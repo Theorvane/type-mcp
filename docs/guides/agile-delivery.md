@@ -31,9 +31,10 @@ Apply at most one label from each status, priority, size, and review group.
 
 `sjungwon03-ai` is the only account that retains labels on a pull request. The
 `Enforce reviewer-managed PR labels` workflow removes labels that any other actor
-adds when a PR is opened, reopened, or labelled. The scheduled reviewer assigns the
-appropriate `review:*` label only after it has completed a review for the current
-head commit.
+adds when a PR is opened or labelled. It deliberately leaves labels untouched when a
+PR is reopened, preserving any existing reviewer outcome. The scheduled reviewer
+assigns the appropriate `review:*` label only after it has completed a review for the
+current head commit.
 
 The workflow deliberately uses `pull_request_target` **only** to call GitHub's label
 API. It must never check out or execute code from the PR branch.

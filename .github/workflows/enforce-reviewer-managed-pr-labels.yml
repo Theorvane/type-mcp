@@ -3,7 +3,7 @@ name: Enforce reviewer-managed PR labels
 on:
   pull_request_target:
     branches: [main]
-    types: [opened, reopened, labeled]
+    types: [opened, labeled]
 
 permissions:
   issues: write

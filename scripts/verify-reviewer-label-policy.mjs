@@ -11,7 +11,6 @@ const workflow = await readFile(workflowPath, "utf8");
 const requiredSnippets = [
 	"pull_request_target:",
 	"opened",
-	"reopened",
 	"labeled",
 	"issues: write",
 	"github.event.sender.login != 'sjungwon03-ai'",
@@ -26,6 +25,12 @@ for (const snippet of requiredSnippets) {
 			`Label-policy workflow is missing required contract: ${snippet}`,
 		);
 	}
+}
+
+if (/reopened/u.test(workflow)) {
+	throw new Error(
+		"Label-policy workflow must preserve reviewer labels when a pull request is reopened.",
+	);
 }
 
 if (/actions\/checkout@/u.test(workflow)) {

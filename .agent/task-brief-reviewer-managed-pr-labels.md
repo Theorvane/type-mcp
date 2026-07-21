@@ -27,7 +27,7 @@ Ensure that labels manually applied by PR authors do not remain on TypeMCP pull 
 ## Acceptance criteria
 
 - [ ] A label added by a non-reviewer is automatically removed.
-- [ ] A label set by `sjungwon03-ai` is preserved.
+- [ ] A label set by `sjungwon03-ai` is preserved, including when a PR is reopened.
 - [ ] Workflow runs only on pull-request events and uses the minimum API permissions required.
 - [ ] Workflow does not check out PR code.
 - [ ] Focused verification detects accidental removal of those constraints.
@@ -44,7 +44,7 @@ Ensure that labels manually applied by PR authors do not remain on TypeMCP pull 
 | Stage | Command | Result / expected reason |
 | --- | --- | --- |
 | Red | `node scripts/verify-reviewer-label-policy.mjs` | Failed as expected with `ENOENT`: enforcement workflow did not exist. |
-| Green | `node scripts/verify-reviewer-label-policy.mjs` | Passed: reviewer-managed PR label workflow contract verified. |
+| Green | `node scripts/verify-reviewer-label-policy.mjs` | Passed: reviewer-managed PR label workflow contract verified. A later regression test first failed on `reopened`, then passed after its removal. |
 | Regression | `npm run typecheck && npm run lint && npm test && npm run build && npm run verify:package && npm run verify:publish` | Passed: 17 tests and all package gates. |
 
 ## Risks and boundaries
