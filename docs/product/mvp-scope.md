@@ -1,6 +1,6 @@
 # MVP scope
 
-**Status:** Decorator metadata storage, definition validation, the instance resolver seam, and tool compilation are implemented today. Resource/prompt compilation, transport, and their runtime behavior remain planned work.
+**Status:** Decorator metadata storage, definition validation, the instance resolver seam, and compilation of tools, static resources, and prompts are implemented today. stdio and HTTP transport remain planned work.
 
 ## Included
 
@@ -10,7 +10,7 @@
 | Tools | `@McpTool()` with name/description and Zod object input schema |
 | Resources | `@McpResource()` for explicit static URIs |
 | Prompts | `@McpPrompt()` for named prompt handlers |
-| Compilation | Validated `@McpTool` metadata compiled to `@modelcontextprotocol/sdk` `McpServer`; resources/prompts are a follow-up compiler task |
+| Compilation | Validated tools, static resources, and prompts compile to an official `@modelcontextprotocol/sdk` `McpServer` |
 | Instance construction | Direct constructor default plus async-capable `InstanceResolver` interface |
 | Local transport | stdio helper |
 | Web transport | Fetch-standard Streamable HTTP handler |

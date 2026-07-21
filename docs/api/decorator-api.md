@@ -1,6 +1,6 @@
 # Decorator API contract
 
-**Status:** Metadata declarations, definition validation, the resolver seam, and SDK tool compilation are implemented. Resource/prompt compilation, stdio, and HTTP transport remain planned MVP work.
+**Status:** Metadata declarations, definition validation, the resolver seam, and SDK compilation of tools, static resources, and prompts are implemented. stdio and HTTP transport remain planned MVP work.
 
 ## Server declaration
 
@@ -15,7 +15,7 @@ class CatalogServer {}
 | Case | Behavior |
 | --- | --- |
 | Accept | `name` and `version` identify one decorated server class. The decorator records an immutable server definition for later compilation. `readMcpServerDefinition()` rejects an undecorated class with `TypeMcpDefinitionError`. `createMcpServer()` compiles validated tool declarations for this server. |
-| Deferred | Resource/prompt SDK compilation remains planned. |
+| Deferred | stdio and HTTP transport remain planned. |
 | Excluded | Automatic Nest provider discovery and inferred application metadata. |
 
 ## Tool declaration
@@ -34,7 +34,7 @@ findProduct(input: { sku: string }) {
 | Case | Behavior |
 | --- | --- |
 | Accept | A method name is used as the tool name unless an explicit `name` is supplied. `input` must be a Zod object schema. `createMcpServer()` registers each validated declaration with the official SDK; SDK validation runs before the bound instance method. String results become text content, JSON-compatible values become JSON text, and valid MCP tool results pass through. Duplicate tool names are rejected by `readMcpServerDefinition()`. |
-| Deferred | Resource/prompt compilation and transport work remain separate tasks. |
+| Deferred | stdio and transport work remain separate tasks. |
 | Excluded | Parameter decorators, automatic schema reflection, authorization, retries, and leaking handler stack traces. |
 
 ## Resource declaration
@@ -52,7 +52,7 @@ readConfig() {
 | Case | Behavior |
 | --- | --- |
 | Accept | A static explicit URI and optional MIME type are recorded as one resource declaration. `readMcpServerDefinition()` rejects duplicate resource names. |
-| Deferred | Resource registration and safe handler errors are planned for compiler tasks. |
+| Accept | `createMcpServer()` registers each static URI through the official SDK. A handler may return text, JSON-compatible data, or an SDK-valid read result. Text and JSON-compatible values become one resource content item at the declared URI; the declared MIME type is retained. Handler failures return generic safe content without application exception text or stack traces. |
 | Excluded | URI templates, subscription/push resources, and persistence/caching policies. |
 
 ## Prompt declaration
@@ -62,16 +62,16 @@ readConfig() {
   name: "summarize-product",
   description: "Prepare a product-summary prompt.",
 })
-summarizeProduct(sku: string) {
-  return `Summarize product ${sku}.`;
+summarizeProduct() {
+  return "Summarize the catalog.";
 }
 ```
 
 | Case | Behavior |
 | --- | --- |
-| Accept | A named method is recorded as a prompt declaration. `readMcpServerDefinition()` rejects duplicate prompt names. Component namespaces are distinct, so a tool, resource, and prompt may share one public name. |
-| Deferred | Prompt registration, result normalization, and safe handler errors are planned for compiler tasks. |
-| Excluded | Automatic argument inference from TypeScript parameter types and prompt template files. |
+| Accept | A named method that is callable with no arguments is recorded as a prompt declaration. `readMcpServerDefinition()` rejects duplicate prompt names. Component namespaces are distinct, so a tool, resource, and prompt may share one public name. Required handler parameters are rejected at compile time. |
+| Accept | `createMcpServer()` registers prompts through the official SDK. A handler may return text, JSON-compatible data, or an SDK-valid prompt result. Text and JSON-compatible values become one `user` text message. Handler failures return a generic safe message without application exception text or stack traces. |
+| Excluded | Prompt argument schemas/inference, automatic argument inference from TypeScript parameter types, and prompt template files. |
 
 ## Server construction
 
@@ -97,7 +97,7 @@ const instance = await resolveMcpServerInstance(CatalogServer, resolver);
 | Case | Behavior |
 | --- | --- |
 | Accept | `InstanceResolver<T>` accepts the decorated constructor for `T` and returns `T` or `Promise<T>`. `resolveMcpServerInstance()` uses `defaultInstanceResolver` only for a zero-argument constructor; that direct-construction path is rejected at compile time for classes requiring dependencies. Passing a custom resolver enables dependency-requiring constructors. `createMcpServer()` accepts the same resolver boundary. The default resolver preserves its synchronous return type. |
-| Deferred | Resource/prompt compilation, stdio, and HTTP adapter work. |
+| Deferred | stdio and HTTP adapter work. |
 | Excluded | Built-in NestJS `ModuleRef`, request-scoped provider semantics, and global service location. |
 
 ## HTTP adapter
