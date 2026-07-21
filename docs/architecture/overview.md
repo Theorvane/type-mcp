@@ -28,7 +28,7 @@ The following distinguishes implemented compiler behavior from planned transport
 4. `createMcpServer()` consumes the validated definition and resolved instance, then registers validated tools, static resources, and prompts with the official SDK `McpServer`. This compiler path is implemented.
 5. Tool inputs cross the Zod validation boundary before application code runs. Compiler handler failures become generic safe content without application error text or stacks.
 6. `startStdioServer()` connects an SDK server to the official Node `StdioServerTransport`.
-7. `createMcpHandler()` connects one SDK server to the official Web Standard Streamable HTTP transport and delegates Fetch requests, HTTP method handling, JSON-RPC framing, and session validation to it.
+7. `createMcpHandler()` creates one SDK server and Web Standard Streamable HTTP transport per SDK-managed session, routing Fetch requests by session ID and delegating HTTP method handling, JSON-RPC framing, and session validation to the SDK.
 ## Core contracts
 
 ```ts

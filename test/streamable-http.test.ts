@@ -162,6 +162,26 @@ describe("Fetch Streamable HTTP handler", () => {
 		expect((await json(call)).result).toMatchObject({
 			content: [{ type: "text", text: "hello" }],
 		});
+
+		const terminated = await handler(
+			request("DELETE", undefined, sessionId ?? undefined, protocolVersion),
+		);
+		expect(terminated.status).toBe(200);
+
+		const restarted = await handler(
+			request("POST", {
+				jsonrpc: "2.0",
+				id: 4,
+				method: "initialize",
+				params: {
+					protocolVersion: "2025-11-25",
+					capabilities: {},
+					clientInfo: { name: "next-client", version: "1.0.0" },
+				},
+			}),
+		);
+		expect(restarted.status).toBe(200);
+		expect(restarted.headers.get("mcp-session-id")).not.toBe(sessionId);
 	});
 
 	it("delegates unsupported methods to the SDK transport", async () => {

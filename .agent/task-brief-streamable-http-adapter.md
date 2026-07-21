@@ -18,7 +18,7 @@ Expose a framework-neutral Fetch handler from `type-mcp/http`, delegating Stream
 
 **In:**
 - `createMcpHandler()` Fetch handler factory.
-- One compiled SDK server and one `WebStandardStreamableHTTPServerTransport` per factory call.
+- One compiled SDK server and one `WebStandardStreamableHTTPServerTransport` **per SDK-managed session**.
 - SDK-managed stateful Streamable HTTP request handling using the official session ID response header.
 - Fetch-level initialize, tools list/call, and unsupported-method tests.
 
@@ -50,7 +50,7 @@ Expose a framework-neutral Fetch handler from `type-mcp/http`, delegating Stream
 
 - Use the SDK `WebStandardStreamableHTTPServerTransport`; do not duplicate protocol or session rules.
 - The root package remains free of HTTP server framework dependencies.
-- Stateful mode is explicit: one compiled server and one SDK transport are retained by the returned handler, and session lifecycle remains SDK-managed.
+- Stateful mode is explicit: each SDK-managed session receives a compiled server and SDK transport, which are removed and closed on `DELETE`.
 
 ## Review handoff
 

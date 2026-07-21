@@ -3,6 +3,7 @@ import type { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
 
 export interface McpHttpServerConnection {
 	connect(transport: Transport): Promise<void>;
+	close(): Promise<void>;
 }
 
 export type McpHandler = (request: Request) => Promise<Response>;
@@ -16,21 +17,44 @@ export interface McpHandlerOptions {
 }
 
 /**
- * Creates a Fetch-compatible Streamable HTTP handler for one MCP SDK server.
+ * Creates a Fetch-compatible Streamable HTTP handler with SDK-managed sessions.
  *
- * HTTP methods, JSON-RPC framing, and stateful session behavior are delegated
- * to the official Web Standard transport.
+ * Each stateful MCP session receives its own compiled server and official Web
+ * Standard transport. HTTP methods, JSON-RPC framing, and session validation
+ * remain delegated to the SDK transport.
  */
-export async function createMcpHandler<Server extends McpHttpServerConnection>(
+export function createMcpHandler<Server extends McpHttpServerConnection>(
 	createServer: () => Server | Promise<Server>,
 	options: McpHandlerOptions = {},
-): Promise<McpHandler> {
-	const server = await createServer();
-	const transport = new WebStandardStreamableHTTPServerTransport({
-		sessionIdGenerator: () => crypto.randomUUID(),
-		enableJsonResponse: options.enableJsonResponse ?? true,
-	});
-	await server.connect(transport);
+): McpHandler {
+	const transports = new Map<
+		string,
+		WebStandardStreamableHTTPServerTransport
+	>();
 
-	return (request) => transport.handleRequest(request);
+	async function createTransport(): Promise<WebStandardStreamableHTTPServerTransport> {
+		const server = await createServer();
+		let transport: WebStandardStreamableHTTPServerTransport;
+		transport = new WebStandardStreamableHTTPServerTransport({
+			sessionIdGenerator: () => crypto.randomUUID(),
+			enableJsonResponse: options.enableJsonResponse ?? true,
+			onsessioninitialized: (sessionId) => {
+				transports.set(sessionId, transport);
+			},
+			onsessionclosed: async (sessionId) => {
+				transports.delete(sessionId);
+				await server.close();
+			},
+		});
+		await server.connect(transport);
+		return transport;
+	}
+
+	return async (request) => {
+		const sessionId = request.headers.get("mcp-session-id");
+		const transport =
+			(sessionId === null ? undefined : transports.get(sessionId)) ??
+			(await createTransport());
+		return transport.handleRequest(request);
+	};
 }
