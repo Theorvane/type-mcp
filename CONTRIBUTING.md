@@ -18,12 +18,20 @@ npm run build
 
 Write and run a failing test first. Implement the smallest behavior that makes it pass, then run the affected suite and full verification as applicable.
 
-## Commit expectations
+## Required issue → branch → PR flow
 
-- Use focused conventional commits, e.g. `feat(core): add MCP tool decorator`.
-- Keep generated files, credentials, local logs, coverage, and `node_modules/` out of commits.
-- Update public docs for changed behavior.
-- Complete [.agent/checklists/pre-commit.md](.agent/checklists/pre-commit.md) before committing.
+All work after the initial repository bootstrap follows this flow. **Never commit directly to `main`.**
+
+1. Search open work, then create one focused GitHub Issue with scope and verification criteria.
+2. Create a branch from updated `main` named `<type>/<issue-number>-<description>`.
+   - Examples: `feat/12-tool-compiler`, `fix/19-safe-error-result`, `docs/24-http-guide`.
+3. Use focused conventional commits, e.g. `feat(core): add MCP tool decorator`.
+4. Push the issue branch and open one PR against `main`.
+5. Include `Closes #<issue-number>` in the PR body so GitHub closes the matching issue after merge.
+6. Include exact verification commands/results, then resolve specification and code-quality review findings.
+7. Squash merge only when CI is green; confirm the issue is closed and local `main` matches `origin/main`.
+
+Keep generated files, credentials, local logs, coverage, and `node_modules/` out of commits. Update public docs for changed behavior and complete [.agent/checklists/pre-commit.md](.agent/checklists/pre-commit.md) before committing.
 
 ## Review expectations
 
