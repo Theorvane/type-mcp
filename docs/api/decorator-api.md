@@ -1,6 +1,6 @@
 # Decorator API contract
 
-**Status:** Metadata declarations, definition validation, and the resolver seam are implemented. SDK compilation, stdio, and HTTP transport remain planned MVP work.
+**Repository development status:** Metadata declarations, definition validation, and the resolver seam are implemented on the repository development line. **Published npm status:** `type-mcp@0.1.0` exposes decorators and `getMcpServerDefinition()` only; validation/resolver APIs are unreleased. SDK compilation, stdio, and HTTP transport remain planned MVP work.
 
 ## Server declaration
 
