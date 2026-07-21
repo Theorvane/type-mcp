@@ -1,0 +1,52 @@
+name: Enforce reviewer-managed PR labels
+
+on:
+  pull_request_target:
+    branches: [main]
+    types: [opened, labeled]
+
+permissions:
+  issues: write
+  pull-requests: read
+
+jobs:
+  remove-unreviewed-labels:
+    if: >-
+      github.event.sender.login != 'sjungwon03-ai'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Remove labels set by a non-reviewer
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { action, label, pull_request: pullRequest } = context.payload;
+            const issueNumber = pullRequest.number;
+
+            if (action === 'labeled') {
+              await github.rest.issues.removeLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber,
+                name: label.name,
+              });
+              core.info(`Removed unauthorized label ${label.name}.`);
+              return;
+            }
+
+            const { data: labels } = await github.rest.issues.listLabelsOnIssue({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+            });
+
+            await Promise.all(
+              labels.map(({ name }) =>
+                github.rest.issues.removeLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issueNumber,
+                  name,
+                }),
+              ),
+            );
+            core.info(`Removed ${labels.length} unreviewed label(s).`);
