@@ -19,7 +19,7 @@ void zeroArgumentInstance;
 // @ts-expect-error Direct construction requires a zero-argument server class.
 void resolveMcpServerInstance(NeedsDependency);
 
-const dependencyResolver: InstanceResolver = {
+const dependencyResolver: InstanceResolver<NeedsDependency> = {
 	resolve: async () => {
 		throw new Error("resolver test");
 	},
