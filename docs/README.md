@@ -7,8 +7,9 @@ This directory is the canonical project documentation set. Read documents in thi
 3. [Architecture overview](architecture/overview.md) — components and runtime flow
 4. [Decorator API contract](api/decorator-api.md) — public behavior, including Accept/Error/Excluded cases
 5. [npm release readiness](guides/npm-release.md) — package ownership and pre-publish safeguards
-6. [Single-package migration plan](planning/2026-07-21-single-package-migration.md) — active packaging plan
-7. [Historical MVP implementation plan](planning/2026-07-21-mvp-implementation-plan.md) — superseded two-workspace task history
+6. [Open-source launch checklist](guides/open-source-launch.md) — community health, security, and public-repository safeguards
+7. [Single-package migration plan](planning/2026-07-21-single-package-migration.md) — active packaging plan
+8. [Historical MVP implementation plan](planning/2026-07-21-mvp-implementation-plan.md) — superseded two-workspace task history
 
 ## Sections
 

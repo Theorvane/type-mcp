@@ -2,7 +2,7 @@
 
 ## Purpose
 
-`type-mcp` is a private TypeScript repository for one unscoped, decorator-first MCP server package. The root export provides the framework-neutral metadata/core API; `type-mcp/http` is its Fetch/Streamable HTTP subpath. A NestJS integration is intentionally deferred; the runtime core must remain Nest-independent.
+`type-mcp` is an open-source TypeScript repository for one unscoped, decorator-first MCP server package. The root export provides the framework-neutral metadata/core API; `type-mcp/http` is its Fetch/Streamable HTTP subpath. A NestJS integration is intentionally deferred; the runtime core must remain Nest-independent.
 
 ## Source-of-truth hierarchy
 

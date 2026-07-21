@@ -80,6 +80,10 @@ The declarations above are available today. `createMcpServer()` compiles decorat
 - [Decorator API contract](docs/api/decorator-api.md) — available metadata behavior and planned compiler contracts.
 - [Implementation plan](docs/planning/2026-07-21-mvp-implementation-plan.md) — TDD task order and acceptance criteria.
 - [Contributing guide](CONTRIBUTING.md) — issue → branch → PR workflow and local checks.
+- [Code of Conduct](CODE_OF_CONDUCT.md) — expectations for all project spaces.
+- [Security policy](SECURITY.md) — current private vulnerability-reporting channel status.
+- [Support guide](SUPPORT.md) — where to ask usage and contribution questions.
+- [Open-source launch checklist](docs/guides/open-source-launch.md) — public-repository safeguards and settings.
 - [npm release readiness](docs/guides/npm-release.md) — scope ownership and release safeguards.
 
 ## Develop locally

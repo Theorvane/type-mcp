@@ -1,0 +1,42 @@
+name: Question or contribution support
+description: Ask a public usage or contribution question that is not a bug report or feature request.
+title: "question: "
+labels:
+  - question
+  - status:needs-triage
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not include credentials, private URLs, customer data, or vulnerability details. Read SUPPORT.md, CONTRIBUTING.md, and the relevant documentation before opening this form.
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+      description: State the question and the outcome you need.
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context and what you already checked
+      description: Link relevant documentation, issues, code, or safe command output.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: TypeMCP and runtime version
+      placeholder: type-mcp 0.1.0, Node 20.x
+    validations:
+      required: true
+  - type: dropdown
+    id: contribution
+    attributes:
+      label: Are you willing to submit a pull request?
+      options:
+        - "Yes"
+        - "No"
+        - "I need guidance"
+    validations:
+      required: true
