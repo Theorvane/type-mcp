@@ -2,7 +2,7 @@
 
 ## Purpose
 
-`type-mcp` is a private TypeScript monorepo for a decorator-first MCP server framework. The MVP provides a framework-neutral core (`@type-mcp/core`) and a Fetch/Streamable HTTP adapter (`@type-mcp/http`). A NestJS package is intentionally deferred; core must remain Nest-independent.
+`type-mcp` is a private TypeScript repository for one unscoped, decorator-first MCP server package. The root export provides the framework-neutral metadata/core API; `type-mcp/http` is its Fetch/Streamable HTTP subpath. A NestJS integration is intentionally deferred; the runtime core must remain Nest-independent.
 
 ## Source-of-truth hierarchy
 
@@ -16,8 +16,8 @@ If sources conflict, stop and update the lower-priority document before implemen
 
 ## Repository boundaries
 
-- `packages/core/`: decorators, metadata, validation, compiler, resolver contract, stdio helper. **No NestJS imports.**
-- `packages/http/`: Fetch `Request → Response` Streamable HTTP adapter. Depends on core, not vice versa.
+- `src/`: decorators, metadata, validation/compiler, resolver contract, and stdio helper. **No NestJS imports.**
+- `src/http.ts`: Fetch `Request → Response` Streamable HTTP subpath entry point. It may depend on root runtime contracts but not the reverse.
 - `examples/`: runnable, minimal usage—not a second framework implementation.
 - `docs/`: canonical human-facing product, architecture, API, guide, and planning documents.
 - `.agent/`: tracked agent operating aids; never imported by package runtime code.
@@ -62,9 +62,12 @@ Every change after the initial repository bootstrap follows this sequence. Never
 
 ```bash
 npm ci
+npm run lint
 npm run typecheck
 npm test
 npm run build
+npm run verify:package
+npm run verify:publish
 git diff --check
 git status --short --branch
 ```

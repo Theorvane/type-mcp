@@ -2,8 +2,8 @@
 
 ## Before changing code
 
-1. Read [AGENTS.md](AGENTS.md), the relevant document in [docs/](docs/README.md), and the task in [the MVP plan](docs/planning/2026-07-21-mvp-implementation-plan.md).
-2. Keep the core framework-neutral: no NestJS dependency or import in `packages/core`.
+1. Read [AGENTS.md](AGENTS.md), the relevant document in [docs/](docs/README.md), and the active task in [the single-package migration plan](docs/planning/2026-07-21-single-package-migration.md) or a later approved plan.
+2. Keep the root package framework-neutral: no NestJS dependency or import in `src/`.
 3. Confirm whether the requested behavior is MVP scope. Add an ADR and revised plan before implementing a deferred capability.
 
 ## Development loop
@@ -15,7 +15,8 @@ npm run typecheck
 npm run lint
 npm test
 npm run build
-npm run verify:packages
+npm run verify:package
+npm run verify:publish
 ```
 
 Write and run a failing test first. Implement the smallest behavior that makes it pass, then run the affected suite and full verification as applicable.

@@ -9,7 +9,7 @@ The desired developer experience is decorator-first and needs to fit NestJS in t
 
 ## Decision
 
-`@type-mcp/core` stores class/method definitions and exposes an async-capable `InstanceResolver` interface. The default resolver directly constructs the decorated class. The compiler depends only on the interface.
+`type-mcp` stores class/method definitions and exposes an async-capable `InstanceResolver` interface. The default resolver directly constructs the decorated class. The compiler depends only on the interface.
 
 ```ts
 export interface InstanceResolver {
@@ -17,7 +17,7 @@ export interface InstanceResolver {
 }
 ```
 
-A future `@type-mcp/nestjs` package will implement this interface with Nest `ModuleRef` and may use `DiscoveryService` to find decorated providers.
+A future NestJS integration will implement this interface with Nest `ModuleRef` and may use `DiscoveryService` to find decorated providers.
 
 ## Consequences
 

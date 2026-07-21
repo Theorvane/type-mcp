@@ -1,19 +1,21 @@
 # type-mcp MVP Implementation Plan
 
-> **For Hermes:** Implement this plan task-by-task using test-driven development. Every production behavior starts with a focused failing Vitest test; run the test before and after the smallest implementation.
+> **Status: superseded for package layout.** The behavioral tasks below remain historical TDD evidence, but their two-workspace structure is replaced by the active [single-package migration plan](2026-07-21-single-package-migration.md) for [Issue #14](https://github.com/sjungwon03/type-mcp/issues/14).
 
-**Goal:** Publish a private, decorator-first TypeScript MCP framework with a framework-neutral core, a Fetch-compatible Streamable HTTP adapter, and an explicit NestJS integration seam.
+> **For Hermes:** Implement active plans task-by-task using test-driven development. Every production behavior starts with a focused failing Vitest test; run the test before and after the smallest implementation.
 
-**Architecture:** `@type-mcp/core` stores declarative class/method metadata and compiles it into the official MCP SDK's `McpServer`. Instance creation is delegated through a narrow `InstanceResolver` contract so a later NestJS package can provide DI-backed resolution without adding a Nest dependency to the core. `@type-mcp/http` adapts compiled servers to Fetch `Request → Response` handlers using the MCP SDK's Web Standard Streamable HTTP transport.
+**Original goal:** Publish a decorator-first TypeScript MCP framework with a framework-neutral runtime, a Fetch-compatible Streamable HTTP subpath, and an explicit NestJS integration seam.
 
-**Tech Stack:** TypeScript (strict mode, stage-3 decorators), npm workspaces, `@modelcontextprotocol/sdk`, Zod, Vitest, tsup, GitHub Actions, Node 22 LTS.
+**Historical architecture:** The original `@type-mcp/core` and `@type-mcp/http` workspace layout has been superseded by one unscoped `type-mcp` package. The root export owns metadata and future compilation; `type-mcp/http` remains the Fetch handler subpath.
+
+**Tech Stack:** TypeScript (strict mode, stage-3 decorators), npm, `@modelcontextprotocol/sdk`, Zod, Vitest, tsup, GitHub Actions, Node 22 LTS.
 
 ---
 
-## Delivery constraints
+## Historical delivery constraints
 
-- The repository must remain an npm workspace with two publishable packages: `@type-mcp/core` and `@type-mcp/http`.
-- `@type-mcp/core` must not import NestJS packages.
+- The active package boundary is one public, unscoped `type-mcp` package with a `type-mcp/http` subpath; do not implement the retired workspace layout below.
+- The root `type-mcp` API must not import NestJS packages.
 - All public runtime input must be typed as `unknown` until validated; no public `any`, `@ts-ignore`, or unsafe error stack exposure.
 - No authentication, resource templates, persistence layer, legacy SSE transport, or Nest module is included in this MVP.
 - Each completed task is committed with a focused conventional commit.
