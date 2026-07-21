@@ -5,6 +5,9 @@ export { McpTool } from "./decorators/mcp-tool.js";
 export { TypeMcpDefinitionError } from "./errors.js";
 export { getMcpServerDefinition } from "./metadata/definitions.js";
 export { readMcpServerDefinition } from "./metadata/read-server-definition.js";
+export { defaultInstanceResolver } from "./resolver/default-instance-resolver.js";
+export type { InstanceResolver } from "./resolver/instance-resolver.js";
+export { resolveMcpServerInstance } from "./resolver/resolve-server-instance.js";
 export type {
 	McpPromptDefinition,
 	McpPromptOptions,
