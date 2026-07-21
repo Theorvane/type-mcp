@@ -1,6 +1,6 @@
 # Decorator API contract
 
-**Status:** Metadata declarations, definition validation, and the resolver seam are implemented. SDK compilation, stdio, and HTTP transport remain planned MVP work.
+**Status:** Metadata declarations, definition validation, the resolver seam, and SDK tool compilation are implemented. Resource/prompt compilation, stdio, and HTTP transport remain planned MVP work.
 
 ## Server declaration
 
@@ -14,8 +14,8 @@ class CatalogServer {}
 
 | Case | Behavior |
 | --- | --- |
-| Accept | `name` and `version` identify one decorated server class. The decorator records an immutable server definition for later compilation. `readMcpServerDefinition()` rejects an undecorated class with `TypeMcpDefinitionError`. |
-| Deferred | SDK compilation remains planned. |
+| Accept | `name` and `version` identify one decorated server class. The decorator records an immutable server definition for later compilation. `readMcpServerDefinition()` rejects an undecorated class with `TypeMcpDefinitionError`. `createMcpServer()` compiles validated tool declarations for this server. |
+| Deferred | Resource/prompt SDK compilation remains planned. |
 | Excluded | Automatic Nest provider discovery and inferred application metadata. |
 
 ## Tool declaration
@@ -33,8 +33,8 @@ findProduct(input: { sku: string }) {
 
 | Case | Behavior |
 | --- | --- |
-| Accept | A method name is used as the tool name unless an explicit `name` is supplied. `input` must be a Zod object schema. The decorator records metadata only; runtime validation and invocation are planned. `readMcpServerDefinition()` rejects duplicate tool names. |
-| Deferred | Runtime argument validation, handler invocation, and safe MCP errors are planned for compiler tasks. |
+| Accept | A method name is used as the tool name unless an explicit `name` is supplied. `input` must be a Zod object schema. `createMcpServer()` registers each validated declaration with the official SDK; SDK validation runs before the bound instance method. String results become text content, JSON-compatible values become JSON text, and valid MCP tool results pass through. Duplicate tool names are rejected by `readMcpServerDefinition()`. |
+| Deferred | Resource/prompt compilation and transport work remain separate tasks. |
 | Excluded | Parameter decorators, automatic schema reflection, authorization, retries, and leaking handler stack traces. |
 
 ## Resource declaration
@@ -96,8 +96,8 @@ const instance = await resolveMcpServerInstance(CatalogServer, resolver);
 
 | Case | Behavior |
 | --- | --- |
-| Accept | `InstanceResolver<T>` accepts the decorated constructor for `T` and returns `T` or `Promise<T>`. `resolveMcpServerInstance()` uses `defaultInstanceResolver` only for a zero-argument constructor; that direct-construction path is rejected at compile time for classes requiring dependencies. Passing a custom resolver enables dependency-requiring constructors. The default resolver preserves its synchronous return type. |
-| Deferred | `createMcpServer()` remains a placeholder; it will consume this seam when SDK compilation is implemented. |
+| Accept | `InstanceResolver<T>` accepts the decorated constructor for `T` and returns `T` or `Promise<T>`. `resolveMcpServerInstance()` uses `defaultInstanceResolver` only for a zero-argument constructor; that direct-construction path is rejected at compile time for classes requiring dependencies. Passing a custom resolver enables dependency-requiring constructors. `createMcpServer()` accepts the same resolver boundary. The default resolver preserves its synchronous return type. |
+| Deferred | Resource/prompt compilation, stdio, and HTTP adapter work. |
 | Excluded | Built-in NestJS `ModuleRef`, request-scoped provider semantics, and global service location. |
 
 ## HTTP adapter

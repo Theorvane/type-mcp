@@ -10,12 +10,17 @@ const exportsToVerify = [
 	{
 		key: ".",
 		symbols: [
-			"createMcpServer",
-			"readMcpServerDefinition",
-			"TypeMcpDefinitionError",
+			{ name: "createMcpServer", runtimeType: "function" },
+			{ name: "defaultInstanceResolver", runtimeType: "object" },
+			{ name: "resolveMcpServerInstance", runtimeType: "function" },
+			{ name: "readMcpServerDefinition", runtimeType: "function" },
+			{ name: "TypeMcpDefinitionError", runtimeType: "function" },
 		],
 	},
-	{ key: "./http", symbols: ["createMcpHandler"] },
+	{
+		key: "./http",
+		symbols: [{ name: "createMcpHandler", runtimeType: "function" }],
+	},
 ];
 
 for (const { key, symbols } of exportsToVerify) {
@@ -43,17 +48,14 @@ for (const { key, symbols } of exportsToVerify) {
 	const require = createRequire(manifestPath);
 	const cjs = require(cjsPath);
 
-	for (const symbol of symbols) {
-		if (
-			typeof esm[symbol] !== "function" ||
-			typeof cjs[symbol] !== "function"
-		) {
+	for (const { name, runtimeType } of symbols) {
+		if (typeof esm[name] !== runtimeType || typeof cjs[name] !== runtimeType) {
 			throw new Error(
-				`${manifest.name}: missing ${key} ${symbol} runtime export`,
+				`${manifest.name}: missing ${key} ${name} runtime export`,
 			);
 		}
-		if (!typeDeclarations.includes(symbol)) {
-			throw new Error(`${manifest.name}: missing ${key} ${symbol} type export`);
+		if (!typeDeclarations.includes(name)) {
+			throw new Error(`${manifest.name}: missing ${key} ${name} type export`);
 		}
 	}
 

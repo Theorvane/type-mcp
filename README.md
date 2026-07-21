@@ -13,11 +13,11 @@
 
 TypeMCP is a decorator-first TypeScript framework for defining [Model Context Protocol](https://modelcontextprotocol.io/) servers. It keeps declarations close to application code while preserving a framework-neutral core that can later support Fetch-based HTTP and NestJS dependency injection without making either a core dependency.
 
-> **Current status:** Decorator metadata storage, definition validation, and an async-capable instance-resolver seam are implemented and verified. MCP SDK compilation, stdio, and HTTP transport are planned MVP work.
+> **Current status:** Decorator metadata storage, definition validation, the async-capable instance-resolver seam, and MCP SDK **tool compilation** are implemented and verified. Resource/prompt compilation, stdio, and HTTP transport remain planned MVP work.
 
 ## Define MCP components where they belong
 
-Decorate a class with the server, tool, resource, and prompt declarations that describe its MCP surface. TypeMCP records an immutable definition that later compiler work will turn into an MCP SDK server.
+Decorate a class with the server, tool, resource, and prompt declarations that describe its MCP surface. TypeMCP records an immutable definition; `createMcpServer()` now compiles its validated tools into an MCP SDK server, while resource and prompt compilation remain planned.
 
 ```ts
 import { z } from "zod";
@@ -35,7 +35,7 @@ class CalculatorServer {
 }
 ```
 
-The declarations above are available today. Calling `createMcpServer()`, connecting stdio, or serving Streamable HTTP is intentionally not available until their focused implementation issues land.
+The declarations above are available today. `createMcpServer()` compiles decorated tools to the official SDK and safely invokes them; resource/prompt compilation, stdio, and Streamable HTTP remain intentionally unavailable until their focused implementation issues land.
 
 ## What exists today
 
@@ -49,7 +49,7 @@ The declarations above are available today. Calling `createMcpServer()`, connect
 | `readMcpServerDefinition()` | Available | Validates a decorated class, rejects duplicate names within each MCP component namespace with `TypeMcpDefinitionError`, then returns a newly allocated deeply frozen definition copy. |
 | `TypeMcpDefinitionError` | Available | Safe declaration-validation error for undecorated classes and duplicate public component names. |
 | `InstanceResolver<T>` | Available | Framework-neutral synchronous/asynchronous construction seam; direct construction is restricted to zero-argument classes. |
-| `createMcpServer()` | Planned | Will validate declarations, resolve instances, and register them with the official MCP SDK. |
+| `createMcpServer()` | Available — tools | Validates declarations, resolves an instance, and registers decorated tools with the official MCP SDK. Resource/prompt compilation is planned. |
 | `type-mcp/http` | Planned | Will expose a Fetch `Request` → `Response` Streamable HTTP adapter. |
 | NestJS integration | Deferred | Will bridge Nest discovery and DI through the resolver seam. |
 
@@ -61,13 +61,13 @@ The declarations above are available today. Calling `createMcpServer()`, connect
 
 **The MCP SDK remains authoritative.** TypeMCP is an ergonomic definition and compilation layer, not a replacement protocol implementation.
 
-**Runtime boundaries must stay explicit.** Planned compiler work will validate raw tool input with Zod and convert handler failures into safe MCP-visible errors without exposing application stacks.
+**Runtime boundaries must stay explicit.** The tool compiler validates raw input with Zod and converts handler failures into safe MCP-visible errors without exposing application stacks. The same boundary is required for future resource/prompt and transport work.
 
 ## Package surface
 
 | Import | Role | Status |
 | --- | --- | --- |
-| `type-mcp` | Decorators, metadata, declaration validation, resolver seam, and future compiler/stdio helper | Declarations/validation/resolver available; compiler and transport planned |
+| `type-mcp` | Decorators, metadata, declaration validation, resolver seam, and tool compiler | Declarations/validation/resolver and tool compiler available; resource/prompt compilation and transports planned |
 | `type-mcp/http` | Fetch-compatible Streamable HTTP adapter subpath | Planned |
 | Future NestJS integration | Discovery and DI integration | Deferred |
 

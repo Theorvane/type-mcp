@@ -1,4 +1,5 @@
 import {
+	createMcpServer,
 	defaultInstanceResolver,
 	type InstanceResolver,
 	resolveMcpServerInstance,
@@ -19,6 +20,9 @@ void zeroArgumentInstance;
 // @ts-expect-error Direct construction requires a zero-argument server class.
 void resolveMcpServerInstance(NeedsDependency);
 
+// @ts-expect-error Direct compilation requires a resolver for a dependency-requiring class.
+void createMcpServer(NeedsDependency);
+
 const dependencyResolver: InstanceResolver<NeedsDependency> = {
 	resolve: async () => {
 		throw new Error("resolver test");
@@ -26,3 +30,4 @@ const dependencyResolver: InstanceResolver<NeedsDependency> = {
 };
 
 void resolveMcpServerInstance(NeedsDependency, dependencyResolver);
+void createMcpServer(NeedsDependency, dependencyResolver);
