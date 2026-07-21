@@ -105,7 +105,13 @@ describe("readMcpServerDefinition", () => {
 		apply(metadata);
 		decorateServer(DuplicateServer, metadata);
 
-		expect(() => readMcpServerDefinition(DuplicateServer)).toThrow(name);
+		const readDefinition = (): void => {
+			readMcpServerDefinition(DuplicateServer);
+		};
+
+		expect(readDefinition).toThrow(TypeMcpDefinitionError);
+		expect(readDefinition).toThrow("DuplicateServer");
+		expect(readDefinition).toThrow(name);
 	});
 
 	it("allows the same public name in distinct MCP namespaces", () => {
@@ -127,10 +133,18 @@ describe("readMcpServerDefinition", () => {
 		decorateServer(NamespaceServer, metadata);
 
 		const definition = readMcpServerDefinition(NamespaceServer);
+		const secondDefinition = readMcpServerDefinition(NamespaceServer);
 
+		expect(definition).not.toBe(secondDefinition);
 		expect(definition.tools[0]?.name).toBe("status");
 		expect(definition.resources[0]?.name).toBe("status");
 		expect(definition.prompts[0]?.name).toBe("status");
 		expect(Object.isFrozen(definition)).toBe(true);
+		expect(Object.isFrozen(definition.tools)).toBe(true);
+		expect(Object.isFrozen(definition.tools[0])).toBe(true);
+		expect(Object.isFrozen(definition.resources)).toBe(true);
+		expect(Object.isFrozen(definition.resources[0])).toBe(true);
+		expect(Object.isFrozen(definition.prompts)).toBe(true);
+		expect(Object.isFrozen(definition.prompts[0])).toBe(true);
 	});
 });
