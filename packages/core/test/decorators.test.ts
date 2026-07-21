@@ -190,6 +190,12 @@ describe("MCP decorators", () => {
     expect(Object.isFrozen(firstRead.tools)).toBe(true);
     expect(Object.isFrozen(firstRead.tools[0])).toBe(true);
     expect(firstRead.tools[0]?.input).toBe(input);
+    expect(Object.isFrozen(input)).toBe(false);
+
+    const mutationMarker = Symbol("schema mutation marker");
+    expect(Reflect.defineProperty(input, mutationMarker, { configurable: true, value: true })).toBe(true);
+    expect(Reflect.has(getMcpServerDefinition(CopiedServer)?.tools[0]?.input ?? {}, mutationMarker)).toBe(true);
+    expect(Reflect.deleteProperty(input, mutationMarker)).toBe(true);
     expect(getMcpServerDefinition(CopiedServer)).not.toBe(firstRead);
   });
 });

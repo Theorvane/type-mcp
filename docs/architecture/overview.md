@@ -1,6 +1,6 @@
 # Architecture overview
 
-**Status:** Planned MVP architecture.
+**Status:** Target MVP architecture — except decorator metadata storage, the runtime compiler, resolver, stdio helper, and HTTP adapter described here are not implemented yet.
 
 ## Package boundaries
 
@@ -18,16 +18,18 @@ application class
         └─ @type-mcp/http → Web Standard Streamable HTTP transport
 ```
 
-`@type-mcp/core` is the only owner of decorator definitions and compilation. `@type-mcp/http` consumes a compiled-server factory and owns Web Standard request/response adaptation. Applications own business handlers and dependencies.
+`@type-mcp/core` is the only owner of decorator definitions and will own compilation. `@type-mcp/http` will consume a compiled-server factory and own Web Standard request/response adaptation. Today, only decorator metadata storage is implemented; applications own business handlers and dependencies.
 
-## Runtime flow
+## Target runtime flow
 
-1. `@McpServer`, `@McpTool`, `@McpResource`, and `@McpPrompt` record immutable definition data associated with a class.
-2. `createMcpServer()` reads and validates that data before opening a transport.
-3. An `InstanceResolver` returns the application class instance. The default resolver constructs it directly.
-4. The compiler registers validated tools, static resources, and prompts against the official SDK `McpServer`.
-5. A transport connects to the SDK server. For HTTP, `@type-mcp/http` uses the SDK's Web Standard Streamable HTTP transport.
-6. Tool inputs cross the Zod validation boundary before application code runs. Errors are converted to safe MCP errors.
+The following is planned behavior, not the current runtime implementation:
+
+1. `@McpServer`, `@McpTool`, `@McpResource`, and `@McpPrompt` record definition data associated with a class. This metadata step is implemented.
+2. `createMcpServer()` will read and validate that data before opening a transport.
+3. An `InstanceResolver` will return the application class instance; the default resolver will construct it directly.
+4. The compiler will register validated tools, static resources, and prompts against the official SDK `McpServer`.
+5. A transport will connect to the SDK server. For HTTP, `@type-mcp/http` will use the SDK's Web Standard Streamable HTTP transport.
+6. Tool inputs will cross the Zod validation boundary before application code runs, and errors will become safe MCP errors.
 
 ## Core contracts
 
@@ -39,9 +41,11 @@ export interface InstanceResolver {
 
 This interface intentionally permits asynchronous resolution so a future NestJS adapter can obtain providers from `ModuleRef` without changing core metadata or compiler APIs.
 
-## Error boundary
+## Target error boundary
 
-| Failure source | Behavior |
+The following error behavior is planned for compiler and HTTP work; it is not provided by the current metadata-only implementation.
+
+| Failure source | Target behavior |
 | --- | --- |
 | Decorator/definition conflict | fail fast during server compilation with a typed framework error |
 | Invalid tool input | return a safe MCP-visible validation error; do not invoke the handler |

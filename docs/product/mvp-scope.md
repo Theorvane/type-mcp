@@ -1,5 +1,7 @@
 # MVP scope
 
+**Status:** Target MVP scope. Only decorator metadata storage is implemented today; compiler, resolver, transport, runtime validation, and safe runtime error handling remain planned work.
+
 ## Included
 
 | Capability | MVP boundary |
