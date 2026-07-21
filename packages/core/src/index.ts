@@ -1,3 +1,20 @@
+export { McpPrompt } from "./decorators/mcp-prompt.js";
+export { McpResource } from "./decorators/mcp-resource.js";
+export { McpServer } from "./decorators/mcp-server.js";
+export { McpTool } from "./decorators/mcp-tool.js";
+export { getMcpServerDefinition } from "./metadata/definitions.js";
+export type {
+  McpPromptDefinition,
+  McpServerConstructor,
+  McpPromptOptions,
+  McpResourceDefinition,
+  McpResourceOptions,
+  McpServerDefinition,
+  McpServerOptions,
+  McpToolDefinition,
+  McpToolOptions,
+} from "./types.js";
+
 /**
  * Compiles a decorated class into an MCP server.
  *

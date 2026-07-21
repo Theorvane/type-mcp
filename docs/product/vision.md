@@ -1,5 +1,7 @@
 # Product vision
 
+**Status:** Product target. The current implementation provides decorator metadata storage only; compiler, validation, resolver, stdio, and HTTP outcomes below remain planned MVP work.
+
 ## Problem
 
 Teams building MCP servers in TypeScript often assemble protocol registration, runtime validation, HTTP transport, and framework integration by hand. The resulting code is repetitive, hard to discover in large applications, and becomes tightly coupled to a chosen framework too early.
