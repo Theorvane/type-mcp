@@ -1,6 +1,6 @@
 # Product vision
 
-**Status:** Product target. The current implementation provides decorator metadata storage, definition validation, an async-capable instance-resolver seam, and tool compilation with runtime input validation and safe tool errors. Stdio, HTTP, and resource/prompt runtime outcomes below remain planned MVP work.
+**Status:** Product target. The current implementation provides decorator metadata storage, definition validation, an async-capable instance-resolver seam, compiler support for tools/static resources/prompts, runtime tool-input validation, safe handler errors, and the Node stdio helper. HTTP remains planned MVP work.
 
 ## Problem
 

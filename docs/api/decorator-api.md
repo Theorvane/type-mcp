@@ -1,6 +1,6 @@
 # Decorator API contract
 
-**Status:** Metadata declarations, definition validation, the resolver seam, and SDK compilation of tools, static resources, and prompts are implemented. stdio and HTTP transport remain planned MVP work.
+**Status:** Metadata declarations, definition validation, the resolver seam, SDK compilation of tools/static resources/prompts, and the Node stdio helper are implemented. HTTP transport remains planned MVP work.
 
 ## Server declaration
 
@@ -15,7 +15,7 @@ class CatalogServer {}
 | Case | Behavior |
 | --- | --- |
 | Accept | `name` and `version` identify one decorated server class. The decorator records an immutable server definition for later compilation. `readMcpServerDefinition()` rejects an undecorated class with `TypeMcpDefinitionError`. `createMcpServer()` compiles validated tool declarations for this server. |
-| Deferred | stdio and HTTP transport remain planned. |
+| Deferred | HTTP transport remains planned. |
 | Excluded | Automatic Nest provider discovery and inferred application metadata. |
 
 ## Tool declaration
@@ -34,7 +34,7 @@ findProduct(input: { sku: string }) {
 | Case | Behavior |
 | --- | --- |
 | Accept | A method name is used as the tool name unless an explicit `name` is supplied. `input` must be a Zod object schema. `createMcpServer()` registers each validated declaration with the official SDK; SDK validation runs before the bound instance method. String results become text content, JSON-compatible values become JSON text, and valid MCP tool results pass through. Duplicate tool names are rejected by `readMcpServerDefinition()`. |
-| Deferred | stdio and transport work remain separate tasks. |
+| Deferred | HTTP and other transport work remain separate tasks. |
 | Excluded | Parameter decorators, automatic schema reflection, authorization, retries, and leaking handler stack traces. |
 
 ## Resource declaration
@@ -97,8 +97,23 @@ const instance = await resolveMcpServerInstance(CatalogServer, resolver);
 | Case | Behavior |
 | --- | --- |
 | Accept | `InstanceResolver<T>` accepts the decorated constructor for `T` and returns `T` or `Promise<T>`. `resolveMcpServerInstance()` uses `defaultInstanceResolver` only for a zero-argument constructor; that direct-construction path is rejected at compile time for classes requiring dependencies. Passing a custom resolver enables dependency-requiring constructors. `createMcpServer()` accepts the same resolver boundary. The default resolver preserves its synchronous return type. |
-| Deferred | stdio and HTTP adapter work. |
+| Deferred | HTTP adapter work. |
 | Excluded | Built-in NestJS `ModuleRef`, request-scoped provider semantics, and global service location. |
+
+## Stdio transport
+
+```ts
+import { createMcpServer, startStdioServer } from "type-mcp";
+
+const server = await createMcpServer(CatalogServer);
+await startStdioServer(server);
+```
+
+| Case | Behavior |
+| --- | --- |
+| Accept | `startStdioServer()` connects an official SDK `McpServer` to one official Node-only `StdioServerTransport`, which reads process stdin and writes process stdout. It returns the connected server and transport for caller-managed lifecycle. |
+| Test seam | `StdioServerOptions.transportFactory` may inject a compatible SDK transport for deterministic tests. |
+| Excluded | Custom framing, direct `process` stream configuration, shutdown policy, and HTTP/session behavior. |
 
 ## HTTP adapter
 
