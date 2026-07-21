@@ -174,6 +174,89 @@ describe("decorated resource and prompt compilation", () => {
 		await Promise.all([client.close(), server.close()]);
 	});
 
+	it("preserves SDK-valid resource and prompt results", async () => {
+		class StructuredServer {
+			public readGuide() {
+				return {
+					contents: [
+						{ uri: "guide://catalog", text: "Overview" },
+						{
+							uri: "guide://catalog/chapter-1",
+							mimeType: "text/markdown",
+							text: "# Chapter 1",
+						},
+					],
+				};
+			}
+
+			public buildGuide() {
+				return {
+					description: "Catalog guide",
+					messages: [
+						{
+							role: "assistant",
+							content: { type: "text", text: "Start with the overview." },
+						},
+						{
+							role: "user",
+							content: { type: "text", text: "Then read chapter one." },
+						},
+					],
+				};
+			}
+		}
+
+		const metadata: DecoratorMetadata = {};
+		McpResource({ uri: "guide://catalog" })(
+			StructuredServer.prototype.readGuide,
+			methodContext("readGuide", metadata),
+		);
+		McpPrompt({})(
+			StructuredServer.prototype.buildGuide,
+			methodContext("buildGuide", metadata),
+		);
+		McpServer({ name: "structured", version: "1.0.0" })(
+			StructuredServer,
+			classContext(metadata),
+		);
+
+		const { client, server } = await connect(createMcpServer(StructuredServer));
+		const resource = await client.request(
+			{ method: "resources/read", params: { uri: "guide://catalog" } },
+			ReadResourceResultSchema,
+		);
+		const prompt = await client.request(
+			{ method: "prompts/get", params: { name: "buildGuide", arguments: {} } },
+			GetPromptResultSchema,
+		);
+
+		expect(resource).toEqual({
+			contents: [
+				{ uri: "guide://catalog", text: "Overview" },
+				{
+					uri: "guide://catalog/chapter-1",
+					mimeType: "text/markdown",
+					text: "# Chapter 1",
+				},
+			],
+		});
+		expect(prompt).toEqual({
+			description: "Catalog guide",
+			messages: [
+				{
+					role: "assistant",
+					content: { type: "text", text: "Start with the overview." },
+				},
+				{
+					role: "user",
+					content: { type: "text", text: "Then read chapter one." },
+				},
+			],
+		});
+
+		await Promise.all([client.close(), server.close()]);
+	});
+
 	it("hides resource and prompt handler failure details", async () => {
 		class FailureServer {
 			public failResource(): never {

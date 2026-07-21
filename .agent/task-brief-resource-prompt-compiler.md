@@ -42,8 +42,8 @@ Compile decorated static resources and named prompts into the official MCP SDK s
 | Stage | Command | Result / expected reason |
 | --- | --- | --- |
 | Red | `npm test -- test/resource-prompt-compilation.test.ts` | `resources/list` and `prompts/list` returned MCP `-32601 Method not found` before registration. |
-| Green | `npm test -- test/resource-prompt-compilation.test.ts` | 3 tests pass: static resource list/read, sync/async prompts, and safe handler failure content. |
-| Regression | `npm test` | 9 files / 23 tests pass. |
+| Green | `npm test -- test/resource-prompt-compilation.test.ts` | 4 tests pass: static resource list/read, sync/async prompts, SDK-result pass-through, and safe handler failure content. |
+| Regression | `npm test` | Pending final run after independent-review remediation. |
 
 ## Risks and boundaries
 
