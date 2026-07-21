@@ -2,7 +2,10 @@ import { appendPromptDefinition } from "../metadata/metadata.js";
 import type { McpPromptOptions } from "../types.js";
 
 export function McpPrompt(options: McpPromptOptions) {
-	return function (_value: object, context: ClassMethodDecoratorContext): void {
+	return function <This>(
+		_value: (this: This) => unknown,
+		context: ClassMethodDecoratorContext<This, (this: This) => unknown>,
+	): void {
 		const methodName = getMethodName(context);
 
 		appendPromptDefinition(context.metadata, {
@@ -13,7 +16,7 @@ export function McpPrompt(options: McpPromptOptions) {
 	};
 }
 
-function getMethodName(context: ClassMethodDecoratorContext): string {
+function getMethodName(context: { readonly name: string | symbol }): string {
 	if (typeof context.name !== "string") {
 		throw new TypeError("MCP decorators require string-named methods");
 	}

@@ -1,12 +1,12 @@
 # npm release readiness
 
-TypeMCP publishes one public, unscoped package: `type-mcp`. Its Fetch-compatible HTTP entry point is the `type-mcp/http` subpath. The GitHub repository may remain private; GitHub visibility and npm package visibility are separate controls.
+TypeMCP publishes one public, unscoped package: `type-mcp`. Its Fetch-compatible HTTP entry point is the `type-mcp/http` subpath. The repository is being prepared for public open-source launch; repository visibility and npm package visibility remain separate controls.
 
 ## What must happen before the first release
 
 1. Confirm the unscoped npm name `type-mcp` remains available and that the authenticated npm user owns the publish right.
 2. Configure npm trusted publishing for this GitHub repository and a reviewed release workflow. Trusted publishing uses GitHub Actions OIDC instead of a long-lived npm token.
-3. Finish and verify the compiler, stdio, and HTTP adapter work. The framework-neutral async-capable resolver seam is implemented, but the current package is not a release candidate: `createMcpServer()` and `createMcpHandler()` still throw placeholder errors.
+3. Complete the release-readiness requirements: verify HTTP behavior, configure trusted publishing, and obtain the required release issue/PR approval. Tool/resource/prompt compilation, Node stdio, and the Fetch HTTP handler are implemented.
 4. Pick a version that has never been published. npm versions are immutable. Use a prerelease such as `0.1.0-alpha.1` for an early public preview if desired.
 5. Run the repository checks and inspect the generated tarball:
 

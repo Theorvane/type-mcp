@@ -1,3 +1,4 @@
+export { createMcpServer } from "./compiler/create-mcp-server.js";
 export { McpPrompt } from "./decorators/mcp-prompt.js";
 export { McpResource } from "./decorators/mcp-resource.js";
 export { McpServer } from "./decorators/mcp-server.js";
@@ -9,6 +10,12 @@ export { defaultInstanceResolver } from "./resolver/default-instance-resolver.js
 export type { InstanceResolver } from "./resolver/instance-resolver.js";
 export { resolveMcpServerInstance } from "./resolver/resolve-server-instance.js";
 export type {
+	McpServerConnection,
+	StartedStdioServer,
+	StdioServerOptions,
+} from "./transports/stdio.js";
+export { startStdioServer } from "./transports/stdio.js";
+export type {
 	McpPromptDefinition,
 	McpPromptOptions,
 	McpResourceDefinition,
@@ -19,13 +26,3 @@ export type {
 	McpToolDefinition,
 	McpToolOptions,
 } from "./types.js";
-
-/**
- * Compiles a decorated class into an MCP server.
- *
- * The implementation is introduced with the compiler task; this export exists
- * now to establish the stable package entry point.
- */
-export function createMcpServer(): never {
-	throw new Error("createMcpServer is not implemented yet");
-}

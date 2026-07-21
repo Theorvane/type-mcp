@@ -2,7 +2,7 @@
 
 > **Release note:** This document describes the product and repository-development target, not the currently published npm surface. For `type-mcp@0.1.0` installation and exact exports, start with the [README](../../README.md) and [getting-started guide](../guides/getting-started.md).
 
-**Status:** Decorator metadata storage, definition validation, and the instance resolver seam are implemented today; compiler, transport, runtime validation, and safe runtime error handling remain planned work.
+**Status:** On the repository-development line, decorator metadata storage, definition validation, the instance resolver seam, compiler behavior, the Node stdio helper, and the Fetch Streamable HTTP adapter are implemented. The release note above remains authoritative for `type-mcp@0.1.0` installation behavior.
 
 ## Included
 

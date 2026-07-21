@@ -12,6 +12,8 @@
 </div>
 
 > **Published surface — [`type-mcp@0.1.0`](https://www.npmjs.com/package/type-mcp):** standard decorators and immutable metadata reads are available. Definition validation, instance resolvers, MCP SDK compilation, stdio, `type-mcp/http` Streamable HTTP, and NestJS integration are **not included in the published release**.
+>
+> **Repository-development status:** the current `main` branch implements declaration validation, the resolver seam, SDK compilation, stdio, and the `type-mcp/http` Streamable HTTP adapter. Those additions are not yet a promise of availability from npm until a release publishes them.
 
 TypeMCP keeps MCP declarations beside TypeScript classes without coupling the core to a web framework. Install it when you need a strict, inspectable declaration layer and want application code ready for later runtime support.
 

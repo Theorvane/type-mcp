@@ -2,7 +2,7 @@
 
 > **Release note:** This architecture describes the repository-development target. The published [`type-mcp@0.1.0`](https://www.npmjs.com/package/type-mcp) release contains decorator metadata and `getMcpServerDefinition()` only; use the [getting-started guide](../guides/getting-started.md) for installable behavior.
 
-**Status:** Target MVP architecture — decorator metadata storage, definition validation, and the async-capable resolver seam are implemented. The runtime compiler, stdio helper, and HTTP adapter described here are not implemented yet.
+**Status:** Repository-development architecture — decorator metadata storage, definition validation, the async-capable resolver seam, runtime compiler, Node stdio helper, and Fetch Streamable HTTP adapter are implemented on `main`. The release note above remains authoritative for the currently published npm surface.
 
 ## Package surface
 

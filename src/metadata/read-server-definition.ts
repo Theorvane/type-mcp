@@ -13,9 +13,10 @@ type NamedDefinition =
 	| McpResourceDefinition
 	| McpPromptDefinition;
 
-export function readMcpServerDefinition(
-	target: McpServerConstructor,
-): McpServerDefinition {
+export function readMcpServerDefinition<
+	T extends object,
+	Arguments extends readonly unknown[],
+>(target: McpServerConstructor<T, Arguments>): McpServerDefinition {
 	const definition = getMcpServerDefinition(target);
 	const className = target.name || "<anonymous>";
 

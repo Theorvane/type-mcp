@@ -21,9 +21,10 @@ Apply at most one label from each status, priority, size, and review group.
 | Group | Labels | Purpose |
 | --- | --- | --- |
 | Type | `type:feature`, `type:bug`, `type:docs`, `type:test`, `type:tooling`, `type:chore`, `type:release` | Nature of the work |
-| Area | `area:core`, `area:http`, `area:ci`, `area:docs` | Affected package surface |
+| Area | `area:core`, `area:http`, `area:ci`, `area:docs`, `area:community`, `area:security` | Affected package surface or community operation |
 | Priority | `priority:critical`, `priority:high`, `priority:medium`, `priority:low` | Sprint ordering |
-| Status | `status:needs-triage`, `status:ready`, `status:in-progress`, `status:blocked` | Delivery state |
+| Status | `status:needs-triage`, `status:needs-info`, `status:ready`, `status:in-progress`, `status:blocked` | Delivery state |
+| Cross-cutting | `dependencies`, `breaking-change`, `good first issue`, `help wanted` | Dependency, compatibility, and contributor discovery signals |
 | Size | `size:XS`, `size:S`, `size:M`, `size:L`, `size:XL` | Planning estimate |
 | Review | `review:approved`, `review:changes-requested`, `review:commented` | Automated reviewer outcome |
 

@@ -12,21 +12,22 @@ export interface PendingMcpDefinitions {
 	readonly prompts: readonly McpPromptDefinition[];
 }
 
-const serverDefinitions = new WeakMap<
-	McpServerConstructor,
-	McpServerDefinition
->();
+const serverDefinitions = new WeakMap<object, McpServerDefinition>();
 
-export function storeMcpServerDefinition(
-	target: McpServerConstructor,
+export function storeMcpServerDefinition<
+	T extends object,
+	Arguments extends readonly unknown[],
+>(
+	target: McpServerConstructor<T, Arguments>,
 	definition: McpServerDefinition,
 ): void {
 	serverDefinitions.set(target, freezeServerDefinition(definition));
 }
 
-export function getMcpServerDefinition(
-	target: McpServerConstructor,
-): McpServerDefinition | undefined {
+export function getMcpServerDefinition<
+	T extends object,
+	Arguments extends readonly unknown[],
+>(target: McpServerConstructor<T, Arguments>): McpServerDefinition | undefined {
 	const definition = serverDefinitions.get(target);
 	return definition === undefined
 		? undefined

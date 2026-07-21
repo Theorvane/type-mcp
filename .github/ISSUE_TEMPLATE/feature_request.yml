@@ -1,0 +1,50 @@
+name: Feature request
+description: Propose a focused, framework-neutral improvement to TypeMCP.
+title: "feat: "
+labels:
+  - type:feature
+  - status:needs-triage
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the proposal. Review the MVP scope and architecture documents first. Deferred capabilities need an explicit product/architecture decision before implementation.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem to solve
+      description: Explain the user need or limitation, not only a preferred implementation.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+      description: Describe observable behavior, public API implications, and an example.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+    validations:
+      required: true
+  - type: checkboxes
+    id: boundaries
+    attributes:
+      label: Scope checks
+      options:
+        - label: I checked the existing issues and documentation for duplicates or prior decisions.
+          required: true
+        - label: I understand core changes cannot add NestJS coupling, secrets, or undocumented transport behavior.
+          required: true
+  - type: dropdown
+    id: contribution
+    attributes:
+      label: Are you willing to submit a pull request?
+      options:
+        - "Yes"
+        - "No"
+        - "I need guidance"
+    validations:
+      required: true
