@@ -20,7 +20,7 @@ Expose a framework-neutral Fetch handler from `type-mcp/http`, delegating Stream
 - `createMcpHandler()` Fetch handler factory.
 - One compiled SDK server and one `WebStandardStreamableHTTPServerTransport` **per SDK-managed session**.
 - SDK-managed stateful Streamable HTTP request handling using the official session ID response header.
-- Fetch-level initialize, tools list/call, and unsupported-method tests.
+- Fetch-level initialize, tools list/call, session teardown/reinitialize, and unsupported/unknown-session request tests.
 
 **Out:**
 - OAuth, durable/custom sessions, Express/Node adapters, legacy SSE, handcrafted JSON-RPC framing, NestJS, URI templates, and publishing.
@@ -43,17 +43,17 @@ Expose a framework-neutral Fetch handler from `type-mcp/http`, delegating Stream
 | Stage | Command | Result / expected reason |
 | --- | --- | --- |
 | Red | `npm test -- test/streamable-http.test.ts` | `createMcpHandler is not implemented yet` before implementation. |
-| Green | `npm test -- test/streamable-http.test.ts` | 2 tests pass: initialize → SDK session → tools/list → tools/call, plus unsupported method delegation. |
+| Green | `npm test -- test/streamable-http.test.ts` | 3 tests pass: initialize → SDK session → tools/list → tools/call → DELETE → reinitialize; unknown/unsupported requests allocate no server; valid routed requests use SDK transport. |
 | Regression | `npm test` | 11 files / 28 tests pass. |
 
 ## Risks and boundaries
 
 - Use the SDK `WebStandardStreamableHTTPServerTransport`; do not duplicate protocol or session rules.
 - The root package remains free of HTTP server framework dependencies.
-- Stateful mode is explicit: each SDK-managed session receives a compiled server and SDK transport, which are removed and closed on `DELETE`.
+- Stateful mode is explicit: each SDK-managed session receives a compiled server and SDK transport, which are removed and closed on `DELETE`. The adapter rejects absent/unknown sessions before allocation.
 
 ## Review handoff
 
-- Spec review: completed — three review findings remediated (async Fetch example, negotiated protocol test, stateful lifecycle wording).
+- Spec review: completed — five review findings remediated (async Fetch example, negotiated protocol test, stateful lifecycle wording, session-per-transport lifecycle, and no-allocation unknown-session routing).
 - Quality review: completed — no implementation-level blocker found after remediation.
 - Final checks: lint, typecheck, tests, build, package/publish verification, production audit, diff check

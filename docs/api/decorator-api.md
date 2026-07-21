@@ -125,7 +125,7 @@ export { handler as GET, handler as POST, handler as DELETE };
 
 | Case | Behavior |
 | --- | --- |
-| Accept | `createMcpHandler()` creates one compiled MCP SDK server and one official `WebStandardStreamableHTTPServerTransport` per SDK-managed session. It returns a Fetch `(request: Request) => Promise<Response>` handler. Initialization returns the SDK-managed `mcp-session-id`; subsequent requests supply that header and negotiated protocol-version header. `DELETE` closes and removes the relevant session so a new client can initialize. HTTP method handling, JSON-RPC framing, and session validation remain SDK-owned. |
+| Accept | `createMcpHandler()` creates one compiled MCP SDK server and one official `WebStandardStreamableHTTPServerTransport` per SDK-managed session. It returns a Fetch `(request: Request) => Promise<Response>` handler. Initialization returns the SDK-managed `mcp-session-id`; subsequent requests supply that header and negotiated protocol-version header. `DELETE` closes and removes the relevant session so a new client can initialize. The adapter rejects absent or unknown session routing before allocation; valid routed HTTP method handling, JSON-RPC framing, and session validation remain SDK-owned. |
 | Excluded | OAuth, custom durable sessions/event stores, Express middleware, legacy SSE transport, and custom protocol parsing. |
 
 ## Metadata immutability

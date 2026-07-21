@@ -184,8 +184,38 @@ describe("Fetch Streamable HTTP handler", () => {
 		expect(restarted.headers.get("mcp-session-id")).not.toBe(sessionId);
 	});
 
-	it("delegates unsupported methods to the SDK transport", async () => {
-		const handler = await createMcpHandler(() =>
+	it("does not allocate a server for unsupported or unknown-session requests", async () => {
+		let created = 0;
+		let closed = 0;
+		const handler = createMcpHandler(() => {
+			created += 1;
+			return {
+				async connect(): Promise<void> {},
+				async close(): Promise<void> {
+					closed += 1;
+				},
+			};
+		});
+
+		const unsupported = await handler(request("PUT"));
+		expect(unsupported.status).toBe(405);
+		expect(created).toBe(0);
+
+		const unknownSession = await handler(
+			request(
+				"POST",
+				{ jsonrpc: "2.0", id: 1, method: "tools/list" },
+				"unknown-session",
+				"2025-11-25",
+			),
+		);
+		expect(unknownSession.status).toBe(404);
+		expect(created).toBe(0);
+		expect(closed).toBe(0);
+	});
+
+	it("delegates unsupported methods to the SDK transport after session routing", async () => {
+		const handler = createMcpHandler(() =>
 			createMcpServer(createDecoratedServerClass()),
 		);
 
