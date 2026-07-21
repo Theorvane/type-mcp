@@ -27,8 +27,10 @@ Use before pushing a release candidate, creating a remote repository, publishing
 - [ ] `git rev-parse HEAD` equals `git ls-remote origin refs/heads/main` after push.
 - [ ] `gh repo view sjungwon03/type-mcp --json url,visibility,defaultBranchRef` confirms private `main`.
 
-## Review
+## Review and integration
 
 - [ ] Specification review found no unresolved acceptance gaps.
 - [ ] Code-quality review found no unresolved blocking issue.
+- [ ] The PR targets `main` and includes `Closes #<issue-number>`.
+- [ ] After merge, the linked issue is confirmed closed and local `main` matches `origin/main`.
 - [ ] Any deferred feature is stated explicitly in the final report.

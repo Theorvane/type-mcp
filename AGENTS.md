@@ -33,9 +33,21 @@ If sources conflict, stop and update the lower-priority document before implemen
 6. **YAGNI.** Do not add OAuth, persistence, legacy SSE, resource templates, or Nest modules unless a separately approved scope document changes.
 7. **Small commits.** One intent per commit with a conventional message. Do not mix formatting churn or unrelated refactors into feature work.
 
+## Required issue → branch → PR workflow
+
+Every change after the initial repository bootstrap follows this sequence. Never commit directly to `main`.
+
+1. Inspect existing open issues and PRs, then create or update one focused GitHub Issue before branching.
+2. Put the issue number in the branch: `<type>/<issue-number>-<short-description>` — for example, `feat/12-tool-compiler` or `chore/1-strict-workspace-baseline`.
+3. Branch from the current `origin/main` unless a documented stacked PR requires another base.
+4. Implement one coherent issue only. Commit with conventional format: `type(scope): subject`.
+5. Push the branch and open a PR against `main` with `Closes #<issue-number>` in the body.
+6. Run and report fresh verification evidence; obtain specification and code-quality review before merge.
+7. Squash merge only after CI/review passes, then verify the issue is closed and `main` contains the merged commit.
+
 ## Required loop for every code task
 
-1. Read the relevant product/architecture/API docs and the precise task in `docs/planning/`.
+1. Read the linked GitHub Issue, relevant product/architecture/API docs, and precise task in `docs/planning/`.
 2. Create a task brief from `.agent/templates/task-brief.md` if the change touches more than one behavior.
 3. Add one failing test near the behavior under test.
 4. Run the focused test and record the expected failure in the task brief or commit context.
@@ -44,7 +56,7 @@ If sources conflict, stop and update the lower-priority document before implemen
 7. Run `npm run typecheck` when changing TypeScript public or internal source.
 8. Update README/API/architecture docs for user-visible behavior or decisions.
 9. Review the exact diff and complete `.agent/checklists/pre-commit.md`.
-10. Commit only after the required checks pass.
+10. Commit only after the required checks pass; push and open/update the linked PR.
 
 ## Verification commands
 
