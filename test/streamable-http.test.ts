@@ -184,6 +184,34 @@ describe("Fetch Streamable HTTP handler", () => {
 		expect(restarted.headers.get("mcp-session-id")).not.toBe(sessionId);
 	});
 
+	it("closes a newly created server when transport connection fails", async () => {
+		let closed = 0;
+		const handler = createMcpHandler(() => ({
+			async connect(): Promise<void> {
+				throw new Error("connection failed");
+			},
+			async close(): Promise<void> {
+				closed += 1;
+			},
+		}));
+
+		await expect(
+			handler(
+				request("POST", {
+					jsonrpc: "2.0",
+					id: 1,
+					method: "initialize",
+					params: {
+						protocolVersion: "2025-11-25",
+						capabilities: {},
+						clientInfo: { name: "failing-client", version: "1.0.0" },
+					},
+				}),
+			),
+		).rejects.toThrow("connection failed");
+		expect(closed).toBe(1);
+	});
+
 	it("does not allocate a server for unsupported or unknown-session requests", async () => {
 		let created = 0;
 		let closed = 0;

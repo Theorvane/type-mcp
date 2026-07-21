@@ -78,7 +78,16 @@ export function createMcpHandler<Server extends McpHttpServerConnection>(
 			},
 		});
 		session = { server, transport };
-		await server.connect(transport);
+		try {
+			await server.connect(transport);
+		} catch (error) {
+			try {
+				await server.close();
+			} catch {
+				// Preserve the original transport connection failure.
+			}
+			throw error;
+		}
 		return session;
 	}
 
