@@ -1,6 +1,6 @@
 # Decorator API contract
 
-**Status:** Metadata declarations are implemented. SDK compilation, instance resolution, stdio, and HTTP transport remain planned MVP work.
+**Status:** Metadata declarations and definition validation are implemented. SDK compilation, instance resolution, stdio, and HTTP transport remain planned MVP work.
 
 ## Server declaration
 
@@ -14,8 +14,8 @@ class CatalogServer {}
 
 | Case | Behavior |
 | --- | --- |
-| Accept | `name` and `version` identify one decorated server class. The decorator records an immutable server definition for later compilation. |
-| Deferred | Compilation and `TypeMcpDefinitionError` are planned for a later core compiler task. |
+| Accept | `name` and `version` identify one decorated server class. The decorator records an immutable server definition for later compilation. `readMcpServerDefinition()` rejects an undecorated class with `TypeMcpDefinitionError`. |
+| Deferred | SDK compilation remains planned. |
 | Excluded | Automatic Nest provider discovery and inferred application metadata. |
 
 ## Tool declaration
@@ -33,8 +33,8 @@ findProduct(input: { sku: string }) {
 
 | Case | Behavior |
 | --- | --- |
-| Accept | A method name is used as the tool name unless an explicit `name` is supplied. `input` must be a Zod object schema. The decorator records metadata only; runtime validation and invocation are planned. |
-| Deferred | Runtime argument validation, handler invocation, safe MCP errors, and duplicate-name checks are planned for compiler tasks. |
+| Accept | A method name is used as the tool name unless an explicit `name` is supplied. `input` must be a Zod object schema. The decorator records metadata only; runtime validation and invocation are planned. `readMcpServerDefinition()` rejects duplicate tool names. |
+| Deferred | Runtime argument validation, handler invocation, and safe MCP errors are planned for compiler tasks. |
 | Excluded | Parameter decorators, automatic schema reflection, authorization, retries, and leaking handler stack traces. |
 
 ## Resource declaration
@@ -51,8 +51,8 @@ readConfig() {
 
 | Case | Behavior |
 | --- | --- |
-| Accept | A static explicit URI and optional MIME type are recorded as one resource declaration. |
-| Deferred | Resource registration, declaration validation, duplicate checks, and safe handler errors are planned for compiler tasks. |
+| Accept | A static explicit URI and optional MIME type are recorded as one resource declaration. `readMcpServerDefinition()` rejects duplicate resource names. |
+| Deferred | Resource registration and safe handler errors are planned for compiler tasks. |
 | Excluded | URI templates, subscription/push resources, and persistence/caching policies. |
 
 ## Prompt declaration
@@ -69,8 +69,8 @@ summarizeProduct(sku: string) {
 
 | Case | Behavior |
 | --- | --- |
-| Accept | A named method is recorded as a prompt declaration. |
-| Deferred | Prompt registration, result normalization, duplicate checks, and safe handler errors are planned for compiler tasks. |
+| Accept | A named method is recorded as a prompt declaration. `readMcpServerDefinition()` rejects duplicate prompt names. Component namespaces are distinct, so a tool, resource, and prompt may share one public name. |
+| Deferred | Prompt registration, result normalization, and safe handler errors are planned for compiler tasks. |
 | Excluded | Automatic argument inference from TypeScript parameter types and prompt template files. |
 
 ## Server construction

@@ -7,11 +7,18 @@ const root = process.cwd();
 const manifestPath = resolve(root, "package.json");
 const manifest = JSON.parse(await readFile(manifestPath, "utf8"));
 const exportsToVerify = [
-	{ key: ".", symbol: "createMcpServer" },
-	{ key: "./http", symbol: "createMcpHandler" },
+	{
+		key: ".",
+		symbols: [
+			"createMcpServer",
+			"readMcpServerDefinition",
+			"TypeMcpDefinitionError",
+		],
+	},
+	{ key: "./http", symbols: ["createMcpHandler"] },
 ];
 
-for (const { key, symbol } of exportsToVerify) {
+for (const { key, symbols } of exportsToVerify) {
 	const exportMap = manifest.exports?.[key];
 	if (
 		exportMap === undefined ||
@@ -29,11 +36,25 @@ for (const { key, symbol } of exportsToVerify) {
 	const typesPath = resolve(root, exportMap.types);
 	await Promise.all([access(esmPath), access(cjsPath), access(typesPath)]);
 
-	const esm = await import(pathToFileURL(esmPath).href);
+	const [esm, typeDeclarations] = await Promise.all([
+		import(pathToFileURL(esmPath).href),
+		readFile(typesPath, "utf8"),
+	]);
 	const require = createRequire(manifestPath);
 	const cjs = require(cjsPath);
-	if (typeof esm[symbol] !== "function" || typeof cjs[symbol] !== "function") {
-		throw new Error(`${manifest.name}: missing ${key} ${symbol} export`);
+
+	for (const symbol of symbols) {
+		if (
+			typeof esm[symbol] !== "function" ||
+			typeof cjs[symbol] !== "function"
+		) {
+			throw new Error(
+				`${manifest.name}: missing ${key} ${symbol} runtime export`,
+			);
+		}
+		if (!typeDeclarations.includes(symbol)) {
+			throw new Error(`${manifest.name}: missing ${key} ${symbol} type export`);
+		}
 	}
 
 	console.log(
