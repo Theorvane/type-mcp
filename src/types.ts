@@ -1,6 +1,8 @@
 import type { ZodObject } from "zod";
 
-export type McpServerConstructor = abstract new (...args: never[]) => object;
+export type McpServerConstructor<T extends object = object> = new (
+	...args: never[]
+) => T;
 
 export interface McpServerOptions {
 	readonly name: string;
