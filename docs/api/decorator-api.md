@@ -69,7 +69,7 @@ summarizeProduct() {
 
 | Case | Behavior |
 | --- | --- |
-| Accept | A named **zero-argument** method is recorded as a prompt declaration. `readMcpServerDefinition()` rejects duplicate prompt names. Component namespaces are distinct, so a tool, resource, and prompt may share one public name. |
+| Accept | A named method that is callable with no arguments is recorded as a prompt declaration. `readMcpServerDefinition()` rejects duplicate prompt names. Component namespaces are distinct, so a tool, resource, and prompt may share one public name. Required handler parameters are rejected at compile time. |
 | Accept | `createMcpServer()` registers prompts through the official SDK. A handler may return text, JSON-compatible data, or an SDK-valid prompt result. Text and JSON-compatible values become one `user` text message. Handler failures return a generic safe message without application exception text or stack traces. |
 | Excluded | Prompt argument schemas/inference, automatic argument inference from TypeScript parameter types, and prompt template files. |
 

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { McpServer, McpTool } from "../src/index.js";
+import { McpPrompt, McpServer, McpTool } from "../src/index.js";
 
 @McpServer({ name: "type-test", version: "0.1.0" })
 class ValidDecoratedServer {
@@ -14,6 +14,17 @@ class ValidDecoratedServer {
 	// @ts-expect-error McpTool can decorate methods only.
 	@McpTool({ input: z.object({}) })
 	readonly invalidField = "not a handler";
+
+	@McpPrompt({})
+	welcome(): string {
+		return "Welcome";
+	}
+
+	// @ts-expect-error McpPrompt does not support required handler parameters.
+	@McpPrompt({})
+	productSummary(_sku: string): string {
+		return _sku;
+	}
 }
 
 void ValidDecoratedServer;

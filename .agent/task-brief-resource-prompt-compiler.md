@@ -30,6 +30,7 @@ Compile decorated static resources and named prompts into the official MCP SDK s
 - [x] Prompts list and get through an SDK client, including an async handler.
 - [x] Focused test was observed failing before production implementation.
 - [x] Resource/prompt handler failures return generic content and do not expose thrown secrets.
+- [x] Required prompt-handler parameters are rejected by the TypeScript decorator contract.
 
 ## Files
 
@@ -43,7 +44,7 @@ Compile decorated static resources and named prompts into the official MCP SDK s
 | --- | --- | --- |
 | Red | `npm test -- test/resource-prompt-compilation.test.ts` | `resources/list` and `prompts/list` returned MCP `-32601 Method not found` before registration. |
 | Green | `npm test -- test/resource-prompt-compilation.test.ts` | 4 tests pass: static resource list/read, sync/async prompts, SDK-result pass-through, and safe handler failure content. |
-| Regression | `npm test` | Pending final run after independent-review remediation. |
+| Regression | `npm run typecheck && npm test` | Pending final run after required-parameter type-contract remediation. |
 
 ## Risks and boundaries
 
