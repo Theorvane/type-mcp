@@ -34,7 +34,7 @@ findProduct(input: { sku: string }) {
 | Case | Behavior |
 | --- | --- |
 | Accept | A method name is used as the tool name unless an explicit `name` is supplied. `input` must be a Zod object schema. `createMcpServer()` registers each validated declaration with the official SDK; SDK validation runs before the bound instance method. String results become text content, JSON-compatible values become JSON text, and valid MCP tool results pass through. Duplicate tool names are rejected by `readMcpServerDefinition()`. |
-| Deferred | stdio and transport work remain separate tasks. |
+| Deferred | HTTP and other transport work remain separate tasks. |
 | Excluded | Parameter decorators, automatic schema reflection, authorization, retries, and leaking handler stack traces. |
 
 ## Resource declaration
