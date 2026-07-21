@@ -1,21 +1,21 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.5.4/schema.json",
-  "files": {
-    "includes": ["**", "!**/dist", "!**/coverage", "!**/node_modules"]
-  },
-  "linter": {
-    "enabled": true,
-    "rules": {
-      "preset": "recommended",
-      "complexity": {
-        "useArrowFunction": "off"
-      },
-      "suspicious": {
-        "noPrototypeBuiltins": "off"
-      },
-      "style": {
-        "useImportType": "error"
-      }
-    }
-  }
+	"$schema": "https://biomejs.dev/schemas/2.5.4/schema.json",
+	"files": {
+		"includes": ["**", "!**/dist", "!**/coverage", "!**/node_modules"]
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"preset": "recommended",
+			"complexity": {
+				"useArrowFunction": "off"
+			},
+			"suspicious": {
+				"noPrototypeBuiltins": "off"
+			},
+			"style": {
+				"useImportType": "error"
+			}
+		}
+	}
 }

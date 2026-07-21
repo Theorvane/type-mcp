@@ -5,5 +5,5 @@
  * exists now to establish the stable package entry point.
  */
 export function createMcpHandler(): never {
-  throw new Error("createMcpHandler is not implemented yet");
+	throw new Error("createMcpHandler is not implemented yet");
 }
