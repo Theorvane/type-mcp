@@ -1,6 +1,6 @@
 # Architecture overview
 
-**Status:** Target MVP architecture — decorator metadata storage, definition validation, the async-capable resolver seam, compiler behavior, and the Node stdio helper are implemented. The HTTP adapter described here remains unimplemented.
+**Status:** Target MVP architecture — decorator metadata storage, definition validation, the async-capable resolver seam, compiler behavior, the Node stdio helper, and the Fetch Streamable HTTP adapter are implemented.
 
 ## Package surface
 
@@ -16,7 +16,7 @@ type-mcp
   └─ type-mcp/http → Web Standard Streamable HTTP transport
 ```
 
-The root `type-mcp` export owns decorator definitions, definition validation, the resolver seam, MCP SDK compiler behavior, and the Node stdio helper. The `type-mcp/http` subpath will consume compiled-server contracts and own Web Standard request/response adaptation. Applications own business handlers and dependencies; HTTP transport remains pending.
+The root `type-mcp` export owns decorator definitions, definition validation, the resolver seam, MCP SDK compiler behavior, and the Node stdio helper. The `type-mcp/http` subpath owns Fetch request/response adaptation through the SDK's Web Standard Streamable HTTP transport. Applications own business handlers and dependencies.
 
 ## Runtime flow
 
@@ -28,7 +28,7 @@ The following distinguishes implemented compiler behavior from planned transport
 4. `createMcpServer()` consumes the validated definition and resolved instance, then registers validated tools, static resources, and prompts with the official SDK `McpServer`. This compiler path is implemented.
 5. Tool inputs cross the Zod validation boundary before application code runs. Compiler handler failures become generic safe content without application error text or stacks.
 6. `startStdioServer()` connects an SDK server to the official Node `StdioServerTransport`.
-7. For HTTP, the `type-mcp/http` subpath will use the SDK's Web Standard Streamable HTTP transport.
+7. `createMcpHandler()` creates one SDK server and Web Standard Streamable HTTP transport per SDK-managed session, routes known sessions by ID, rejects unrouteable traffic before allocation, and delegates valid routed HTTP method handling, JSON-RPC framing, and session validation to the SDK.
 ## Core contracts
 
 ```ts
@@ -43,14 +43,14 @@ This interface intentionally permits asynchronous resolution so a future NestJS 
 
 ## Target error boundary
 
-The following error behavior is implemented for compiler work; HTTP behavior remains planned.
+The following error behavior is implemented for compiler and HTTP adapter work.
 
 | Failure source | Target behavior |
 | --- | --- |
 | Decorator/definition conflict | fail fast during server compilation with a typed framework error |
 | Invalid tool input | return a safe MCP-visible validation error; do not invoke the handler |
 | Application handler throws | return generic safe MCP error; log/observability integration is deferred |
-| Unsupported HTTP method | return an HTTP method error compatible with the adapter contract |
+| Unsupported HTTP method | delegate to the SDK Streamable HTTP transport's method response |
 | Transport/session behavior | delegate to the official SDK transport rather than reimplement protocol state |
 
 ## Deferred NestJS integration
