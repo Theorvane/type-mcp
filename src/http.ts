@@ -99,10 +99,24 @@ export function createMcpHandler<Server extends McpHttpServerConnection>(
 		}
 
 		const session = await createSession();
-		const response = await session.transport.handleRequest(request);
-		if (session.transport.sessionId === undefined) {
+		try {
+			const response = await session.transport.handleRequest(request);
+			if (response.status < 400) {
+				return response;
+			}
+			const sessionId = session.transport.sessionId;
+			if (sessionId !== undefined) {
+				sessions.delete(sessionId);
+			}
 			await session.server.close();
+			return response;
+		} catch (error) {
+			const sessionId = session.transport.sessionId;
+			if (sessionId !== undefined) {
+				sessions.delete(sessionId);
+			}
+			await session.server.close();
+			throw error;
 		}
-		return response;
 	};
 }
