@@ -118,8 +118,7 @@ await startStdioServer(server);
 ## HTTP adapter
 
 ```ts
-const handlerPromise = createMcpHandler(() => createMcpServer(CatalogServer));
-const handler = async (request: Request) => (await handlerPromise)(request);
+const handler = createMcpHandler(() => createMcpServer(CatalogServer));
 
 export { handler as GET, handler as POST, handler as DELETE };
 ```
