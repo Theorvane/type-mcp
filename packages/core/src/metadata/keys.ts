@@ -1,12 +1,12 @@
 const symbolWithMetadata = Symbol as unknown as {
-  metadata?: symbol;
+	metadata?: symbol;
 };
 
 if (symbolWithMetadata.metadata === undefined) {
-  Object.defineProperty(Symbol, "metadata", {
-    configurable: true,
-    value: Symbol("Symbol.metadata"),
-  });
+	Object.defineProperty(Symbol, "metadata", {
+		configurable: true,
+		value: Symbol("Symbol.metadata"),
+	});
 }
 
 export const MCP_TOOLS_METADATA_KEY = Symbol("type-mcp:tools");

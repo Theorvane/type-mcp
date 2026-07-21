@@ -4,15 +4,15 @@ export { McpServer } from "./decorators/mcp-server.js";
 export { McpTool } from "./decorators/mcp-tool.js";
 export { getMcpServerDefinition } from "./metadata/definitions.js";
 export type {
-  McpPromptDefinition,
-  McpServerConstructor,
-  McpPromptOptions,
-  McpResourceDefinition,
-  McpResourceOptions,
-  McpServerDefinition,
-  McpServerOptions,
-  McpToolDefinition,
-  McpToolOptions,
+	McpPromptDefinition,
+	McpPromptOptions,
+	McpResourceDefinition,
+	McpResourceOptions,
+	McpServerConstructor,
+	McpServerDefinition,
+	McpServerOptions,
+	McpToolDefinition,
+	McpToolOptions,
 } from "./types.js";
 
 /**
@@ -22,5 +22,5 @@ export type {
  * now to establish the stable package entry point.
  */
 export function createMcpServer(): never {
-  throw new Error("createMcpServer is not implemented yet");
+	throw new Error("createMcpServer is not implemented yet");
 }

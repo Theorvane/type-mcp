@@ -138,7 +138,7 @@ git diff --check
 **Step 7: Commit.**
 
 ```bash
-git add package.json package-lock.json tsconfig.base.json vitest.config.ts eslint.config.mjs scripts/ .gitignore .github packages/
+git add package.json package-lock.json tsconfig.base.json vitest.config.ts biome.json scripts/ .gitignore .github packages/
 git commit -m "chore: scaffold strict TypeScript workspace"
 ```
 
