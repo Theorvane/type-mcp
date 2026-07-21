@@ -1,6 +1,6 @@
 # Architecture overview
 
-**Status:** Target MVP architecture — decorator metadata storage, definition validation, and the async-capable resolver seam are implemented. The runtime compiler, stdio helper, and HTTP adapter described here are not implemented yet.
+**Status:** Target MVP architecture — decorator metadata storage, definition validation, the async-capable resolver seam, and tool compilation are implemented. Resource/prompt compilation, the stdio helper, and HTTP adapter described here remain unimplemented.
 
 ## Package surface
 
@@ -16,19 +16,18 @@ type-mcp
   └─ type-mcp/http → Web Standard Streamable HTTP transport
 ```
 
-The root `type-mcp` export owns decorator definitions, definition validation, and the resolver seam, and will own compilation. The `type-mcp/http` subpath will consume compiled-server contracts and own Web Standard request/response adaptation. Today, decorator metadata storage, declaration validation, and resolver contracts are implemented; applications own business handlers and dependencies.
+The root `type-mcp` export owns decorator definitions, definition validation, the resolver seam, and tool compilation. The `type-mcp/http` subpath will consume compiled-server contracts and own Web Standard request/response adaptation. Today, applications own business handlers and dependencies; resource/prompt compilation and transports are pending.
 
 ## Target runtime flow
 
-The following is planned behavior, not the current runtime implementation:
+The following describes the current tool path and remaining planned behavior:
 
 1. `@McpServer`, `@McpTool`, `@McpResource`, and `@McpPrompt` record definition data associated with a class. This metadata step is implemented.
 2. `readMcpServerDefinition()` validates decorated declarations and returns a frozen definition copy. This declaration-validation step is implemented.
 3. `resolveMcpServerInstance()` uses the synchronous `defaultInstanceResolver` for zero-argument server classes or awaits a supplied `InstanceResolver<T>`. This resolver seam is implemented.
-4. `createMcpServer()` will consume the validated definition and resolved instance before opening a transport.
-5. The compiler will register validated tools, static resources, and prompts against the official SDK `McpServer`.
+4. `createMcpServer()` consumes the validated definition and resolved instance, then registers validated tools with the official SDK `McpServer`. Tool inputs cross the Zod validation boundary before application code runs; handler failures become safe MCP errors. This tool path is implemented.
+5. Resource and prompt registrations are planned compiler work.
 6. A transport will connect to the SDK server. For HTTP, the `type-mcp/http` subpath will use the SDK's Web Standard Streamable HTTP transport.
-7. Tool inputs will cross the Zod validation boundary before application code runs, and errors will become safe MCP errors.
 
 ## Core contracts
 
@@ -44,7 +43,7 @@ This interface intentionally permits asynchronous resolution so a future NestJS 
 
 ## Target error boundary
 
-The following error behavior is planned for compiler and HTTP work; it is not provided by the current metadata-only implementation.
+The following error behavior is implemented for compiled tools; corresponding resource/prompt and HTTP behavior remains planned.
 
 | Failure source | Target behavior |
 | --- | --- |
