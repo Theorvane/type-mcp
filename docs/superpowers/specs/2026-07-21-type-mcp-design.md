@@ -3,6 +3,8 @@
 **상태:** 승인된 설계 — 구현 계획 작성 전 검토용  
 **작성일:** 2026-07-21
 
+> **문서 위치 안내:** 이 문서는 승인된 설계의 원본 기록입니다. 현재의 정식 문서 진입점은 [docs/README.md](../../README.md)이며, 실행 단위 작업은 [MVP 구현 계획](../../planning/2026-07-21-mvp-implementation-plan.md)을 따릅니다.
+
 ## 1. 목표
 
 `type-mcp`는 TypeScript에서 MCP(Model Context Protocol) 서버를 데코레이터 기반으로 작성하도록 지원하는 프레임워크다. FastMCP의 선언적 컴포넌트 등록 경험과 `mcp-handler`의 Web/Next.js 전송 어댑터 모델을 참고한다.
@@ -152,7 +154,7 @@ Vitest로 test-first 개발한다.
 - TypeScript `strict: true`, public API에서 `any` 금지
 - `npm run typecheck`, `npm test`, `npm run build`가 모두 통과해야 한다.
 - GitHub Actions는 Node LTS에서 위 세 검증을 실행한다.
-- MIT License, README, 사용 예제, 기여 가이드를 포함한다.
+- MIT License, README, 사용 예제를 포함한다.
 - GitHub 저장소: `sjungwon03/type-mcp`, 비공개(private)
 
 ## 8. 구현 순서
