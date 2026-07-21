@@ -6,6 +6,10 @@ import type {
 	McpServerConstructor,
 	ZeroArgumentMcpServerConstructor,
 } from "../types.js";
+import {
+	normalizePromptResult,
+	normalizeResourceResult,
+} from "./normalize-resource-prompt-result.js";
 import { normalizeToolResult } from "./normalize-tool-result.js";
 
 export async function createMcpServer<T extends object>(
@@ -59,6 +63,52 @@ export async function createMcpServer<
 		);
 	}
 
+	for (const resource of definition.resources) {
+		server.registerResource(
+			resource.name,
+			resource.uri,
+			{
+				...(resource.description === undefined
+					? {}
+					: { description: resource.description }),
+				...(resource.mimeType === undefined
+					? {}
+					: { mimeType: resource.mimeType }),
+			},
+			async (uri) => {
+				try {
+					const result = await invokeMethod(instance, resource.methodName, []);
+					return normalizeResourceResult(result, uri, resource.mimeType);
+				} catch {
+					return normalizeResourceResult(
+						"Resource execution failed",
+						uri,
+						resource.mimeType,
+					);
+				}
+			},
+		);
+	}
+
+	for (const prompt of definition.prompts) {
+		server.registerPrompt(
+			prompt.name,
+			{
+				...(prompt.description === undefined
+					? {}
+					: { description: prompt.description }),
+			},
+			async () => {
+				try {
+					const result = await invokeMethod(instance, prompt.methodName, []);
+					return normalizePromptResult(result);
+				} catch {
+					return normalizePromptResult("Prompt execution failed");
+				}
+			},
+		);
+	}
+
 	return server;
 }
 
@@ -67,10 +117,18 @@ function invokeTool(
 	methodName: string,
 	input: unknown,
 ): unknown | Promise<unknown> {
+	return invokeMethod(instance, methodName, [input]);
+}
+
+function invokeMethod(
+	instance: object,
+	methodName: string,
+	arguments_: readonly unknown[],
+): unknown | Promise<unknown> {
 	const method = Reflect.get(instance, methodName);
 	if (typeof method !== "function") {
-		throw new TypeError("Decorated tool method is not callable");
+		throw new TypeError("Decorated MCP method is not callable");
 	}
 
-	return Reflect.apply(method, instance, [input]);
+	return Reflect.apply(method, instance, arguments_);
 }

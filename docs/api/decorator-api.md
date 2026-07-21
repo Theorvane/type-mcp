@@ -1,6 +1,6 @@
 # Decorator API contract
 
-**Status:** Metadata declarations, definition validation, the resolver seam, and SDK tool compilation are implemented. Resource/prompt compilation, stdio, and HTTP transport remain planned MVP work.
+**Status:** Metadata declarations, definition validation, the resolver seam, and SDK compilation of tools, static resources, and prompts are implemented. stdio and HTTP transport remain planned MVP work.
 
 ## Server declaration
 
@@ -15,7 +15,7 @@ class CatalogServer {}
 | Case | Behavior |
 | --- | --- |
 | Accept | `name` and `version` identify one decorated server class. The decorator records an immutable server definition for later compilation. `readMcpServerDefinition()` rejects an undecorated class with `TypeMcpDefinitionError`. `createMcpServer()` compiles validated tool declarations for this server. |
-| Deferred | Resource/prompt SDK compilation remains planned. |
+| Deferred | stdio and HTTP transport remain planned. |
 | Excluded | Automatic Nest provider discovery and inferred application metadata. |
 
 ## Tool declaration
@@ -52,7 +52,7 @@ readConfig() {
 | Case | Behavior |
 | --- | --- |
 | Accept | A static explicit URI and optional MIME type are recorded as one resource declaration. `readMcpServerDefinition()` rejects duplicate resource names. |
-| Deferred | Resource registration and safe handler errors are planned for compiler tasks. |
+| Accept | `createMcpServer()` registers each static URI through the official SDK. A handler may return text, JSON-compatible data, or an SDK-valid read result. Text and JSON-compatible values become one resource content item at the declared URI; the declared MIME type is retained. Handler failures return generic safe content without application exception text or stack traces. |
 | Excluded | URI templates, subscription/push resources, and persistence/caching policies. |
 
 ## Prompt declaration
@@ -70,7 +70,7 @@ summarizeProduct(sku: string) {
 | Case | Behavior |
 | --- | --- |
 | Accept | A named method is recorded as a prompt declaration. `readMcpServerDefinition()` rejects duplicate prompt names. Component namespaces are distinct, so a tool, resource, and prompt may share one public name. |
-| Deferred | Prompt registration, result normalization, and safe handler errors are planned for compiler tasks. |
+| Accept | `createMcpServer()` registers prompts through the official SDK. A handler may return text, JSON-compatible data, or an SDK-valid prompt result. Text and JSON-compatible values become one `user` text message. Handler failures return a generic safe message without application exception text or stack traces. |
 | Excluded | Automatic argument inference from TypeScript parameter types and prompt template files. |
 
 ## Server construction
