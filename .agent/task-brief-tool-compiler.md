@@ -45,7 +45,8 @@ Compile validated `@McpTool` declarations to an official MCP SDK `McpServer`, wh
 | --- | --- | --- |
 | Red | `npm test -- --run test/tool-compilation.test.ts` | `createMcpServer is not implemented yet` from the previous placeholder. |
 | Red | `npm test -- --run test/tool-compilation.test.ts` | JSON-return test produced empty MCP content because a generic object was accepted as a stripped SDK result. |
-| Green | `npm test -- --run test/tool-compilation.test.ts` | Tool list/call, invalid input, async handler, safe handler error, custom resolver, and JSON normalization pass. |
+| Red | `npm test -- --run test/tool-compilation.test.ts` | A `{ structuredContent: … }` SDK-valid result was incorrectly normalized to JSON text. |
+| Green | `npm test -- --run test/tool-compilation.test.ts` | Tool list/call, handler-skip on invalid input, async handler, safe handler error, custom resolver, JSON normalization, and structured MCP result pass-through pass. |
 | Regression | `npm test` | Pending final full suite. |
 
 ## Risks and boundaries

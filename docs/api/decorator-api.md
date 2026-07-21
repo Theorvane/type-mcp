@@ -14,8 +14,8 @@ class CatalogServer {}
 
 | Case | Behavior |
 | --- | --- |
-| Accept | `name` and `version` identify one decorated server class. The decorator records an immutable server definition for later compilation. `readMcpServerDefinition()` rejects an undecorated class with `TypeMcpDefinitionError`. |
-| Deferred | SDK compilation remains planned. |
+| Accept | `name` and `version` identify one decorated server class. The decorator records an immutable server definition for later compilation. `readMcpServerDefinition()` rejects an undecorated class with `TypeMcpDefinitionError`. `createMcpServer()` compiles validated tool declarations for this server. |
+| Deferred | Resource/prompt SDK compilation remains planned. |
 | Excluded | Automatic Nest provider discovery and inferred application metadata. |
 
 ## Tool declaration

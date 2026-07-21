@@ -7,8 +7,13 @@ function isRecord(result: unknown): result is Record<string, unknown> {
 	return typeof result === "object" && result !== null;
 }
 
-function hasMcpContent(result: unknown): result is { content: unknown[] } {
-	return isRecord(result) && Array.isArray(result.content);
+function isMcpToolResultCandidate(result: unknown): boolean {
+	return (
+		isRecord(result) &&
+		(Array.isArray(result.content) ||
+			"structuredContent" in result ||
+			"isError" in result)
+	);
 }
 
 export function normalizeToolResult(result: unknown): CallToolResult {
@@ -16,7 +21,7 @@ export function normalizeToolResult(result: unknown): CallToolResult {
 		return { content: [{ type: "text", text: result }] };
 	}
 
-	if (hasMcpContent(result)) {
+	if (isMcpToolResultCandidate(result)) {
 		const parsed = CallToolResultSchema.safeParse(result);
 		if (parsed.success) {
 			return parsed.data;

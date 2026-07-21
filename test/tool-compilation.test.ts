@@ -37,8 +37,11 @@ function classContext(metadata: DecoratorMetadata): ClassDecoratorContext {
 
 describe("decorated tool compilation", () => {
 	it("lists a decorated tool and invokes it with validated input", async () => {
+		let addCallCount = 0;
+
 		class CalculatorServer {
 			public add(input: { left: number; right: number }): string {
+				addCallCount += 1;
 				return String(input.left + input.right);
 			}
 		}
@@ -89,7 +92,9 @@ describe("decorated tool compilation", () => {
 			}),
 		);
 		expect(result.content).toEqual([{ type: "text", text: "5" }]);
+		expect(addCallCount).toBe(1);
 		expect(invalidResult.isError).toBe(true);
+		expect(addCallCount).toBe(1);
 		expect(invalidResult.content[0]).toMatchObject({ type: "text" });
 
 		await Promise.all([client.close(), server.close()]);
@@ -158,12 +163,22 @@ describe("decorated tool compilation", () => {
 			public details(input: { id: number }): { label: string; id: number } {
 				return { label: `${this.prefix}-${input.id}`, id: input.id };
 			}
+
+			public structured(input: { id: number }): {
+				structuredContent: { answer: number };
+			} {
+				return { structuredContent: { answer: input.id } };
+			}
 		}
 
 		const metadata: DecoratorMetadata = {};
 		McpTool({ input: z.object({ id: z.number() }) })(
 			DependencyServer.prototype.details,
 			methodContext("details", metadata),
+		);
+		McpTool({ input: z.object({ id: z.number() }) })(
+			DependencyServer.prototype.structured,
+			methodContext("structured", metadata),
 		);
 		McpServer({ name: "dependency", version: "1.0.0" })(
 			DependencyServer,
@@ -189,9 +204,21 @@ describe("decorated tool compilation", () => {
 			CallToolResultSchema,
 		);
 
+		const structuredResult = await client.request(
+			{
+				method: "tools/call",
+				params: { name: "structured", arguments: { id: 42 } },
+			},
+			CallToolResultSchema,
+		);
+
 		expect(result.content).toEqual([
 			{ type: "text", text: '{"label":"record-7","id":7}' },
 		]);
+		expect(structuredResult).toMatchObject({
+			content: [],
+			structuredContent: { answer: 42 },
+		});
 
 		await Promise.all([client.close(), server.close()]);
 	});

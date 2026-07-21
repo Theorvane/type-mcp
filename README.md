@@ -17,7 +17,7 @@ TypeMCP is a decorator-first TypeScript framework for defining [Model Context Pr
 
 ## Define MCP components where they belong
 
-Decorate a class with the server, tool, resource, and prompt declarations that describe its MCP surface. TypeMCP records an immutable definition that later compiler work will turn into an MCP SDK server.
+Decorate a class with the server, tool, resource, and prompt declarations that describe its MCP surface. TypeMCP records an immutable definition; `createMcpServer()` now compiles its validated tools into an MCP SDK server, while resource and prompt compilation remain planned.
 
 ```ts
 import { z } from "zod";
@@ -67,7 +67,7 @@ The declarations above are available today. `createMcpServer()` compiles decorat
 
 | Import | Role | Status |
 | --- | --- | --- |
-| `type-mcp` | Decorators, metadata, declaration validation, resolver seam, and compiler/stdio helper | Declarations/validation/resolver and tool compiler available; other runtime components planned |
+| `type-mcp` | Decorators, metadata, declaration validation, resolver seam, and tool compiler | Declarations/validation/resolver and tool compiler available; resource/prompt compilation and transports planned |
 | `type-mcp/http` | Fetch-compatible Streamable HTTP adapter subpath | Planned |
 | Future NestJS integration | Discovery and DI integration | Deferred |
 
