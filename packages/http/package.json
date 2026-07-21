@@ -14,14 +14,18 @@
       "require": "./dist/index.cjs"
     }
   },
-  "files": ["dist"],
+  "files": ["dist", "README.md", "LICENSE"],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "build": "tsup",
-    "test": "vitest run"
+    "test": "vitest run",
+    "prepublishOnly": "npm --prefix ../.. run verify:publish"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.26.0",
-    "@type-mcp/core": "file:../core"
+    "@type-mcp/core": "0.1.0"
   }
 }

@@ -6,7 +6,8 @@ This directory is the canonical project documentation set. Read documents in thi
 2. [MVP scope](product/mvp-scope.md) — delivery boundary and exclusions
 3. [Architecture overview](architecture/overview.md) — components and runtime flow
 4. [Decorator API contract](api/decorator-api.md) — public behavior, including Accept/Error/Excluded cases
-5. [MVP implementation plan](planning/2026-07-21-mvp-implementation-plan.md) — task-level execution order
+5. [npm release readiness](guides/npm-release.md) — scope ownership and pre-publish safeguards
+6. [MVP implementation plan](planning/2026-07-21-mvp-implementation-plan.md) — task-level execution order
 
 ## Sections
 
