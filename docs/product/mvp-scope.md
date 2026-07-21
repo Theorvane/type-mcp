@@ -31,7 +31,7 @@
 
 ## Constraints
 
-- Repository target: private `sjungwon03/type-mcp`.
+- Repository launch target: public open-source `sjungwon03/type-mcp`; see [open-source launch checklist](../guides/open-source-launch.md) before changing visibility.
 - Runtime protocol behavior comes from the official MCP SDK.
 - The root `type-mcp` package must have no NestJS runtime or peer dependency.
 - Public types are strict and runtime input is validated before handler invocation.

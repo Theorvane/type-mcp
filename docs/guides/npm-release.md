@@ -1,6 +1,6 @@
 # npm release readiness
 
-TypeMCP publishes one public, unscoped package: `type-mcp`. Its Fetch-compatible HTTP entry point is the `type-mcp/http` subpath. The GitHub repository may remain private; GitHub visibility and npm package visibility are separate controls.
+TypeMCP publishes one public, unscoped package: `type-mcp`. Its Fetch-compatible HTTP entry point is the `type-mcp/http` subpath. The repository is being prepared for public open-source launch; repository visibility and npm package visibility remain separate controls.
 
 ## What must happen before the first release
 

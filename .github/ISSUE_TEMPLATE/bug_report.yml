@@ -1,0 +1,66 @@
+name: Bug report
+description: Report reproducible unexpected behavior in TypeMCP.
+title: "bug: "
+labels:
+  - type:bug
+  - status:needs-triage
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for helping improve TypeMCP. Do not include access tokens, credentials, private endpoints, or application data. For security vulnerabilities, follow [SECURITY.md](https://github.com/sjungwon03/type-mcp/blob/main/SECURITY.md) instead of opening a public issue.
+  - type: textarea
+    id: summary
+    attributes:
+      label: What happened?
+      description: Describe the observed behavior and why it is unexpected.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction
+      description: Provide the smallest code sample and exact commands that reproduce the issue.
+      placeholder: |
+        1. Install ...
+        2. Run ...
+        3. Observe ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior and safe logs
+      description: Remove secrets, private URLs, and application data before pasting output.
+    validations:
+      required: true
+  - type: input
+    id: type-mcp-version
+    attributes:
+      label: TypeMCP version
+      placeholder: 0.1.0
+    validations:
+      required: true
+  - type: input
+    id: runtime
+    attributes:
+      label: Runtime and OS
+      placeholder: Node 22.x on Ubuntu 24.04
+    validations:
+      required: true
+  - type: dropdown
+    id: contribution
+    attributes:
+      label: Are you willing to submit a pull request?
+      options:
+        - "Yes"
+        - "No"
+        - "I need guidance"
+    validations:
+      required: true

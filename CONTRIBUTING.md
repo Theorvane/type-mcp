@@ -1,4 +1,6 @@
-# Contributing to type-mcp
+# Contributing to TypeMCP
+
+Thank you for contributing. TypeMCP is an open-source TypeScript project released under the [MIT License](LICENSE). By submitting a contribution, you agree to license it under that license and to follow the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## Before changing code
 
@@ -45,6 +47,11 @@ Review in two passes:
 
 Use [.agent/templates/review-report.md](.agent/templates/review-report.md) to record findings when a change is non-trivial.
 
-## Publication
+## Security and support
 
-The current repository target is private. Before creating/pushing the remote repository or reporting delivery, complete [.agent/checklists/release-readiness.md](.agent/checklists/release-readiness.md).
+- Report suspected vulnerabilities privately through [SECURITY.md](SECURITY.md); never include sensitive details in a public issue or pull request.
+- For usage and contribution questions, read [SUPPORT.md](SUPPORT.md) before opening a `question` issue.
+
+## Maintainer review
+
+Maintainers triage new reports, request missing reproduction details when needed, and review changes for specification compliance and code quality. A contribution is ready to merge only after the linked issue is scoped, CI is green, review findings are resolved, and the PR template is complete.
