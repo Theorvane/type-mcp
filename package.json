@@ -47,6 +47,7 @@
 		"build": "tsup",
 		"verify:package": "node scripts/verify-package-exports.mjs",
 		"verify:publish": "npm run build && node scripts/verify-publish-readiness.mjs",
+		"example:standalone-http": "npm run build && npm --prefix examples/standalone-http ci && npm --prefix examples/standalone-http run build",
 		"prepublishOnly": "npm run verify:publish",
 		"clean": "rimraf dist coverage"
 	},

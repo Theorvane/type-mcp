@@ -120,6 +120,8 @@ The methods above are ordinary application methods; **`0.1.0` does not validate 
 - [Getting started](docs/guides/getting-started.md) — install, declare, inspect, and respect the `0.1.0` boundary.
 - [Configuration and compatibility](docs/guides/configuration.md) — Node, ESM/CommonJS, TypeScript decorators, schemas, and release boundaries.
 - [Agent integration guide](docs/guides/agent-integration.md) — evidence-first coding-agent workflow and no-runtime rule.
+- [HTTP framework integration](docs/guides/http-and-nextjs.md) — repository-source Streamable HTTP example and Fetch/Next.js route shape; not yet part of npm `0.1.0`.
+- [Standalone HTTP example](examples/standalone-http/README.md) — exact source and smoke-test commands for the repository implementation.
 - [Decorator API contract](docs/api/decorator-api.md) — repository API target; check its status notices before using unreleased APIs.
 - [Architecture overview](docs/architecture/overview.md) — package boundaries and planned runtime direction.
 - [MVP scope](docs/product/mvp-scope.md) — planned product capabilities.

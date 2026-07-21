@@ -11,8 +11,10 @@ This directory is the canonical project documentation set. For an installed pack
 7. [Architecture overview](architecture/overview.md) — components and runtime flow
 8. [npm release readiness](guides/npm-release.md) — package ownership and pre-publish safeguards
 9. [Single-package migration plan](planning/2026-07-21-single-package-migration.md) — active packaging plan
-10. [Open-source launch checklist](guides/open-source-launch.md) — community health, security, and public-repository safeguards
-11. [Historical MVP implementation plan](planning/2026-07-21-mvp-implementation-plan.md) — superseded two-workspace task history
+10. [HTTP framework integration](guides/http-and-nextjs.md) — repository-source Fetch/Next.js route integration boundary
+11. [Standalone HTTP example](../examples/standalone-http/README.md) — executable repository example and smoke test
+12. [Open-source launch checklist](guides/open-source-launch.md) — community health, security, and public-repository safeguards
+13. [Historical MVP implementation plan](planning/2026-07-21-mvp-implementation-plan.md) — superseded two-workspace task history
 
 ## Sections
 
