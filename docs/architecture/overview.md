@@ -1,6 +1,6 @@
 # Architecture overview
 
-**Status:** Target MVP architecture — decorator metadata storage, definition validation, the async-capable resolver seam, and compilation of tools, static resources, and prompts are implemented. The stdio helper and HTTP adapter described here remain unimplemented.
+**Status:** Target MVP architecture — decorator metadata storage, definition validation, the async-capable resolver seam, compiler behavior, and the Node stdio helper are implemented. The HTTP adapter described here remains unimplemented.
 
 ## Package surface
 
@@ -16,7 +16,7 @@ type-mcp
   └─ type-mcp/http → Web Standard Streamable HTTP transport
 ```
 
-The root `type-mcp` export owns decorator definitions, definition validation, the resolver seam, and MCP SDK compilation for tools, static resources, and prompts. The `type-mcp/http` subpath will consume compiled-server contracts and own Web Standard request/response adaptation. Applications own business handlers and dependencies; transports remain pending.
+The root `type-mcp` export owns decorator definitions, definition validation, the resolver seam, MCP SDK compiler behavior, and the Node stdio helper. The `type-mcp/http` subpath will consume compiled-server contracts and own Web Standard request/response adaptation. Applications own business handlers and dependencies; HTTP transport remains pending.
 
 ## Runtime flow
 
@@ -27,7 +27,8 @@ The following distinguishes implemented compiler behavior from planned transport
 3. `resolveMcpServerInstance()` uses the synchronous `defaultInstanceResolver` for zero-argument server classes or awaits a supplied `InstanceResolver<T>`. This resolver seam is implemented.
 4. `createMcpServer()` consumes the validated definition and resolved instance, then registers validated tools, static resources, and prompts with the official SDK `McpServer`. This compiler path is implemented.
 5. Tool inputs cross the Zod validation boundary before application code runs. Compiler handler failures become generic safe content without application error text or stacks.
-6. A transport will connect to the SDK server. For HTTP, the `type-mcp/http` subpath will use the SDK's Web Standard Streamable HTTP transport.
+6. `startStdioServer()` connects an SDK server to the official Node `StdioServerTransport`.
+7. For HTTP, the `type-mcp/http` subpath will use the SDK's Web Standard Streamable HTTP transport.
 ## Core contracts
 
 ```ts

@@ -1,6 +1,6 @@
 # MVP scope
 
-**Status:** Decorator metadata storage, definition validation, the instance resolver seam, and compilation of tools, static resources, and prompts are implemented today. stdio and HTTP transport remain planned work.
+**Status:** Decorator metadata storage, definition validation, the instance resolver seam, compiler behavior, and the Node stdio helper are implemented today. HTTP transport remains planned work.
 
 ## Included
 

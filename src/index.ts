@@ -10,6 +10,12 @@ export { defaultInstanceResolver } from "./resolver/default-instance-resolver.js
 export type { InstanceResolver } from "./resolver/instance-resolver.js";
 export { resolveMcpServerInstance } from "./resolver/resolve-server-instance.js";
 export type {
+	McpServerConnection,
+	StartedStdioServer,
+	StdioServerOptions,
+} from "./transports/stdio.js";
+export { startStdioServer } from "./transports/stdio.js";
+export type {
 	McpPromptDefinition,
 	McpPromptOptions,
 	McpResourceDefinition,
