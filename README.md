@@ -76,6 +76,7 @@ The declarations above are available today. Calling `createMcpServer()`, connect
 - [Decorator API contract](docs/api/decorator-api.md) — available metadata behavior and planned compiler contracts.
 - [Implementation plan](docs/planning/2026-07-21-mvp-implementation-plan.md) — TDD task order and acceptance criteria.
 - [Contributing guide](CONTRIBUTING.md) — issue → branch → PR workflow and local checks.
+- [npm release readiness](docs/guides/npm-release.md) — scope ownership and release safeguards.
 
 ## Develop locally
 
