@@ -1,5 +1,4 @@
 import { access, readFile } from "node:fs/promises";
-import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
 interface RootPackageManifest {
@@ -10,19 +9,17 @@ interface RootPackageManifest {
 interface BiomeConfiguration {
 	readonly linter?: {
 		readonly rules?: {
-			readonly style?: {
-				readonly useImportType?: string;
-			};
+			readonly style?: { readonly useImportType?: string };
 		};
 	};
 }
 
-const rootManifestUrl = new URL("../../../package.json", import.meta.url);
-const biomeConfigUrl = new URL("../../../biome.json", import.meta.url);
-const eslintConfigUrl = new URL("../../../eslint.config.mjs", import.meta.url);
+const rootManifestUrl = new URL("../package.json", import.meta.url);
+const biomeConfigUrl = new URL("../biome.json", import.meta.url);
+const eslintConfigUrl = new URL("../eslint.config.mjs", import.meta.url);
 
 async function readJson<T>(url: URL): Promise<T> {
-	return JSON.parse(await readFile(fileURLToPath(url), "utf8")) as T;
+	return JSON.parse(await readFile(url, "utf8")) as T;
 }
 
 describe("lint tooling contract", () => {
@@ -35,6 +32,6 @@ describe("lint tooling contract", () => {
 		expect(manifest.devDependencies?.["typescript-eslint"]).toBeUndefined();
 		expect(manifest.scripts?.lint).toBe("biome check .");
 		expect(biomeConfig.linter?.rules?.style?.useImportType).toBe("error");
-		await expect(access(fileURLToPath(eslintConfigUrl))).rejects.toThrow();
+		await expect(access(eslintConfigUrl)).rejects.toThrow();
 	});
 });

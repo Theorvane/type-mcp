@@ -30,7 +30,7 @@ Teams building MCP servers in TypeScript often assemble protocol registration, r
 | Declarative clarity | A runnable example defines and invokes a tool with a decorated class. |
 | Protocol correctness | Integration tests exercise initialize, list, and call paths through the official SDK transports. |
 | Safe boundaries | Tests prove invalid inputs and thrown handlers do not expose stack traces. |
-| Framework neutrality | `@type-mcp/core` has no NestJS dependency/import and supports a custom resolver. |
+| Framework neutrality | `type-mcp` has no NestJS dependency/import and supports a custom resolver. |
 | Developer confidence | Strict typecheck, tests, builds, and CI pass from a clean install. |
 
 ## Product principles

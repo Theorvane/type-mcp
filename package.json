@@ -1,27 +1,58 @@
 {
 	"name": "type-mcp",
 	"version": "0.1.0",
-	"private": true,
 	"description": "Decorator-first TypeScript framework for Model Context Protocol servers",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/sjungwon03/type-mcp.git"
+	},
+	"homepage": "https://github.com/sjungwon03/type-mcp#readme",
+	"bugs": {
+		"url": "https://github.com/sjungwon03/type-mcp/issues"
+	},
 	"license": "MIT",
 	"type": "module",
+	"main": "./dist/index.cjs",
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js",
+			"require": "./dist/index.cjs"
+		},
+		"./http": {
+			"types": "./dist/http.d.ts",
+			"import": "./dist/http.js",
+			"require": "./dist/http.cjs"
+		}
+	},
+	"files": [
+		"dist",
+		"README.md",
+		"LICENSE"
+	],
+	"publishConfig": {
+		"access": "public"
+	},
 	"packageManager": "npm@10.9.7",
 	"engines": {
 		"node": ">=20"
 	},
-	"workspaces": [
-		"packages/*",
-		"examples/*"
-	],
 	"scripts": {
-		"typecheck": "tsc --noEmit --project tsconfig.base.json && npm run typecheck --workspaces --if-present",
+		"typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.type-tests.json",
 		"test": "vitest run",
 		"test:watch": "vitest",
 		"lint": "biome check .",
-		"build": "npm run build --workspaces --if-present",
-		"verify:packages": "node scripts/verify-package-exports.mjs",
+		"build": "tsup",
+		"verify:package": "node scripts/verify-package-exports.mjs",
 		"verify:publish": "npm run build && node scripts/verify-publish-readiness.mjs",
-		"clean": "rimraf packages/*/dist packages/*/coverage coverage"
+		"prepublishOnly": "npm run verify:publish",
+		"clean": "rimraf dist coverage"
+	},
+	"dependencies": {
+		"@modelcontextprotocol/sdk": "1.26.0",
+		"zod": "^4.4.3"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.5.4",

@@ -21,7 +21,7 @@ Decorate a class with the server, tool, resource, and prompt declarations that d
 
 ```ts
 import { z } from "zod";
-import { McpServer, McpTool } from "@type-mcp/core";
+import { McpServer, McpTool } from "type-mcp";
 
 @McpServer({ name: "calculator", version: "0.1.0" })
 class CalculatorServer {
@@ -47,26 +47,26 @@ The declarations above are available today. Calling `createMcpServer()`, connect
 | `@McpPrompt` | Available | Records a named prompt declaration. |
 | `getMcpServerDefinition()` | Available | Reads a newly allocated frozen definition container. |
 | `createMcpServer()` | Planned | Will validate declarations, resolve instances, and register them with the official MCP SDK. |
-| `@type-mcp/http` | Planned | Will expose a Fetch `Request` → `Response` Streamable HTTP adapter. |
-| `@type-mcp/nestjs` | Deferred | Will bridge Nest discovery and DI through the core resolver seam. |
+| `type-mcp/http` | Planned | Will expose a Fetch `Request` → `Response` Streamable HTTP adapter. |
+| NestJS integration | Deferred | Will bridge Nest discovery and DI through the resolver seam. |
 
 ## Design principles
 
 **Decorators describe; compilers execute.** Decorators are declaration-only. They do not instantiate application classes, start transports, or perform runtime protocol registration.
 
-**Framework neutrality is a boundary.** `@type-mcp/core` has no NestJS, Next.js, or web-server dependency. A future adapter can implement DI behavior without pulling framework concerns into the core package.
+**Framework neutrality is a boundary.** The root `type-mcp` API has no NestJS, Next.js, or web-server dependency. Its future runtime compiler stays framework-neutral; `type-mcp/http` is an opt-in subpath for Fetch transport support.
 
 **The MCP SDK remains authoritative.** TypeMCP is an ergonomic definition and compilation layer, not a replacement protocol implementation.
 
 **Runtime boundaries must stay explicit.** Planned compiler work will validate raw tool input with Zod and convert handler failures into safe MCP-visible errors without exposing application stacks.
 
-## Package roadmap
+## Package surface
 
-| Package | Role | Status |
+| Import | Role | Status |
 | --- | --- | --- |
-| `@type-mcp/core` | Decorators, metadata, validation/compiler, resolver seam, stdio helper | Metadata available; compiler and transport planned |
-| `@type-mcp/http` | Fetch-compatible Streamable HTTP adapter | Planned |
-| `@type-mcp/nestjs` | NestJS discovery and DI integration | Deferred |
+| `type-mcp` | Decorators, metadata, future validation/compiler, resolver seam, and stdio helper | Metadata available; compiler and transport planned |
+| `type-mcp/http` | Fetch-compatible Streamable HTTP adapter subpath | Planned |
+| Future NestJS integration | Discovery and DI integration | Deferred |
 
 ## Explore the project
 
@@ -86,7 +86,8 @@ npm run lint
 npm run typecheck
 npm test
 npm run build
-npm run verify:packages
+npm run verify:package
+npm run verify:publish
 ```
 
 Every repository change follows a focused **GitHub Issue → issue-numbered branch → pull request → review and CI → squash merge** flow. See [CONTRIBUTING.md](CONTRIBUTING.md) for the full contributor workflow.

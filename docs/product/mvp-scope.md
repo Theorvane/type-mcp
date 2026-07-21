@@ -20,7 +20,7 @@
 
 | Capability | Why deferred |
 | --- | --- |
-| `@type-mcp/nestjs` | Requires a focused design for provider discovery and request scopes; core seam comes first. |
+| NestJS integration | Requires a focused design for provider discovery and request scopes; the root resolver seam comes first. |
 | OAuth/authentication | Requires explicit threat model, identity contract, and deployment guidance. |
 | Redis or external session storage | SDK transport/session semantics must be proven locally first. |
 | Legacy SSE transport | Streamable HTTP is the modern target transport for the MVP. |
@@ -33,7 +33,7 @@
 
 - Repository target: private `sjungwon03/type-mcp`.
 - Runtime protocol behavior comes from the official MCP SDK.
-- Core must have no NestJS runtime or peer dependency.
+- The root `type-mcp` package must have no NestJS runtime or peer dependency.
 - Public types are strict and runtime input is validated before handler invocation.
 - No user-visible error may include an unfiltered application stack trace.
 

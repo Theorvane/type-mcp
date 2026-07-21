@@ -5,6 +5,9 @@
 ## Server declaration
 
 ```ts
+import { McpServer, McpTool } from "type-mcp";
+import { createMcpHandler } from "type-mcp/http";
+
 @McpServer({ name: "catalog", version: "0.1.0" })
 class CatalogServer {}
 ```

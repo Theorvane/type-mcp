@@ -1,9 +1,9 @@
 # type-mcp 설계 명세
 
-**상태:** 승인된 설계 — 구현 계획 작성 전 검토용  
+**상태:** 역사적 설계 기록 — package layout은 대체됨
 **작성일:** 2026-07-21
 
-> **문서 위치 안내:** 이 문서는 승인된 설계의 원본 기록입니다. 현재의 정식 문서 진입점은 [docs/README.md](../../README.md)이며, 실행 단위 작업은 [MVP 구현 계획](../../planning/2026-07-21-mvp-implementation-plan.md)을 따릅니다.
+> **대체 안내:** 이 문서의 두 npm workspace (`@type-mcp/core`, `@type-mcp/http`) 구조는 더 이상 현재 계약이 아닙니다. 승인된 현재 구조는 단일 unscoped `type-mcp` package와 `type-mcp/http` subpath입니다. 실행 단위 작업은 [single-package migration plan](../../planning/2026-07-21-single-package-migration.md), 정식 문서 진입점은 [docs/README.md](../../README.md)를 따릅니다. 아래 내용은 설계 이력으로만 보존됩니다.
 
 ## 1. 목표
 
