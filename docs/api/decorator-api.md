@@ -1,6 +1,6 @@
 # Decorator API contract
 
-**Status:** Planned MVP API. Names and signatures are design targets until code and tests land.
+**Status:** Metadata declarations are implemented. SDK compilation, instance resolution, stdio, and HTTP transport remain planned MVP work.
 
 ## Server declaration
 
@@ -11,7 +11,7 @@ class CatalogServer {}
 
 | Case | Behavior |
 | --- | --- |
-| Accept | `name` and `version` identify one decorated server class. |
+| Accept | `name` and `version` identify one decorated server class. The decorator records an immutable server definition for later compilation. |
 | Error | Compiling a class without `@McpServer` fails with `TypeMcpDefinitionError`. |
 | Excluded | Automatic Nest provider discovery and inferred application metadata. |
 
@@ -30,7 +30,7 @@ findProduct(input: { sku: string }) {
 
 | Case | Behavior |
 | --- | --- |
-| Accept | A method name is used as the tool name unless an explicit `name` is supplied. `input` is a Zod object schema; sync and async methods are supported. |
+| Accept | A method name is used as the tool name unless an explicit `name` is supplied. `input` must be a Zod object schema. The decorator records metadata only; runtime validation and invocation are planned. |
 | Error | Invalid arguments do not invoke the method and become a safe MCP validation error. A handler throw becomes a generic safe MCP error. Duplicate public tool names fail before registration. |
 | Excluded | Parameter decorators, automatic schema reflection, authorization, retries, and leaking handler stack traces. |
 
