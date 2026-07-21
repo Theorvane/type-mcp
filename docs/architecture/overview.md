@@ -1,6 +1,6 @@
 # Architecture overview
 
-**Status:** Target MVP architecture — except decorator metadata storage, the runtime compiler, resolver, stdio helper, and HTTP adapter described here are not implemented yet.
+**Status:** Target MVP architecture — decorator metadata storage and definition validation are implemented. The runtime compiler, resolver, stdio helper, and HTTP adapter described here are not implemented yet.
 
 ## Package surface
 
@@ -16,18 +16,19 @@ type-mcp
   └─ type-mcp/http → Web Standard Streamable HTTP transport
 ```
 
-The root `type-mcp` export owns decorator definitions and will own compilation. The `type-mcp/http` subpath will consume compiled-server contracts and own Web Standard request/response adaptation. Today, only decorator metadata storage is implemented; applications own business handlers and dependencies.
+The root `type-mcp` export owns decorator definitions, definition validation, and will own compilation. The `type-mcp/http` subpath will consume compiled-server contracts and own Web Standard request/response adaptation. Today, decorator metadata storage and declaration validation are implemented; applications own business handlers and dependencies.
 
 ## Target runtime flow
 
 The following is planned behavior, not the current runtime implementation:
 
 1. `@McpServer`, `@McpTool`, `@McpResource`, and `@McpPrompt` record definition data associated with a class. This metadata step is implemented.
-2. `createMcpServer()` will read and validate that data before opening a transport.
-3. An `InstanceResolver` will return the application class instance; the default resolver will construct it directly.
-4. The compiler will register validated tools, static resources, and prompts against the official SDK `McpServer`.
-5. A transport will connect to the SDK server. For HTTP, the `type-mcp/http` subpath will use the SDK's Web Standard Streamable HTTP transport.
-6. Tool inputs will cross the Zod validation boundary before application code runs, and errors will become safe MCP errors.
+2. `readMcpServerDefinition()` validates decorated declarations and returns a frozen definition copy. This declaration-validation step is implemented.
+3. `createMcpServer()` will consume that validated definition before opening a transport.
+4. An `InstanceResolver` will return the application class instance; the default resolver will construct it directly.
+5. The compiler will register validated tools, static resources, and prompts against the official SDK `McpServer`.
+6. A transport will connect to the SDK server. For HTTP, the `type-mcp/http` subpath will use the SDK's Web Standard Streamable HTTP transport.
+7. Tool inputs will cross the Zod validation boundary before application code runs, and errors will become safe MCP errors.
 
 ## Core contracts
 
