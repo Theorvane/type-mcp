@@ -12,8 +12,10 @@
 npm ci
 npm test -- --run <focused-test-file>
 npm run typecheck
+npm run lint
 npm test
 npm run build
+npm run verify:packages
 ```
 
 Write and run a failing test first. Implement the smallest behavior that makes it pass, then run the affected suite and full verification as applicable.
