@@ -1,6 +1,10 @@
 # type-mcp
 
-> **MVP in development.** The public packages and decorators described below are planned interfaces until their implementation is merged and verified.
+<p align="center">
+  <img src="docs/assets/type-mcp-hero.png" alt="Abstract decorator tiles flowing through a modular core toward web and dependency integrations" width="100%" />
+</p>
+
+> **MVP in development.** Decorator metadata storage is implemented and verified. MCP SDK compilation, instance resolution, stdio, and HTTP transport remain planned work.
 
 A decorator-first TypeScript framework for building [Model Context Protocol](https://modelcontextprotocol.io/) servers. `type-mcp` combines declarative class APIs with the official MCP SDK, while keeping the core independent of HTTP frameworks and NestJS.
 
