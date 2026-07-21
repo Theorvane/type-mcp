@@ -81,8 +81,14 @@ import {
   type InstanceResolver,
 } from "type-mcp";
 
-const resolver: InstanceResolver = {
-  resolve: async (serverClass) => new serverClass(),
+class CatalogServer {
+  constructor(private readonly catalog: object) {}
+}
+
+declare const catalogService: object;
+
+const resolver: InstanceResolver<CatalogServer> = {
+  resolve: () => new CatalogServer(catalogService),
 };
 
 const instance = await resolveMcpServerInstance(CatalogServer, resolver);
