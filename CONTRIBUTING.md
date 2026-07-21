@@ -49,8 +49,8 @@ Use [.agent/templates/review-report.md](.agent/templates/review-report.md) to re
 
 ## Security and support
 
-- Report suspected vulnerabilities privately through [SECURITY.md](SECURITY.md); never include sensitive details in a public issue or pull request.
-- For usage and contribution questions, read [SUPPORT.md](SUPPORT.md) before opening a `question` issue.
+- Check [SECURITY.md](SECURITY.md) before handling a suspected vulnerability. A private reporting channel is not configured yet, so do not submit sensitive details in public issues or pull requests.
+- For usage and contribution questions, read [SUPPORT.md](SUPPORT.md) and use the **Question or contribution support** issue form if the question remains unresolved.
 
 ## Maintainer review
 

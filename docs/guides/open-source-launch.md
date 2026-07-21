@@ -17,7 +17,7 @@ The repository is public. Use this checklist to finish and periodically audit th
 - [x] Confirm Issues are enabled; enable Discussions only if maintainers commit to monitoring it.
 - [ ] Add repository topics: `model-context-protocol`, `mcp`, `typescript`, `decorators`, `zod`, and `streamable-http`.
 - [ ] Verify squash merging and automatic deletion of merged head branches are enabled.
-- [x] Protect `main`: require the `verify` status check, require branches to be up to date, require approvals for external contributors, and block direct pushes.
+- [ ] Protect `main`: verify that the required `verify` status check, up-to-date branch requirement, approval rules, and direct-push block are all enforced. Record the verification date and settings evidence before marking complete.
 
 ## Release and operations
 

@@ -11,7 +11,7 @@ Establish the community and policy baseline for the now-public TypeMCP repositor
 
 ## Included
 
-- Structured bug and feature GitHub issue forms, contact routing, and a pull-request template.
+- Structured bug, feature, and question GitHub issue forms, contact routing, and a pull-request template.
 - Code of Conduct, Security Policy, Support guide, public contribution guidance, and an operations checklist.
 - Label taxonomy additions for community, security, dependencies, compatibility, and missing information.
 - Accurate status for the public repository, its branch-protection policy, and reporting channels.
