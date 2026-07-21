@@ -1,6 +1,6 @@
 # Product vision
 
-**Status:** Product target. The current implementation provides decorator metadata storage and definition validation; compiler, runtime tool-input validation, resolver, stdio, and HTTP outcomes below remain planned MVP work.
+**Status:** Product target. The current implementation provides decorator metadata storage, definition validation, and an async-capable instance-resolver seam; compiler, runtime tool-input validation, stdio, and HTTP outcomes below remain planned MVP work.
 
 ## Problem
 
