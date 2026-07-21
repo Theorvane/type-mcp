@@ -1,6 +1,6 @@
-# Open-source launch checklist
+# Open-source operations checklist
 
-Use this checklist immediately before changing repository visibility to public.
+The repository is public. Use this checklist to finish and periodically audit the operational safeguards that remain after public launch.
 
 ## Repository content
 
@@ -11,15 +11,16 @@ Use this checklist immediately before changing repository visibility to public.
 
 ## GitHub settings
 
-- [ ] Make the repository public only after the baseline community PR is merged and CI is green.
-- [ ] Enable private vulnerability reporting and confirm the Security tab accepts private reports.
-- [ ] Confirm Issues are enabled; enable Discussions only if maintainers commit to monitoring it.
+- [x] Repository is public.
+- [ ] Enable private vulnerability reporting and confirm the Security tab accepts private reports. Until this is complete, `SECURITY.md` must not claim a working private channel.
+- [ ] Publish and monitor a private Code of Conduct reporting contact.
+- [x] Confirm Issues are enabled; enable Discussions only if maintainers commit to monitoring it.
 - [ ] Add repository topics: `model-context-protocol`, `mcp`, `typescript`, `decorators`, `zod`, and `streamable-http`.
-- [ ] Enable squash merging and automatic deletion of merged head branches.
-- [ ] Protect `main`: require the `verify` status check, require branches to be up to date, require at least one approval for external contributors, and block direct pushes.
+- [ ] Verify squash merging and automatic deletion of merged head branches are enabled.
+- [x] Protect `main`: require the `verify` status check, require branches to be up to date, require approvals for external contributors, and block direct pushes.
 
 ## Release and operations
 
 - [ ] Run `npm ci`, `npm run lint`, `npm run typecheck`, `npm test`, `npm run build`, `npm run verify:package`, `npm run verify:publish`, `npm audit --omit=dev --audit-level=high`, and `git diff --check`.
 - [ ] Complete [npm release readiness](npm-release.md) separately before any new package publication.
-- [ ] Publish a short maintainer policy for triage, review turnaround, and supported versions once a regular release cadence is chosen.
+- [ ] Publish a maintainer policy for security/CODE OF CONDUCT reporting contacts, triage, review turnaround, and supported versions once a regular release cadence is chosen.

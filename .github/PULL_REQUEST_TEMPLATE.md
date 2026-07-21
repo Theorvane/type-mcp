@@ -8,7 +8,8 @@ Closes #
 
 ## Verification
 
-- [ ] Focused test was written first and observed failing for the intended missing behavior.
+- [ ] When code behavior changes: a focused test was written first and observed failing for the intended missing behavior.
+- [ ] For docs/config-only changes: the relevant links, forms, or configuration were validated instead.
 - [ ] `npm run lint`
 - [ ] `npm run typecheck`
 - [ ] `npm test`

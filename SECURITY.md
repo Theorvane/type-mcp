@@ -8,14 +8,9 @@ Security fixes are applied to the latest release line. Before the first post-`0.
 
 **Do not open a public GitHub issue for a suspected vulnerability.** Do not include tokens, credentials, private endpoints, customer data, or exploit details in public discussions, pull requests, or logs.
 
-Use GitHub's **Report a vulnerability** control from this repository's Security tab to submit a private report. Include:
+Private vulnerability reporting is **not configured yet** for this repository. Until maintainers enable GitHub's **Report a vulnerability** control or publish a monitored private contact, there is no supported channel for submitting sensitive exploit details. Do not disclose those details publicly.
 
-- A concise impact assessment.
-- A minimal reproducible proof of concept.
-- Affected TypeMCP and runtime versions.
-- Any mitigation or remediation ideas.
-
-Maintainers will acknowledge a private report within 7 days, assess it, coordinate a fix and release where appropriate, and credit reporters only with their permission. Please allow time for a coordinated fix before public disclosure.
+Maintainers must configure a private reporting channel before accepting private reports or making an acknowledgement-time commitment. After a channel is published, this policy will state the required report content, acknowledgement target, coordinated-disclosure process, and optional reporter credit.
 
 ## Scope
 

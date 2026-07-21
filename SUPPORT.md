@@ -4,8 +4,8 @@
 
 - **Bug reports:** Use the bug-report issue form when you can provide a minimal, reproducible example.
 - **Feature proposals:** Use the feature-request issue form after checking the MVP scope, architecture decisions, and existing issues.
-- **Contribution questions:** Read [CONTRIBUTING.md](CONTRIBUTING.md), [AGENTS.md](AGENTS.md), and the relevant guide in [docs/](docs/README.md) first. If the question remains unresolved, open a GitHub issue labelled `question` with the context you already checked.
-- **Security issues:** Follow [SECURITY.md](SECURITY.md). Do not use public issues.
+- **Contribution questions:** Read [CONTRIBUTING.md](CONTRIBUTING.md), [AGENTS.md](AGENTS.md), and the relevant guide in [docs/](docs/README.md) first. If the question remains unresolved, open an issue with the context you already checked; maintainers will apply labels during triage.
+- **Security issues:** Do not use public issues for sensitive details. [SECURITY.md](SECURITY.md) states whether a private reporting channel is currently available.
 
 ## What maintainers can help with
 

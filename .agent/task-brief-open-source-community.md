@@ -7,27 +7,27 @@
 
 ## Objective
 
-Prepare the repository for a safe public open-source launch without changing package runtime behavior or repository visibility before the baseline is reviewed and merged.
+Establish the community and policy baseline for the now-public TypeMCP repository without changing package runtime behavior.
 
 ## Included
 
 - Structured bug and feature GitHub issue forms, contact routing, and a pull-request template.
-- Code of Conduct, Security Policy, Support guide, public contribution guidance, and a launch checklist.
+- Code of Conduct, Security Policy, Support guide, public contribution guidance, and an operations checklist.
 - Label taxonomy additions for community, security, dependencies, compatibility, and missing information.
-- Public repository topics when GitHub allows the setting for this repository.
+- Accurate status for the public repository, its branch-protection policy, and reporting channels.
 
 ## Excluded
 
-- Changing visibility to public before the baseline PR, CI, and secret/history review pass.
 - Publishing npm packages, version changes, runtime code changes, or enabling Discussions without a maintainer-support decision.
+- Claiming a working private security or Code of Conduct reporting channel before one is configured and monitored.
 
 ## Verification
 
 - `biome check .` validates repository formatting, including YAML forms.
 - A deterministic Markdown-link scan confirms local Markdown targets exist.
-- GitHub community profile is rechecked after this PR reaches `main`.
-- GitHub topics and private vulnerability reporting are configured when the repository settings API permits them; current private-repo API attempts return 404 and remain launch-checklist tasks.
+- GitHub labels referenced by issue forms are checked against the repository.
+- The repository is public and Issues are enabled. GitHub topic and vulnerability-reporting settings remain pending because the available token cannot access their settings endpoints; the operations checklist records them transparently.
 
-## Launch handoff
+## Operations handoff
 
-After merge, verify community health, enable private vulnerability reporting, protect `main` with the verified `verify` check, then perform the secret/history review before public visibility is changed.
+Before representing the project as accepting private reports, configure GitHub private vulnerability reporting or publish a monitored private contact, then update `SECURITY.md`, the Code of Conduct, and issue-form routing together. Continue to audit public history, Actions logs, releases, issue/PR bodies, and npm metadata for sensitive content.

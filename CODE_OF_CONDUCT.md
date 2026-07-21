@@ -34,7 +34,7 @@ This Code of Conduct applies within all project spaces and also applies when an 
 
 ## Enforcement
 
-Report unacceptable behavior privately through the repository's security contact channel described in [SECURITY.md](SECURITY.md), with the subject `Code of Conduct report`. Do not post sensitive reports in public issues. Maintainers will review reports promptly and fairly, protect reporter privacy where possible, and may take corrective action ranging from a warning to a temporary or permanent ban.
+Do not post sensitive Code of Conduct reports in public issues. A private reporting contact has not been published yet; maintainers must publish and monitor one before representing this policy as an externally enforceable reporting channel. Once it is available, this section will name that channel and explain how reporters' privacy is protected. Maintainers may take corrective action ranging from a warning to a temporary or permanent ban.
 
 ## Attribution
 
