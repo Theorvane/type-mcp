@@ -31,7 +31,7 @@
 
 ## Constraints
 
-- Repository visibility: public open-source `sjungwon03/type-mcp`. See [open-source operations checklist](../guides/open-source-launch.md) for remaining settings.
+- Repository visibility: public open-source `sloki-code/type-mcp`. See [open-source operations checklist](../guides/open-source-launch.md) for remaining settings.
 - Runtime protocol behavior comes from the official MCP SDK.
 - The root `type-mcp` package must have no NestJS runtime or peer dependency.
 - Public types are strict and runtime input is validated before handler invocation.
