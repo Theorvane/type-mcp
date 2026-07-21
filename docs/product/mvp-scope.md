@@ -1,6 +1,8 @@
 # MVP scope
 
-**Status:** Decorator metadata storage, definition validation, the instance resolver seam, compiler behavior, the Node stdio helper, and the Fetch Streamable HTTP adapter are implemented today.
+> **Release note:** This document describes the product and repository-development target, not the currently published npm surface. For `type-mcp@0.1.0` installation and exact exports, start with the [README](../../README.md) and [getting-started guide](../guides/getting-started.md).
+
+**Status:** On the repository-development line, decorator metadata storage, definition validation, the instance resolver seam, compiler behavior, the Node stdio helper, and the Fetch Streamable HTTP adapter are implemented. The release note above remains authoritative for `type-mcp@0.1.0` installation behavior.
 
 ## Included
 
@@ -10,7 +12,7 @@
 | Tools | `@McpTool()` with name/description and Zod object input schema |
 | Resources | `@McpResource()` for explicit static URIs |
 | Prompts | `@McpPrompt()` for named prompt handlers |
-| Compilation | Validated tools, static resources, and prompts compile to an official `@modelcontextprotocol/sdk` `McpServer` |
+| Compilation | Decorator metadata compiled to `@modelcontextprotocol/sdk` `McpServer` |
 | Instance construction | Direct constructor default plus async-capable `InstanceResolver` interface |
 | Local transport | stdio helper |
 | Web transport | Fetch-standard Streamable HTTP handler |
@@ -27,11 +29,11 @@
 | Dynamic resource URI templates | Static resource semantics provide a smaller, testable first surface. |
 | Prompt argument inference | Explicit options avoid unstable reflection behavior. |
 | Multi-server route registry | One compiled server per handler keeps the first adapter simple. |
-| npm publishing/release automation | Package publication follows a separate release plan and must not be coupled to repository visibility. |
+| npm publishing/release automation | Private GitHub repository is the delivery target; package publication follows a separate release plan. |
 
 ## Constraints
 
-- Repository visibility: public open-source `sloki-code/type-mcp`. See [open-source operations checklist](../guides/open-source-launch.md) for remaining settings.
+- Repository target: private `sjungwon03/type-mcp`.
 - Runtime protocol behavior comes from the official MCP SDK.
 - The root `type-mcp` package must have no NestJS runtime or peer dependency.
 - Public types are strict and runtime input is validated before handler invocation.

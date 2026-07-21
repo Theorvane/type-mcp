@@ -3,92 +3,134 @@
 
   <h1>TypeMCP</h1>
 
-  **Decorator-first MCP servers for TypeScript.**
+  **Decorator-first MCP declarations for strict TypeScript.**
 
-  [![MVP status](https://img.shields.io/badge/status-MVP%20in%20development-5B5BD6?style=flat-square)](docs/product/mvp-scope.md)
-  [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?style=flat-square&logo=typescript&logoColor=white)](tsconfig.base.json)
+  [![npm](https://img.shields.io/npm/v/type-mcp?style=flat-square&label=npm)](https://www.npmjs.com/package/type-mcp)
+  [![Node](https://img.shields.io/node/v/type-mcp?style=flat-square)](package.json)
   [![MCP](https://img.shields.io/badge/Model%20Context%20Protocol-SDK%20first-7C3AED?style=flat-square)](https://modelcontextprotocol.io/)
   [![License](https://img.shields.io/badge/license-MIT-111827?style=flat-square)](LICENSE)
 </div>
 
-TypeMCP is a decorator-first TypeScript framework for defining [Model Context Protocol](https://modelcontextprotocol.io/) servers. It keeps declarations close to application code while preserving a framework-neutral core that can later support Fetch-based HTTP and NestJS dependency injection without making either a core dependency.
+> **Published surface — [`type-mcp@0.1.0`](https://www.npmjs.com/package/type-mcp):** standard decorators and immutable metadata reads are available. Definition validation, instance resolvers, MCP SDK compilation, stdio, `type-mcp/http` Streamable HTTP, and NestJS integration are **not included in the published release**.
+>
+> **Repository-development status:** the current `main` branch implements declaration validation, the resolver seam, SDK compilation, stdio, and the `type-mcp/http` Streamable HTTP adapter. Those additions are not yet a promise of availability from npm until a release publishes them.
 
-> **Current status:** Decorator metadata storage, definition validation, the async-capable instance-resolver seam, MCP SDK compilation for tools/resources/prompts, the Node stdio helper, and a Fetch-compatible Streamable HTTP handler are implemented and verified.
+TypeMCP keeps MCP declarations beside TypeScript classes without coupling the core to a web framework. Install it when you need a strict, inspectable declaration layer and want application code ready for later runtime support.
 
-## Define MCP components where they belong
+## Fast path for developers and agents
 
-Decorate a class with the server, tool, resource, and prompt declarations that describe its MCP surface. TypeMCP records an immutable definition, then `createMcpServer()` compiles validated tools, static resources, and prompts into an MCP SDK server.
+1. Check the published capability table below. Do not call an API marked **reserved** or **planned**.
+2. Install [`type-mcp` from npm](https://www.npmjs.com/package/type-mcp) with `zod`.
+3. Use standard TypeScript decorators to declare a server surface.
+4. Inspect the declaration through `getMcpServerDefinition()` at an application boundary.
+5. Stop at the metadata boundary in `0.1.0`; do not register a transport or invoke an MCP runtime through TypeMCP.
 
-```ts
-import { z } from "zod";
-import { McpServer, McpTool } from "type-mcp";
+Agents should start with [the agent integration guide](docs/guides/agent-integration.md). It defines an evidence-first workflow and prevents unavailable runtime APIs from being mistaken for supported features.
 
-@McpServer({ name: "calculator", version: "0.1.0" })
-class CalculatorServer {
-  @McpTool({
-    description: "Add two numbers.",
-    input: z.object({ left: z.number(), right: z.number() }),
-  })
-  add({ left, right }: { left: number; right: number }) {
-    return String(left + right);
+## Install
+
+TypeMCP requires **Node.js 20 or later** and TypeScript with standard (Stage 3) decorator support.
+
+```bash
+npm install type-mcp zod
+```
+
+The package is ESM-first and also exposes a CommonJS root export. TypeScript projects should use Node-aware module resolution. This `tsconfig.json` baseline matches the package contract:
+
+```json
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["ES2022", "ESNext.Decorators"],
+    "strict": true,
+    "verbatimModuleSyntax": true
   }
 }
 ```
 
-The declarations above are available today. `createMcpServer()` compiles decorated tools, static resources, and prompts through the official SDK; `startStdioServer()` connects the compiled server to Node stdio; and `createMcpHandler()` creates a Fetch-compatible Streamable HTTP handler.
+Do not enable TypeScript's legacy `experimentalDecorators` mode for these standard decorator examples. See [configuration and compatibility](docs/guides/configuration.md) for ESM, CommonJS, and decorator details.
 
-## What exists today
+## Define and inspect a server declaration
 
-| Surface | Status | Details |
+Create `src/catalog-server.ts`:
+
+```ts
+import { z } from "zod";
+import {
+  getMcpServerDefinition,
+  McpPrompt,
+  McpResource,
+  McpServer,
+  McpTool,
+} from "type-mcp";
+
+@McpServer({ name: "catalog", version: "0.1.0" })
+export class CatalogServer {
+  @McpTool({
+    description: "Look up a catalog item by SKU.",
+    input: z.object({ sku: z.string().min(1) }),
+  })
+  findProduct({ sku }: { sku: string }) {
+    return { sku, available: true };
+  }
+
+  @McpResource({
+    uri: "config://catalog",
+    mimeType: "application/json",
+    description: "Static catalog configuration.",
+  })
+  readConfig() {
+    return { region: "ap-northeast-2" };
+  }
+
+  @McpPrompt({ description: "Prepare a product summary request." })
+  summarizeProduct() {
+    return "Summarize the selected catalog product.";
+  }
+}
+
+const definition = getMcpServerDefinition(CatalogServer);
+console.log(definition?.name); // "catalog"
+console.log(definition?.tools[0]?.name); // "findProduct"
+```
+
+`getMcpServerDefinition()` returns `undefined` for a class without `@McpServer`. For a decorated class, it returns a newly allocated frozen metadata container on every call. Zod schemas retain their original identity, so treat a schema passed to a decorator as immutable after declaration.
+
+The methods above are ordinary application methods; **`0.1.0` does not validate declarations, compile, invoke, or transport them as MCP operations**. This example proves the declaration surface, not a runnable MCP server. Follow the [getting-started guide](docs/guides/getting-started.md) for the complete version boundary.
+
+## Capability map
+
+| Surface | `type-mcp@0.1.0` | What it does |
 | --- | --- | --- |
-| `@McpServer` | Available | Records immutable server identity metadata. |
+| `@McpServer` | Available | Records server name and version metadata. |
 | `@McpTool` | Available | Records a method name, optional public name/description, and Zod object schema. |
-| `@McpResource` | Available | Records a static resource declaration. |
+| `@McpResource` | Available | Records a static resource URI and optional metadata. |
 | `@McpPrompt` | Available | Records a named prompt declaration. |
-| `getMcpServerDefinition()` | Available | Reads a newly allocated frozen metadata definition container. |
-| `readMcpServerDefinition()` | Available | Validates a decorated class, rejects duplicate names within each MCP component namespace with `TypeMcpDefinitionError`, then returns a newly allocated deeply frozen definition copy. |
-| `TypeMcpDefinitionError` | Available | Safe declaration-validation error for undecorated classes and duplicate public component names. |
-| `InstanceResolver<T>` | Available | Framework-neutral synchronous/asynchronous construction seam; direct construction is restricted to zero-argument classes. |
-| `createMcpServer()` | Available | Validates declarations, resolves an instance, and registers decorated tools, static resources, and prompts with the official MCP SDK. |
-| `startStdioServer()` | Available | Connects a compiled SDK server to the official Node `StdioServerTransport`. |
-| `type-mcp/http` | Available | Exposes `createMcpHandler()` for Fetch-compatible, SDK-managed Streamable HTTP sessions. |
-| NestJS integration | Deferred | Will bridge Nest discovery and DI through the resolver seam. |
+| `getMcpServerDefinition()` | Available | Reads a fresh frozen metadata copy; returns `undefined` for undecorated classes. |
+| `createMcpServer()` | Reserved / throws | Exported only as a future stable entry point; not usable in `0.1.0`. |
+| `type-mcp/http` / `createMcpHandler()` | Reserved / throws | Exported subpath only; no stdio or Streamable HTTP transport exists in `0.1.0`. |
+| Definition validation and `TypeMcpDefinitionError` | Unreleased | Available in repository development, not in the published package. |
+| `InstanceResolver<T>` / `resolveMcpServerInstance()` | Unreleased | Available in repository development, not in the published package. |
+| NestJS integration | Deferred | A future adapter may connect Nest discovery and DI. |
 
-## Design principles
+## Documentation map
 
-**Decorators describe; compilers execute.** Decorators are declaration-only. They do not instantiate application classes, start transports, or perform runtime protocol registration.
-
-**Framework neutrality is a boundary.** The root `type-mcp` API has no NestJS, Next.js, or web-server dependency. Its future runtime compiler stays framework-neutral; `type-mcp/http` is an opt-in subpath for Fetch transport support.
-
-**The MCP SDK remains authoritative.** TypeMCP is an ergonomic definition and compilation layer, not a replacement protocol implementation.
-
-**Runtime boundaries must stay explicit.** The tool compiler validates raw input with Zod, and compiler handlers return safe MCP-visible content without exposing application stacks. The same boundary is required for future HTTP transport work.
-
-## Package surface
-
-| Import | Role | Status |
-| --- | --- | --- |
-| `type-mcp` | Decorators, metadata, declaration validation, resolver seam, compiler, and Node stdio helper | Declarations/validation/resolver, compiler, and stdio available |
-| `type-mcp/http` | Fetch-compatible Streamable HTTP adapter subpath | Available — SDK-managed Streamable HTTP sessions |
-| Future NestJS integration | Discovery and DI integration | Deferred |
-
-## Explore the project
-
-- [Product vision](docs/product/vision.md) — the problem, users, and target outcomes.
-- [MVP scope](docs/product/mvp-scope.md) — included boundaries and explicitly deferred work.
-- [Architecture overview](docs/architecture/overview.md) — package layers, target runtime flow, and NestJS boundary.
-- [Decorator API contract](docs/api/decorator-api.md) — available metadata behavior and planned compiler contracts.
-- [Implementation plan](docs/planning/2026-07-21-mvp-implementation-plan.md) — TDD task order and acceptance criteria.
-- [Contributing guide](CONTRIBUTING.md) — issue → branch → PR workflow and local checks.
-- [Code of Conduct](CODE_OF_CONDUCT.md) — expectations for all project spaces.
-- [Security policy](SECURITY.md) — current private vulnerability-reporting channel status.
-- [Support guide](SUPPORT.md) — where to ask usage and contribution questions.
-- [Open-source launch checklist](docs/guides/open-source-launch.md) — public-repository safeguards and settings.
-- [npm release readiness](docs/guides/npm-release.md) — scope ownership and release safeguards.
+- [Getting started](docs/guides/getting-started.md) — install, declare, inspect, and respect the `0.1.0` boundary.
+- [Configuration and compatibility](docs/guides/configuration.md) — Node, ESM/CommonJS, TypeScript decorators, schemas, and release boundaries.
+- [Agent integration guide](docs/guides/agent-integration.md) — evidence-first coding-agent workflow and no-runtime rule.
+- [Decorator API contract](docs/api/decorator-api.md) — repository API target; check its status notices before using unreleased APIs.
+- [Architecture overview](docs/architecture/overview.md) — package boundaries and planned runtime direction.
+- [MVP scope](docs/product/mvp-scope.md) — planned product capabilities.
+- [Contributing](CONTRIBUTING.md) — contribution workflow and local verification.
+- [npm package](https://www.npmjs.com/package/type-mcp) — published releases and install metadata.
 
 ## Develop locally
 
 ```bash
+git clone https://github.com/sjungwon03/type-mcp.git
+cd type-mcp
 npm ci
 npm run lint
 npm run typecheck
@@ -98,7 +140,7 @@ npm run verify:package
 npm run verify:publish
 ```
 
-Every repository change follows a focused **GitHub Issue → issue-numbered branch → pull request → review and CI → squash merge** flow. See [CONTRIBUTING.md](CONTRIBUTING.md) for the full contributor workflow.
+Repository changes follow **Issue → issue-numbered branch → pull request → review and CI → squash merge**. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
