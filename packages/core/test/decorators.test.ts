@@ -144,11 +144,37 @@ describe("MCP decorators", () => {
     expect(getMcpServerDefinition(SecondServer)?.tools[0]?.name).toBe("second");
   });
 
-  it("returns copied metadata that cannot mutate stored definitions", () => {
+  it("does not inherit a parent class's component metadata", () => {
+    class ParentServer {}
+    class ChildServer extends ParentServer {}
+    const parentMetadata: DecoratorMetadata = {};
+    const childMetadata = Object.create(parentMetadata) as DecoratorMetadata;
+
+    McpTool({ input: z.object({}) })(
+      () => undefined,
+      methodContext("parentTool", parentMetadata),
+    );
+    McpTool({ input: z.object({}) })(
+      () => undefined,
+      methodContext("childTool", childMetadata),
+    );
+    decorateServer(ParentServer, parentMetadata);
+    decorateServer(ChildServer, childMetadata);
+
+    expect(getMcpServerDefinition(ParentServer)?.tools.map((tool) => tool.name)).toEqual([
+      "parentTool",
+    ]);
+    expect(getMcpServerDefinition(ChildServer)?.tools.map((tool) => tool.name)).toEqual([
+      "childTool",
+    ]);
+  });
+
+  it("returns frozen copied containers while preserving Zod schema identity", () => {
     class CopiedServer {}
     const metadata: DecoratorMetadata = {};
+    const input = z.object({});
 
-    McpTool({ description: "Original", input: z.object({}) })(
+    McpTool({ description: "Original", input })(
       () => undefined,
       methodContext("tool", metadata),
     );
@@ -163,6 +189,7 @@ describe("MCP decorators", () => {
     expect(Object.isFrozen(firstRead)).toBe(true);
     expect(Object.isFrozen(firstRead.tools)).toBe(true);
     expect(Object.isFrozen(firstRead.tools[0])).toBe(true);
+    expect(firstRead.tools[0]?.input).toBe(input);
     expect(getMcpServerDefinition(CopiedServer)).not.toBe(firstRead);
   });
 });

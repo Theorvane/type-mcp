@@ -12,7 +12,7 @@ class CatalogServer {}
 | Case | Behavior |
 | --- | --- |
 | Accept | `name` and `version` identify one decorated server class. The decorator records an immutable server definition for later compilation. |
-| Error | Compiling a class without `@McpServer` fails with `TypeMcpDefinitionError`. |
+| Deferred | Compilation and `TypeMcpDefinitionError` are planned for a later core compiler task. |
 | Excluded | Automatic Nest provider discovery and inferred application metadata. |
 
 ## Tool declaration
@@ -31,7 +31,7 @@ findProduct(input: { sku: string }) {
 | Case | Behavior |
 | --- | --- |
 | Accept | A method name is used as the tool name unless an explicit `name` is supplied. `input` must be a Zod object schema. The decorator records metadata only; runtime validation and invocation are planned. |
-| Error | Invalid arguments do not invoke the method and become a safe MCP validation error. A handler throw becomes a generic safe MCP error. Duplicate public tool names fail before registration. |
+| Deferred | Runtime argument validation, handler invocation, safe MCP errors, and duplicate-name checks are planned for compiler tasks. |
 | Excluded | Parameter decorators, automatic schema reflection, authorization, retries, and leaking handler stack traces. |
 
 ## Resource declaration
@@ -48,8 +48,8 @@ readConfig() {
 
 | Case | Behavior |
 | --- | --- |
-| Accept | A static explicit URI and optional MIME type register one resource handler. |
-| Error | Invalid/missing declaration data or duplicate public resource identity fails during compilation. Handler errors are converted safely. |
+| Accept | A static explicit URI and optional MIME type are recorded as one resource declaration. |
+| Deferred | Resource registration, declaration validation, duplicate checks, and safe handler errors are planned for compiler tasks. |
 | Excluded | URI templates, subscription/push resources, and persistence/caching policies. |
 
 ## Prompt declaration
@@ -66,8 +66,8 @@ summarizeProduct(sku: string) {
 
 | Case | Behavior |
 | --- | --- |
-| Accept | A named method registers a prompt handler. Sync and async returns are normalized to MCP prompt content. |
-| Error | Duplicate public prompt names fail at compilation; unexpected handler failures return a safe MCP error. |
+| Accept | A named method is recorded as a prompt declaration. |
+| Deferred | Prompt registration, result normalization, duplicate checks, and safe handler errors are planned for compiler tasks. |
 | Excluded | Automatic argument inference from TypeScript parameter types and prompt template files. |
 
 ## Server construction
@@ -80,8 +80,7 @@ const server = await createMcpServer(CatalogServer, {
 
 | Case | Behavior |
 | --- | --- |
-| Accept | The default resolver constructs the class; a custom resolver may return an instance or Promise. |
-| Error | Resolver failure prevents usable server construction and is surfaced as a framework construction failure. |
+| Deferred | `createMcpServer()` currently remains a placeholder. Instance resolution and construction failures are planned for later tasks. |
 | Excluded | Built-in NestJS `ModuleRef`, request-scoped provider semantics, and global service location. |
 
 ## HTTP adapter
@@ -93,9 +92,12 @@ export { handler as GET, handler as POST, handler as DELETE };
 
 | Case | Behavior |
 | --- | --- |
-| Accept | A Fetch `Request` is handled through the official SDK's Web Standard Streamable HTTP transport. |
-| Error | Unsupported HTTP methods return an adapter-compatible method error. Protocol/session errors follow SDK transport behavior. |
+| Deferred | `createMcpHandler()` currently remains a placeholder. Streamable HTTP transport behavior is planned for the HTTP adapter task. |
 | Excluded | OAuth, custom durable sessions, Express middleware, and legacy SSE transport. |
+
+## Metadata immutability
+
+`getMcpServerDefinition()` returns a newly allocated, frozen server definition, component arrays, and component records on every read. Tool `input` schemas retain the caller-supplied Zod object-schema identity: schemas are executable mutable objects and are not cloned or frozen by type-mcp. Consumers should treat a schema supplied to a decorator as immutable after declaration.
 
 ## Compatibility policy
 

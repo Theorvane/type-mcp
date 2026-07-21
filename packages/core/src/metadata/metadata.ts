@@ -9,12 +9,19 @@ import type {
   McpToolDefinition,
 } from "../types.js";
 
+function hasOwnMetadata(
+  metadata: DecoratorMetadata,
+  key: symbol,
+): boolean {
+  return Object.prototype.hasOwnProperty.call(metadata, key);
+}
+
 function appendDefinition<T>(
   metadata: DecoratorMetadata,
   key: symbol,
   definition: T,
 ): void {
-  const existing = metadata[key];
+  const existing = hasOwnMetadata(metadata, key) ? metadata[key] : undefined;
   const definitions = Array.isArray(existing) ? existing : [];
 
   Object.defineProperty(metadata, key, {
@@ -26,8 +33,8 @@ function appendDefinition<T>(
 }
 
 function readDefinitions<T>(metadata: DecoratorMetadata, key: symbol): readonly T[] {
-  const definitions = metadata[key];
-  return Array.isArray(definitions) ? [...definitions] as readonly T[] : [];
+  const definitions = hasOwnMetadata(metadata, key) ? metadata[key] : undefined;
+  return Array.isArray(definitions) ? ([...definitions] as readonly T[]) : [];
 }
 
 export function appendToolDefinition(
