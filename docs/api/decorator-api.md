@@ -1,6 +1,6 @@
 # Decorator API contract
 
-**Status:** Metadata declarations and definition validation are implemented. SDK compilation, instance resolution, stdio, and HTTP transport remain planned MVP work.
+**Status:** Metadata declarations, definition validation, and the resolver seam are implemented. SDK compilation, stdio, and HTTP transport remain planned MVP work.
 
 ## Server declaration
 
@@ -76,14 +76,28 @@ summarizeProduct(sku: string) {
 ## Server construction
 
 ```ts
-const server = await createMcpServer(CatalogServer, {
-  resolver: customResolver,
-});
+import {
+  resolveMcpServerInstance,
+  type InstanceResolver,
+} from "type-mcp";
+
+class CatalogServer {
+  constructor(private readonly catalog: object) {}
+}
+
+declare const catalogService: object;
+
+const resolver: InstanceResolver<CatalogServer> = {
+  resolve: () => new CatalogServer(catalogService),
+};
+
+const instance = await resolveMcpServerInstance(CatalogServer, resolver);
 ```
 
 | Case | Behavior |
 | --- | --- |
-| Deferred | `createMcpServer()` currently remains a placeholder. Instance resolution and construction failures are planned for later tasks. |
+| Accept | `InstanceResolver<T>` accepts the decorated constructor for `T` and returns `T` or `Promise<T>`. `resolveMcpServerInstance()` uses `defaultInstanceResolver` only for a zero-argument constructor; that direct-construction path is rejected at compile time for classes requiring dependencies. Passing a custom resolver enables dependency-requiring constructors. The default resolver preserves its synchronous return type. |
+| Deferred | `createMcpServer()` remains a placeholder; it will consume this seam when SDK compilation is implemented. |
 | Excluded | Built-in NestJS `ModuleRef`, request-scoped provider semantics, and global service location. |
 
 ## HTTP adapter

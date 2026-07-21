@@ -9,11 +9,15 @@ The desired developer experience is decorator-first and needs to fit NestJS in t
 
 ## Decision
 
-`type-mcp` stores class/method definitions and exposes an async-capable `InstanceResolver` interface. The default resolver directly constructs the decorated class. The compiler depends only on the interface.
+`type-mcp` stores class/method definitions and exposes an async-capable `InstanceResolver` interface. The default resolver directly constructs the decorated class. The compiler will depend only on the interface.
+
+**Implementation status:** `InstanceResolver<T>`, `defaultInstanceResolver`, and `resolveMcpServerInstance()` are implemented. Direct construction is type-restricted to zero-argument server classes; a custom resolver supports dependency-requiring constructors. MCP SDK compilation has not yet been connected to this seam.
 
 ```ts
-export interface InstanceResolver {
-  resolve<T>(serverClass: new (...args: never[]) => T): T | Promise<T>;
+export interface InstanceResolver<T> {
+  resolve<Arguments extends readonly unknown[]>(
+    serverClass: new (...args: Arguments) => T,
+  ): T | Promise<T>;
 }
 ```
 

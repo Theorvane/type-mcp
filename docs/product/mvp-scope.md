@@ -1,6 +1,6 @@
 # MVP scope
 
-**Status:** Decorator metadata storage and definition validation are implemented today; compiler, resolver, transport, runtime validation, and safe runtime error handling remain planned work.
+**Status:** Decorator metadata storage, definition validation, and the instance resolver seam are implemented today; compiler, transport, runtime validation, and safe runtime error handling remain planned work.
 
 ## Included
 
