@@ -107,7 +107,7 @@ git commit -m "docs: add type-mcp product and architecture docs"
 - Create: `packages/core/tsconfig.json`
 - Create: `packages/http/package.json`
 - Create: `packages/http/tsconfig.json`
-- Create: `vitest.workspace.ts`
+- Create: `vitest.config.ts` (Vitest 4 root config with package test glob)
 - Create: `.gitignore`
 - Create: `.github/workflows/ci.yml`
 - Create: `packages/core/src/index.ts`
@@ -138,7 +138,7 @@ git diff --check
 **Step 7: Commit.**
 
 ```bash
-git add package.json package-lock.json tsconfig.base.json vitest.workspace.ts .gitignore .github packages/
+git add package.json package-lock.json tsconfig.base.json vitest.config.ts eslint.config.mjs scripts/ .gitignore .github packages/
 git commit -m "chore: scaffold strict TypeScript workspace"
 ```
 
