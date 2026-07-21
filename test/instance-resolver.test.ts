@@ -20,13 +20,13 @@ describe("instance resolvers", () => {
 		);
 	});
 
-	it("passes the exact constructor to a custom synchronous resolver", async () => {
+	it("passes a dependency-requiring constructor to a custom synchronous resolver", async () => {
 		class InjectedServer {
-			public readonly source = "injected";
+			public constructor(public readonly dependency: string) {}
 		}
-		const injected = new InjectedServer();
+		const injected = new InjectedServer("injected");
 		const received: object[] = [];
-		const resolver: InstanceResolver = {
+		const resolver: InstanceResolver<InjectedServer> = {
 			resolve(serverClass) {
 				received.push(serverClass);
 				return injected;
@@ -43,7 +43,7 @@ describe("instance resolvers", () => {
 		class AsyncServer {
 			public readonly source = "async";
 		}
-		const resolver: InstanceResolver = {
+		const resolver: InstanceResolver<AsyncServer> = {
 			resolve: async () => new AsyncServer(),
 		};
 

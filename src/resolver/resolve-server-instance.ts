@@ -1,10 +1,32 @@
-import type { McpServerConstructor } from "../types.js";
+import type {
+	McpServerConstructor,
+	ZeroArgumentMcpServerConstructor,
+} from "../types.js";
 import { defaultInstanceResolver } from "./default-instance-resolver.js";
 import type { InstanceResolver } from "./instance-resolver.js";
 
-export async function resolveMcpServerInstance<T extends object>(
-	serverClass: McpServerConstructor<T>,
-	resolver: InstanceResolver = defaultInstanceResolver,
+export function resolveMcpServerInstance<T extends object>(
+	serverClass: ZeroArgumentMcpServerConstructor<T>,
+): Promise<T>;
+export function resolveMcpServerInstance<
+	T extends object,
+	Arguments extends readonly unknown[],
+>(
+	serverClass: McpServerConstructor<T, Arguments>,
+	resolver: InstanceResolver<T>,
+): Promise<T>;
+export async function resolveMcpServerInstance<
+	T extends object,
+	Arguments extends readonly unknown[],
+>(
+	serverClass: McpServerConstructor<T, Arguments>,
+	resolver?: InstanceResolver<T>,
 ): Promise<T> {
-	return resolver.resolve(serverClass);
+	if (resolver) {
+		return resolver.resolve(serverClass);
+	}
+
+	return defaultInstanceResolver.resolve(
+		serverClass as ZeroArgumentMcpServerConstructor<T>,
+	);
 }
