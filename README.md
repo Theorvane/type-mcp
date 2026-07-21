@@ -1,34 +1,27 @@
-# type-mcp
-
-<p align="center">
+<div align="center">
   <img src="docs/assets/type-mcp-hero.png" alt="Abstract decorator tiles flowing through a modular core toward web and dependency integrations" width="100%" />
-</p>
 
-> **MVP in development.**
+  <h1>TypeMCP</h1>
 
-A decorator-first TypeScript framework for building [Model Context Protocol](https://modelcontextprotocol.io/) servers. `type-mcp` combines declarative class APIs with the official MCP SDK, while keeping the core independent of HTTP frameworks and NestJS.
+  **Decorator-first MCP servers for TypeScript.**
 
-## Why type-mcp?
+  [![MVP status](https://img.shields.io/badge/status-MVP%20in%20development-5B5BD6?style=flat-square)](docs/product/mvp-scope.md)
+  [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?style=flat-square&logo=typescript&logoColor=white)](tsconfig.base.json)
+  [![MCP](https://img.shields.io/badge/Model%20Context%20Protocol-SDK%20first-7C3AED?style=flat-square)](https://modelcontextprotocol.io/)
+  [![License](https://img.shields.io/badge/license-MIT-111827?style=flat-square)](LICENSE)
+</div>
 
-- **Declarative:** Describe a server, tools, resources, and prompts on a class.
-- **Type-safe:** strict TypeScript and Zod runtime boundaries.
-- **Portable:** core does not depend on NestJS, Next.js, or a specific web server.
-- **Web-ready:** a Fetch-first Streamable HTTP adapter is planned for Next.js and other Web Standard runtimes.
-- **Nest-ready:** an `InstanceResolver` seam will let a future `@type-mcp/nestjs` package use Nest DI without coupling the core to Nest.
+TypeMCP is a decorator-first TypeScript framework for defining [Model Context Protocol](https://modelcontextprotocol.io/) servers. It keeps declarations close to application code while preserving a framework-neutral core that can later support Fetch-based HTTP and NestJS dependency injection without making either a core dependency.
 
-## Planned package layout
+> **Current status:** Decorator metadata storage is implemented and verified. MCP SDK compilation, instance resolution, stdio, and HTTP transport are planned MVP work.
 
-| Package | Responsibility | Status |
-| --- | --- | --- |
-| `@type-mcp/core` | Decorators, metadata, compilation to the official MCP SDK, stdio helper | planned MVP |
-| `@type-mcp/http` | Fetch `Request → Response` Streamable HTTP adapter | planned MVP |
-| `@type-mcp/nestjs` | NestJS discovery, DI, and module integration | deferred |
+## Define MCP components where they belong
 
-## Target developer experience
+Decorate a class with the server, tool, resource, and prompt declarations that describe its MCP surface. TypeMCP records an immutable definition that later compiler work will turn into an MCP SDK server.
 
 ```ts
 import { z } from "zod";
-import { McpServer, McpTool, createMcpServer } from "@type-mcp/core";
+import { McpServer, McpTool } from "@type-mcp/core";
 
 @McpServer({ name: "calculator", version: "0.1.0" })
 class CalculatorServer {
@@ -40,26 +33,63 @@ class CalculatorServer {
     return String(left + right);
   }
 }
-
-const server = await createMcpServer(CalculatorServer);
 ```
 
-The snippet represents the approved API direction, not a currently released package contract.
+The declarations above are available today. Calling `createMcpServer()`, connecting stdio, or serving Streamable HTTP is intentionally not available until their focused implementation issues land.
 
-## Documentation
+## What exists today
 
-- [Documentation index](docs/README.md)
-- [Product vision](docs/product/vision.md)
-- [MVP scope](docs/product/mvp-scope.md)
-- [Architecture overview](docs/architecture/overview.md)
-- [Decorator API contract](docs/api/decorator-api.md)
-- [Approved design](docs/superpowers/specs/2026-07-21-type-mcp-design.md)
-- [MVP implementation plan](docs/planning/2026-07-21-mvp-implementation-plan.md)
+| Surface | Status | Details |
+| --- | --- | --- |
+| `@McpServer` | Available | Records immutable server identity metadata. |
+| `@McpTool` | Available | Records a method name, optional public name/description, and Zod object schema. |
+| `@McpResource` | Available | Records a static resource declaration. |
+| `@McpPrompt` | Available | Records a named prompt declaration. |
+| `getMcpServerDefinition()` | Available | Reads a newly allocated frozen definition container. |
+| `createMcpServer()` | Planned | Will validate declarations, resolve instances, and register them with the official MCP SDK. |
+| `@type-mcp/http` | Planned | Will expose a Fetch `Request` → `Response` Streamable HTTP adapter. |
+| `@type-mcp/nestjs` | Deferred | Will bridge Nest discovery and DI through the core resolver seam. |
 
-## Development status
+## Design principles
 
-The current repository contains approved product/design documents and the contributor-agent harness. Implementation begins with a strict npm workspace and test baseline; follow the [MVP implementation plan](docs/planning/2026-07-21-mvp-implementation-plan.md).
+**Decorators describe; compilers execute.** Decorators are declaration-only. They do not instantiate application classes, start transports, or perform runtime protocol registration.
+
+**Framework neutrality is a boundary.** `@type-mcp/core` has no NestJS, Next.js, or web-server dependency. A future adapter can implement DI behavior without pulling framework concerns into the core package.
+
+**The MCP SDK remains authoritative.** TypeMCP is an ergonomic definition and compilation layer, not a replacement protocol implementation.
+
+**Runtime boundaries must stay explicit.** Planned compiler work will validate raw tool input with Zod and convert handler failures into safe MCP-visible errors without exposing application stacks.
+
+## Package roadmap
+
+| Package | Role | Status |
+| --- | --- | --- |
+| `@type-mcp/core` | Decorators, metadata, validation/compiler, resolver seam, stdio helper | Metadata available; compiler and transport planned |
+| `@type-mcp/http` | Fetch-compatible Streamable HTTP adapter | Planned |
+| `@type-mcp/nestjs` | NestJS discovery and DI integration | Deferred |
+
+## Explore the project
+
+- [Product vision](docs/product/vision.md) — the problem, users, and target outcomes.
+- [MVP scope](docs/product/mvp-scope.md) — included boundaries and explicitly deferred work.
+- [Architecture overview](docs/architecture/overview.md) — package layers, target runtime flow, and NestJS boundary.
+- [Decorator API contract](docs/api/decorator-api.md) — available metadata behavior and planned compiler contracts.
+- [Implementation plan](docs/planning/2026-07-21-mvp-implementation-plan.md) — TDD task order and acceptance criteria.
+- [Contributing guide](CONTRIBUTING.md) — issue → branch → PR workflow and local checks.
+
+## Develop locally
+
+```bash
+npm ci
+npm run lint
+npm run typecheck
+npm test
+npm run build
+npm run verify:packages
+```
+
+Every repository change follows a focused **GitHub Issue → issue-numbered branch → pull request → review and CI → squash merge** flow. See [CONTRIBUTING.md](CONTRIBUTING.md) for the full contributor workflow.
 
 ## License
 
-Planned: MIT. The license file is added alongside the package scaffold before publication.
+[MIT](LICENSE)
