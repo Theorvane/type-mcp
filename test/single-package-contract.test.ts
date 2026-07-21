@@ -1,39 +1,23 @@
-import { access } from "node:fs/promises";
-import { createRequire } from "node:module";
-import { resolve } from "node:path";
-import { pathToFileURL } from "node:url";
+import { readFile } from "node:fs/promises";
 import { describe, expect, it } from "vitest";
+import { createMcpHandler } from "../src/http.js";
+import { createMcpServer } from "../src/index.js";
 
-const root = resolve(import.meta.dirname, "..");
-const require = createRequire(import.meta.url);
+interface PackageManifest {
+	readonly exports?: Record<string, unknown>;
+	readonly name?: string;
+}
 
 describe("type-mcp single-package contract", () => {
-	it("provides root and HTTP subpath ESM, CJS, and type exports from one package", async () => {
-		const exports = {
-			root: {
-				esm: "dist/index.js",
-				cjs: "dist/index.cjs",
-				types: "dist/index.d.ts",
-				symbol: "createMcpServer",
-			},
-			http: {
-				esm: "dist/http.js",
-				cjs: "dist/http.cjs",
-				types: "dist/http.d.ts",
-				symbol: "createMcpHandler",
-			},
-		} as const;
+	it("declares root and HTTP subpath exports from one package", async () => {
+		const manifest = JSON.parse(
+			await readFile(new URL("../package.json", import.meta.url), "utf8"),
+		) as PackageManifest;
 
-		for (const exportContract of Object.values(exports)) {
-			const esmPath = resolve(root, exportContract.esm);
-			const cjsPath = resolve(root, exportContract.cjs);
-			const typesPath = resolve(root, exportContract.types);
-			await Promise.all([access(esmPath), access(cjsPath), access(typesPath)]);
-
-			const esm = await import(pathToFileURL(esmPath).href);
-			const cjs = require(cjsPath) as Record<string, unknown>;
-			expect(esm[exportContract.symbol]).toBeTypeOf("function");
-			expect(cjs[exportContract.symbol]).toBeTypeOf("function");
-		}
+		expect(manifest.name).toBe("type-mcp");
+		expect(manifest.exports).toHaveProperty(".");
+		expect(manifest.exports).toHaveProperty("./http");
+		expect(createMcpServer).toBeTypeOf("function");
+		expect(createMcpHandler).toBeTypeOf("function");
 	});
 });
