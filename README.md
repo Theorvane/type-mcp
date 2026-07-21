@@ -13,7 +13,7 @@
 
 TypeMCP is a decorator-first TypeScript framework for defining [Model Context Protocol](https://modelcontextprotocol.io/) servers. It keeps declarations close to application code while preserving a framework-neutral core that can later support Fetch-based HTTP and NestJS dependency injection without making either a core dependency.
 
-> **Current status:** Decorator metadata storage, definition validation, the async-capable instance-resolver seam, MCP SDK compilation for tools/resources/prompts, and the Node stdio helper are implemented and verified. Streamable HTTP remains planned MVP work.
+> **Current status:** Decorator metadata storage, definition validation, the async-capable instance-resolver seam, MCP SDK compilation for tools/resources/prompts, the Node stdio helper, and a Fetch-compatible Streamable HTTP handler are implemented and verified.
 
 ## Define MCP components where they belong
 
@@ -35,7 +35,7 @@ class CalculatorServer {
 }
 ```
 
-The declarations above are available today. `createMcpServer()` compiles decorated tools, static resources, and prompts through the official SDK; `startStdioServer()` connects the compiled server to Node stdio. Streamable HTTP remains intentionally unavailable until its focused implementation issue lands.
+The declarations above are available today. `createMcpServer()` compiles decorated tools, static resources, and prompts through the official SDK; `startStdioServer()` connects the compiled server to Node stdio; and `createMcpHandler()` creates a Fetch-compatible Streamable HTTP handler.
 
 ## What exists today
 
@@ -51,7 +51,7 @@ The declarations above are available today. `createMcpServer()` compiles decorat
 | `InstanceResolver<T>` | Available | Framework-neutral synchronous/asynchronous construction seam; direct construction is restricted to zero-argument classes. |
 | `createMcpServer()` | Available | Validates declarations, resolves an instance, and registers decorated tools, static resources, and prompts with the official MCP SDK. |
 | `startStdioServer()` | Available | Connects a compiled SDK server to the official Node `StdioServerTransport`. |
-| `type-mcp/http` | Planned | Will expose a Fetch `Request` → `Response` Streamable HTTP adapter. |
+| `type-mcp/http` | Available | Exposes `createMcpHandler()` for Fetch-compatible, SDK-managed Streamable HTTP sessions. |
 | NestJS integration | Deferred | Will bridge Nest discovery and DI through the resolver seam. |
 
 ## Design principles
@@ -68,8 +68,8 @@ The declarations above are available today. `createMcpServer()` compiles decorat
 
 | Import | Role | Status |
 | --- | --- | --- |
-| `type-mcp` | Decorators, metadata, declaration validation, resolver seam, compiler, and Node stdio helper | Declarations/validation/resolver, compiler, and stdio available; HTTP planned |
-| `type-mcp/http` | Fetch-compatible Streamable HTTP adapter subpath | Planned |
+| `type-mcp` | Decorators, metadata, declaration validation, resolver seam, compiler, and Node stdio helper | Declarations/validation/resolver, compiler, and stdio available |
+| `type-mcp/http` | Fetch-compatible Streamable HTTP adapter subpath | Available — SDK-managed Streamable HTTP sessions |
 | Future NestJS integration | Discovery and DI integration | Deferred |
 
 ## Explore the project

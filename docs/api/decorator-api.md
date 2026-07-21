@@ -1,6 +1,6 @@
 # Decorator API contract
 
-**Status:** Metadata declarations, definition validation, the resolver seam, SDK compilation of tools/static resources/prompts, and the Node stdio helper are implemented. HTTP transport remains planned MVP work.
+**Status:** Metadata declarations, definition validation, the resolver seam, SDK compilation of tools/static resources/prompts, the Node stdio helper, and the Fetch Streamable HTTP adapter are implemented.
 
 ## Server declaration
 
@@ -15,7 +15,7 @@ class CatalogServer {}
 | Case | Behavior |
 | --- | --- |
 | Accept | `name` and `version` identify one decorated server class. The decorator records an immutable server definition for later compilation. `readMcpServerDefinition()` rejects an undecorated class with `TypeMcpDefinitionError`. `createMcpServer()` compiles validated tool declarations for this server. |
-| Deferred | HTTP transport remains planned. |
+| Accept | `type-mcp/http` exposes `createMcpHandler()` for Fetch-compatible SDK-managed Streamable HTTP sessions. |
 | Excluded | Automatic Nest provider discovery and inferred application metadata. |
 
 ## Tool declaration
@@ -97,7 +97,7 @@ const instance = await resolveMcpServerInstance(CatalogServer, resolver);
 | Case | Behavior |
 | --- | --- |
 | Accept | `InstanceResolver<T>` accepts the decorated constructor for `T` and returns `T` or `Promise<T>`. `resolveMcpServerInstance()` uses `defaultInstanceResolver` only for a zero-argument constructor; that direct-construction path is rejected at compile time for classes requiring dependencies. Passing a custom resolver enables dependency-requiring constructors. `createMcpServer()` accepts the same resolver boundary. The default resolver preserves its synchronous return type. |
-| Deferred | HTTP adapter work. |
+| Accept | `createMcpHandler()` accepts a factory that returns a compiled SDK server and preserves the same framework-neutral construction boundary. |
 | Excluded | Built-in NestJS `ModuleRef`, request-scoped provider semantics, and global service location. |
 
 ## Stdio transport
@@ -118,14 +118,16 @@ await startStdioServer(server);
 ## HTTP adapter
 
 ```ts
-const handler = createMcpHandler(() => createMcpServer(CatalogServer));
+const handlerPromise = createMcpHandler(() => createMcpServer(CatalogServer));
+const handler = async (request: Request) => (await handlerPromise)(request);
+
 export { handler as GET, handler as POST, handler as DELETE };
 ```
 
 | Case | Behavior |
 | --- | --- |
-| Deferred | `createMcpHandler()` currently remains a placeholder. Streamable HTTP transport behavior is planned for the HTTP adapter task. |
-| Excluded | OAuth, custom durable sessions, Express middleware, and legacy SSE transport. |
+| Accept | `createMcpHandler()` creates one compiled MCP SDK server and one official `WebStandardStreamableHTTPServerTransport`. It returns a Fetch `(request: Request) => Promise<Response>` handler. Initialization returns the SDK-managed `mcp-session-id`; subsequent requests supply that header and negotiated protocol-version header. HTTP method handling, JSON-RPC framing, and session validation remain SDK-owned. |
+| Excluded | OAuth, custom durable sessions/event stores, Express middleware, legacy SSE transport, and custom protocol parsing. |
 
 ## Metadata immutability
 
