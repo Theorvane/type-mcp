@@ -2,7 +2,7 @@ name: Enforce reviewer-managed PR labels
 
 on:
   pull_request_target:
-    branches: [main]
+    branches: [dev, main]
     types: [opened, labeled]
 
 permissions:

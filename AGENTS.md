@@ -35,15 +35,16 @@ If sources conflict, stop and update the lower-priority document before implemen
 
 ## Required issue → branch → PR workflow
 
-Every change after the initial repository bootstrap follows this sequence. Never commit directly to `main`.
+Every change after the initial repository bootstrap follows this sequence. Never commit directly to protected `dev` or `main`.
 
 1. Inspect existing open issues and PRs, then create or update one focused GitHub Issue before branching.
 2. Put the issue number in the branch: `<type>/<issue-number>-<short-description>` — for example, `feat/12-tool-compiler` or `chore/1-strict-workspace-baseline`.
-3. Branch from the current `origin/main` unless a documented stacked PR requires another base.
+3. Branch from the current `origin/dev` unless a documented stacked PR requires another base.
 4. Implement one coherent issue only. Commit with conventional format: `type(scope): subject`.
-5. Push the branch and open a PR against `main` with `Closes #<issue-number>` in the body.
+5. Push the branch and open a PR against `dev` with `Closes #<issue-number>` in the body.
 6. Run and report fresh verification evidence; obtain specification and code-quality review before merge.
-7. Squash merge only after CI/review passes, then verify the issue is closed and `main` contains the merged commit.
+7. Squash merge only after CI/review passes, then verify the issue is closed and `dev` contains the merged commit.
+8. Promote vetted `dev` to release-only `main` in a separate reviewed release PR; verify `main` contains the release commit before publication.
 
 ## Required loop for every code task
 
