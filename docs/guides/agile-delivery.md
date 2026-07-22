@@ -30,7 +30,7 @@ Apply at most one label from each status, priority, size, and review group.
 
 ## Pull request label policy
 
-PR이 opened, reopened, ready-for-review, 또는 synchronize 상태가 되면 `Request AI pull-request review` workflow가 `sjungwon03-ai`에게 검토를 자동 요청합니다. workflow는 `pull_request_target`을 **GitHub PR metadata API 호출에만** 사용하며, PR branch를 checkout하거나 실행하지 않습니다. Draft PR, 이미 요청된 reviewer, 그리고 `sjungwon03-ai`가 author인 PR은 건너뜁니다.
+PR이 opened, reopened, ready-for-review, 또는 synchronize 상태가 되면 `Request AI pull-request review` workflow가 reviewer를 자동 요청합니다. workflow는 `pull_request_target`을 **GitHub PR metadata API 호출에만** 사용하며, PR branch를 checkout하거나 실행하지 않습니다. Draft PR과 이미 요청된 reviewer는 건너뜁니다. AI account (`sjungwon03-ai`)가 author이면 `sjungwon03`에게, 그 외에는 `sjungwon03-ai`에게 review를 요청하므로 self-review 요청을 만들지 않습니다.
 
 `sjungwon03-ai`는 현재 head commit을 검토한 뒤에만 적절한 `review:*` label을 부여합니다.
 

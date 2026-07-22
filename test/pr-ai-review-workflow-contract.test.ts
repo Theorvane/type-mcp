@@ -18,7 +18,9 @@ describe("AI pull-request review workflow", () => {
 		expect(workflow).toContain("synchronize");
 		expect(workflow).toContain("pull-requests: write");
 		expect(workflow).toContain("sjungwon03-ai");
-		expect(workflow).toContain("pullRequest.user.login === reviewer");
+		expect(workflow).toContain(
+			'pullRequest.user.login === "sjungwon03-ai" ? "sjungwon03" : "sjungwon03-ai"',
+		);
 		expect(workflow).toContain("github.rest.pulls.requestReviewers");
 		expect(workflow).not.toContain("actions/checkout");
 		expect(workflow).not.toContain("run:");

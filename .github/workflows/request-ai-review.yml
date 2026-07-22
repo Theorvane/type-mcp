@@ -18,7 +18,6 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const reviewer = "sjungwon03-ai";
             const { data: pullRequest } = await github.rest.pulls.get({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -30,10 +29,8 @@ jobs:
               return;
             }
 
-            if (pullRequest.user.login === reviewer) {
-              core.info("AI reviewer authored this pull request; review request skipped.");
-              return;
-            }
+            const reviewer =
+              pullRequest.user.login === "sjungwon03-ai" ? "sjungwon03" : "sjungwon03-ai";
 
             const alreadyRequested = pullRequest.requested_reviewers.some(
               ({ login }) => login === reviewer,
