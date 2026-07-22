@@ -23,14 +23,14 @@ Use before pushing a release candidate, creating a remote repository, publishing
 
 - [ ] No credentials, `.env`, private keys, test tokens, coverage, or generated `dist/` output are tracked.
 - [ ] Dependency changes were intentionally reviewed.
-- [ ] The repository visibility matches the approved scope (**private** for `sjungwon03/type-mcp`).
-- [ ] `git rev-parse HEAD` equals `git ls-remote origin refs/heads/main` after push.
-- [ ] `gh repo view sjungwon03/type-mcp --json url,visibility,defaultBranchRef` confirms private `main`.
+- [ ] The repository visibility matches the approved scope (**public** for `Theorvane/type-mcp`).
+- [ ] `gh repo view Theorvane/type-mcp --json url,visibility,defaultBranchRef` confirms public `dev` and release-only `main`.
+- [ ] For a release promotion, `git rev-parse HEAD` equals `git ls-remote origin refs/heads/main` after the reviewed `dev` → `main` merge.
 
 ## Review and integration
 
 - [ ] Specification review found no unresolved acceptance gaps.
 - [ ] Code-quality review found no unresolved blocking issue.
-- [ ] The PR targets `main` and includes `Closes #<issue-number>`.
-- [ ] After merge, the linked issue is confirmed closed and local `main` matches `origin/main`.
+- [ ] A feature or maintenance PR targets `dev` and includes `Closes #<issue-number>`; a release promotion uses a separate reviewed `dev` → `main` PR.
+- [ ] After the relevant merge, the linked issue is confirmed closed; for a release promotion, local `main` matches `origin/main`.
 - [ ] Any deferred feature is stated explicitly in the final report.

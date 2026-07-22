@@ -131,7 +131,7 @@ The methods above are ordinary application methods; **`0.1.0` does not validate 
 ## Develop locally
 
 ```bash
-git clone https://github.com/sjungwon03/type-mcp.git
+git clone https://github.com/Theorvane/type-mcp.git
 cd type-mcp
 npm ci
 npm run lint

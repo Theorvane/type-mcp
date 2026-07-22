@@ -1,6 +1,6 @@
 # type-mcp MVP Implementation Plan
 
-> **Status: superseded for package layout.** The behavioral tasks below remain historical TDD evidence, but their two-workspace structure is replaced by the active [single-package migration plan](2026-07-21-single-package-migration.md) for [Issue #14](https://github.com/sjungwon03/type-mcp/issues/14).
+> **Status: superseded for package layout.** The behavioral tasks below remain historical TDD evidence, but their two-workspace structure is replaced by the active [single-package migration plan](2026-07-21-single-package-migration.md) for [Issue #14](https://github.com/Theorvane/type-mcp/issues/14).
 
 > **For Hermes:** Implement active plans task-by-task using test-driven development. Every production behavior starts with a focused failing Vitest test; run the test before and after the smallest implementation.
 
@@ -359,9 +359,11 @@ git add README.md docs/ examples/
 git commit -m "docs: add usage guides and examples"
 ```
 
-## Task 12: Final verification, review, private repository publication
+## Task 12: Historical bootstrap verification and repository publication
 
-**Objective:** Prove the complete repository meets its documented acceptance criteria, publish it privately, and verify the exact remote state.
+> **Historical bootstrap record.** The repository is now public at `Theorvane/type-mcp`; `dev` is the integration branch and `main` is release-only. Follow `AGENTS.md` and the current release-readiness checklist instead of the obsolete creation commands below.
+
+**Objective:** Historical evidence for proving the initial repository met its documented acceptance criteria and verifying the initial remote state.
 
 **Files:**
 - Modify only when review finds a verified defect.
@@ -381,11 +383,11 @@ Expected: all commands exit 0; only intentional, committed source files are trac
 
 **Step 2: Review the exact diff/history** against the acceptance matrix. Add any missing regression test before correcting a confirmed defect.
 
-**Step 3: Create the private GitHub repository and push.**
+**Step 3: Historical bootstrap command (obsolete — do not run).**
 
 ```bash
-gh repo create sjungwon03/type-mcp \
-  --private \
+gh repo create Theorvane/type-mcp \
+  --public \
   --source . \
   --remote origin \
   --push \
@@ -396,12 +398,12 @@ gh repo create sjungwon03/type-mcp \
 
 ```bash
 LOCAL_SHA=$(git rev-parse HEAD)
-REMOTE_SHA=$(git ls-remote origin refs/heads/main | cut -f1)
+REMOTE_SHA=$(git ls-remote origin refs/heads/dev | cut -f1)
 test "$LOCAL_SHA" = "$REMOTE_SHA"
-gh repo view sjungwon03/type-mcp --json nameWithOwner,url,visibility,defaultBranchRef
+gh repo view Theorvane/type-mcp --json nameWithOwner,url,visibility,defaultBranchRef
 git status --short --branch
 ```
 
-Expected: visibility is `PRIVATE`, default branch is `main`, remote SHA equals local `HEAD`, and the working tree is clean.
+Historical expectation: visibility is `PUBLIC`, default branch is `dev`, remote SHA equals local `HEAD`, and the working tree is clean. Current releases require a separately reviewed `dev` → `main` promotion.
 
 **Step 5: Report only verified command results, repository URL, package scope, intentionally deferred features, and the next recommended issue (`@type-mcp/nestjs` implementation).**
