@@ -2,7 +2,7 @@
 
 ## Purpose
 
-`type-mcp` is an open-source TypeScript repository for one unscoped, decorator-first MCP server package. The root export provides the framework-neutral metadata/core API; `type-mcp/http` is its Fetch/Streamable HTTP subpath. A NestJS integration is intentionally deferred; the runtime core must remain Nest-independent.
+`type-mcp` is an open-source TypeScript repository for one unscoped, decorator-first MCP server package. The root export provides the framework-neutral metadata/core API; `type-mcp/http` is its Fetch/Streamable HTTP subpath; `type-mcp/langchain` converts decorated tools to LangChain structured tools. The runtime core remains independent of agent and application frameworks.
 
 ## Source-of-truth hierarchy
 
@@ -16,7 +16,8 @@ If sources conflict, stop and update the lower-priority document before implemen
 
 ## Repository boundaries
 
-- `src/`: decorators, metadata, validation/compiler, resolver contract, and stdio helper. **No NestJS imports.**
+- `src/`: decorators, metadata, validation/compiler, resolver contract, and stdio helper. **No application-framework imports.**
+- `src/langchain.ts`: tools-only LangChain adapter subpath. It may import `@langchain/core`, but never LangGraph or application framework packages.
 - `src/http.ts`: Fetch `Request → Response` Streamable HTTP subpath entry point. It may depend on root runtime contracts but not the reverse.
 - `examples/`: runnable, minimal usage—not a second framework implementation.
 - `docs/`: canonical human-facing product, architecture, API, guide, and planning documents.
@@ -29,8 +30,8 @@ If sources conflict, stop and update the lower-priority document before implemen
 2. **Strict TypeScript.** Do not introduce `any`, `@ts-ignore`, implicit `undefined` behavior, or unchecked external data. Accept runtime input as `unknown`, then validate it.
 3. **Explicit public contracts.** Exported APIs need typed options, behavior tests, documentation, and semver-conscious names.
 4. **Safe MCP errors.** Validation and handler failures return safe MCP error content; never send application stack traces or secrets to clients.
-5. **Framework neutrality.** Core knows only the resolver interface. NestJS discovery, `ModuleRef`, and request scopes belong in a future adapter package.
-6. **YAGNI.** Do not add OAuth, persistence, legacy SSE, resource templates, or Nest modules unless a separately approved scope document changes.
+5. **Framework neutrality.** Core knows only the resolver interface. LangChain interoperability belongs in the `type-mcp/langchain` subpath; LangGraph graphs, model calls, and application lifecycles remain consumer responsibilities.
+6. **YAGNI.** Do not add OAuth, persistence, legacy SSE, resource templates, application-framework modules, or graph runtimes unless a separately approved scope document changes.
 7. **Small commits.** One intent per commit with a conventional message. Do not mix formatting churn or unrelated refactors into feature work.
 
 ## Required issue → branch → PR workflow

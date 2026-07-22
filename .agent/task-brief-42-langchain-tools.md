@@ -37,8 +37,14 @@ Add a distributable, tools-only `type-mcp/langchain` adapter and prove its direc
 | Stage | Command | Result / expected reason |
 | --- | --- | --- |
 | Red | `npm test -- --run test/langchain-package-contract.test.ts` | Failed as expected: `./langchain` export was absent. |
-| Green | `npm test -- --run test/langchain-package-contract.test.ts` | Passed: 1 test. |
-| Regression | `npm run typecheck && npm run build` | Passed; tsup emitted `dist/langchain` ESM/CJS/type artifacts. |
+| Green | `npm test -- --run test/langchain-package-contract.test.ts` | Passed after adding optional peer/export/build contract. |
+| Adapter red | `npm test -- --run test/langchain-tools.test.ts` | Failed as expected: `createLangChainTools` export was absent. |
+| Adapter green | `npm test -- --run test/langchain-tools.test.ts` | Passed: 5/5 tests. |
+| ToolNode red | `npm test -- --run test/langgraph-tool-node.test.ts` | Failed as expected: the LangGraph example module was absent. |
+| ToolNode green | `npm test -- --run test/langgraph-tool-node.test.ts` | Passed: 1/1 in-memory tool-call flow. |
+| Documentation red | `npm test -- --run test/langchain-documentation-contract.test.ts` | Failed as expected: LangChain guide and current-facing replacement path were absent. |
+| Documentation green | `npm test -- --run test/langchain-documentation-contract.test.ts` | Passed after guide, ADR, and current-facing documentation migration. |
+| Regression | `npm run lint && npm run typecheck && npm test -- --run test/langchain-documentation-contract.test.ts test/langchain-package-contract.test.ts test/langchain-tools.test.ts test/langgraph-tool-node.test.ts && npm run build && npm run verify:package && npm run example:langgraph-tools` | Passed. |
 
 ## Risks and boundaries
 

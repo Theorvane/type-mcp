@@ -16,7 +16,7 @@ class CatalogServer {}
 | --- | --- |
 | Accept | `name` and `version` identify one decorated server class. The decorator records an immutable server definition for later compilation. `readMcpServerDefinition()` rejects an undecorated class with `TypeMcpDefinitionError`. |
 | Deferred | SDK compilation remains planned. |
-| Excluded | Automatic Nest provider discovery and inferred application metadata. |
+| Excluded | Automatic application-container discovery and inferred application metadata. |
 
 ## Tool declaration
 
@@ -98,7 +98,7 @@ const instance = await resolveMcpServerInstance(CatalogServer, resolver);
 | --- | --- |
 | Accept | `InstanceResolver<T>` accepts the decorated constructor for `T` and returns `T` or `Promise<T>`. `resolveMcpServerInstance()` uses `defaultInstanceResolver` only for a zero-argument constructor; that direct-construction path is rejected at compile time for classes requiring dependencies. Passing a custom resolver enables dependency-requiring constructors. The default resolver preserves its synchronous return type. |
 | Deferred | `createMcpServer()` remains a placeholder; it will consume this seam when SDK compilation is implemented. |
-| Excluded | Built-in NestJS `ModuleRef`, request-scoped provider semantics, and global service location. |
+| Excluded | Built-in application-container resolution, request-scoped semantics, and global service location. |
 
 ## HTTP adapter
 
