@@ -37,7 +37,7 @@ All work after the initial repository bootstrap follows this flow. **Never commi
 7. Squash merge only when CI is green; confirm the issue is closed and local `dev` matches `origin/dev`.
 8. Use a separate reviewed PR from `dev` to release-only `main` when promoting a release.
 
-Keep generated files, credentials, local logs, coverage, and `node_modules/` out of commits. Update public docs for changed behavior and complete [.agent/checklists/pre-commit.md](.agent/checklists/pre-commit.md) before committing.
+Keep generated files, credentials, local logs, coverage, and `node_modules/` out of commits. Update public docs for changed behavior and complete [.agents/checklists/pre-commit.md](.agents/checklists/pre-commit.md) before committing.
 
 ## Review expectations
 
@@ -46,7 +46,7 @@ Review in two passes:
 1. **Specification compliance:** all acceptance criteria and non-goals are respected.
 2. **Code quality:** test-first evidence, type safety, runtime validation, package boundaries, safe errors, and docs.
 
-Use [.agent/templates/review-report.md](.agent/templates/review-report.md) to record findings when a change is non-trivial.
+Use [.agents/templates/review-report.md](.agents/templates/review-report.md) to record findings when a change is non-trivial.
 
 ## Security and support
 

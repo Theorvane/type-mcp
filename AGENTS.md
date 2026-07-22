@@ -20,7 +20,7 @@ If sources conflict, stop and update the lower-priority document before implemen
 - `src/http.ts`: Fetch `Request → Response` Streamable HTTP subpath entry point. It may depend on root runtime contracts but not the reverse.
 - `examples/`: runnable, minimal usage—not a second framework implementation.
 - `docs/`: canonical human-facing product, architecture, API, guide, and planning documents.
-- `.agent/`: tracked agent operating aids; never imported by package runtime code.
+- `.agents/`: tracked agent operating aids; never imported by package runtime code.
 - `dist/`, coverage, logs, and installed dependencies are generated output and must not be hand-edited or committed.
 
 ## Non-negotiable engineering rules
@@ -49,14 +49,14 @@ Every change after the initial repository bootstrap follows this sequence. Never
 ## Required loop for every code task
 
 1. Read the linked GitHub Issue, relevant product/architecture/API docs, and precise task in `docs/planning/`.
-2. Create a task brief from `.agent/templates/task-brief.md` if the change touches more than one behavior.
+2. Create a task brief from `.agents/templates/task-brief.md` if the change touches more than one behavior.
 3. Add one failing test near the behavior under test.
 4. Run the focused test and record the expected failure in the task brief or commit context.
 5. Implement the smallest safe change.
 6. Re-run the focused test, then affected package tests.
 7. Run `npm run typecheck` when changing TypeScript public or internal source.
 8. Update README/API/architecture docs for user-visible behavior or decisions.
-9. Review the exact diff and complete `.agent/checklists/pre-commit.md`.
+9. Review the exact diff and complete `.agents/checklists/pre-commit.md`.
 10. Commit only after the required checks pass; push and open/update the linked PR.
 
 ## Verification commands
@@ -73,7 +73,7 @@ git diff --check
 git status --short --branch
 ```
 
-Before pushing or claiming completion, all applicable commands above must complete successfully in the current worktree. For a release or external publication, also complete `.agent/checklists/release-readiness.md` and verify remote `main` matches local `HEAD`.
+Before pushing or claiming completion, all applicable commands above must complete successfully in the current worktree. For a release or external publication, also complete `.agents/checklists/release-readiness.md` and verify remote `main` matches local `HEAD`.
 
 ## Documentation rules
 

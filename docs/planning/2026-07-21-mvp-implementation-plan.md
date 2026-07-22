@@ -37,16 +37,16 @@
 
 **Files:**
 - Create: `AGENTS.md`
-- Create: `.agent/README.md`
-- Create: `.agent/checklists/pre-commit.md`
-- Create: `.agent/checklists/release-readiness.md`
-- Create: `.agent/templates/task-brief.md`
-- Create: `.agent/templates/review-report.md`
+- Create: `.agents/README.md`
+- Create: `.agents/checklists/pre-commit.md`
+- Create: `.agents/checklists/release-readiness.md`
+- Create: `.agents/templates/task-brief.md`
+- Create: `.agents/templates/review-report.md`
 - Create: `CONTRIBUTING.md`
 
 **Step 1:** Write `AGENTS.md` with source-of-truth hierarchy, package boundaries, mandatory TDD flow, exact verification commands, safe commit rules, and a ban on manually editing generated `dist/` output.
 
-**Step 2:** Write `.agent/README.md` to explain that `.agent/` is repository-tracked operational context rather than a runtime dependency. Link each checklist/template and define the implementer → reviewer handoff.
+**Step 2:** Write `.agents/README.md` to explain that `.agents/` is repository-tracked operational context rather than a runtime dependency. Link each checklist/template and define the implementer → reviewer handoff.
 
 **Step 3:** Add concise pre-commit and release checklists with checkable criteria: clean status, focused diff review, `npm run typecheck`, `npm test`, `npm run build`, README/API compatibility review, and remote-head verification before publication.
 
@@ -57,7 +57,7 @@
 **Step 6:** Commit.
 
 ```bash
-git add AGENTS.md CONTRIBUTING.md .agent/
+git add AGENTS.md CONTRIBUTING.md .agents/
 git commit -m "docs: add contributor and agent harness"
 ```
 
