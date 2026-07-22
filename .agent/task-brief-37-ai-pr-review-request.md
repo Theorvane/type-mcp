@@ -13,7 +13,7 @@ Request `sjungwon03-ai` to review every eligible non-draft pull request targetin
 
 - Add one metadata-only `pull_request_target` workflow.
 - Trigger on `opened`, `reopened`, `ready_for_review`, and `synchronize`.
-- Skip drafts and duplicate outstanding review requests.
+- Skip drafts, AI-authored PRs, and duplicate outstanding review requests.
 - Test the workflow's required security and behavior contract.
 - Update Agile delivery documentation.
 

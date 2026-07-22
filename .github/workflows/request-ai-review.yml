@@ -30,6 +30,11 @@ jobs:
               return;
             }
 
+            if (pullRequest.user.login === reviewer) {
+              core.info("AI reviewer authored this pull request; review request skipped.");
+              return;
+            }
+
             const alreadyRequested = pullRequest.requested_reviewers.some(
               ({ login }) => login === reviewer,
             );
