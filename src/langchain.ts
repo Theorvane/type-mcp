@@ -1,2 +1,4 @@
-// LangChain adapter implementation is added in the following TDD slice.
-export {};
+export {
+	createLangChainTools,
+	type CreateLangChainToolsOptions,
+} from "./langchain/create-langchain-tools.js";
