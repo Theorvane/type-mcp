@@ -29,11 +29,11 @@
 | Dynamic resource URI templates | Static resource semantics provide a smaller, testable first surface. |
 | Prompt argument inference | Explicit options avoid unstable reflection behavior. |
 | Multi-server route registry | One compiled server per handler keeps the first adapter simple. |
-| npm publishing/release automation | Private GitHub repository is the delivery target; package publication follows a separate release plan. |
+| npm publishing/release automation | Public `Theorvane/type-mcp` is the delivery target; package publication follows a separate release plan. |
 
 ## Constraints
 
-- Repository target: private `sjungwon03/type-mcp`.
+- Repository target: public `Theorvane/type-mcp`.
 - Runtime protocol behavior comes from the official MCP SDK.
 - The root `type-mcp` package must have no NestJS runtime or peer dependency.
 - Public types are strict and runtime input is validated before handler invocation.

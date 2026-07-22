@@ -4,11 +4,11 @@
 	"description": "Decorator-first TypeScript framework for Model Context Protocol servers",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/sjungwon03/type-mcp.git"
+		"url": "git+https://github.com/Theorvane/type-mcp.git"
 	},
-	"homepage": "https://github.com/sjungwon03/type-mcp#readme",
+	"homepage": "https://typemcp.theorvane.tech",
 	"bugs": {
-		"url": "https://github.com/sjungwon03/type-mcp/issues"
+		"url": "https://github.com/Theorvane/type-mcp/issues"
 	},
 	"license": "MIT",
 	"type": "module",
