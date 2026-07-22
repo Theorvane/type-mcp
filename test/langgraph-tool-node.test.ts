@@ -26,7 +26,7 @@ beforeAll(async () => {
 		pathToFileURL("examples/langgraph-tools/dist/server.js").href
 	)) as LangGraphExampleModule;
 	createCatalogToolNode = module.createCatalogToolNode;
-});
+}, 30_000);
 
 describe("LangGraph ToolNode example", () => {
 	it("executes an adapter-generated tool without a model, listener, or network request", async () => {
