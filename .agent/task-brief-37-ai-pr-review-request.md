@@ -33,6 +33,6 @@ Request `sjungwon03-ai` to review every eligible non-draft pull request targetin
 
 ## Safety constraints
 
-- Explicit least-privilege permissions: `contents: read`, `pull-requests: write`.
+- Explicit least-privilege permission: `pull-requests: write` only.
 - No `actions/checkout`, shell `run`, or PR-provided code execution.
 - `pull_request_target` is limited to GitHub REST metadata calls.
