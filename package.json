@@ -25,6 +25,11 @@
 			"types": "./dist/http.d.ts",
 			"import": "./dist/http.js",
 			"require": "./dist/http.cjs"
+		},
+		"./langchain": {
+			"types": "./dist/langchain.d.ts",
+			"import": "./dist/langchain.js",
+			"require": "./dist/langchain.cjs"
 		}
 	},
 	"files": [
@@ -57,10 +62,20 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.5.4",
+		"@langchain/core": "1.2.3",
+		"@langchain/langgraph": "1.4.8",
 		"@types/node": "^22.15.3",
 		"rimraf": "^6.0.1",
 		"tsup": "^8.5.1",
 		"typescript": "^5.8.3",
 		"vitest": "^4.1.10"
+	},
+	"peerDependencies": {
+		"@langchain/core": "^1.2.3"
+	},
+	"peerDependenciesMeta": {
+		"@langchain/core": {
+			"optional": true
+		}
 	}
 }
