@@ -30,15 +30,11 @@ Apply at most one label from each status, priority, size, and review group.
 
 ## Pull request label policy
 
-`sjungwon03-ai` is the only account that retains labels on a pull request. The
-`Enforce reviewer-managed PR labels` workflow removes labels that any other actor
-adds when a PR is opened or labelled. It deliberately leaves labels untouched when a
-PR is reopened, preserving any existing reviewer outcome. The scheduled reviewer
-assigns the appropriate `review:*` label only after it has completed a review for the
-current head commit.
+PR이 opened, reopened, ready-for-review, 또는 synchronize 상태가 되면 `Request AI pull-request review` workflow가 reviewer를 자동 요청합니다. workflow는 `pull_request_target`을 **GitHub PR metadata API 호출에만** 사용하며, PR branch를 checkout하거나 실행하지 않습니다. Draft PR과 이미 요청된 reviewer는 건너뜁니다. AI account (`sjungwon03-ai`)가 author이면 `sjungwon03`에게, 그 외에는 `sjungwon03-ai`에게 review를 요청하므로 self-review 요청을 만들지 않습니다.
 
-The workflow deliberately uses `pull_request_target` **only** to call GitHub's label
-API. It must never check out or execute code from the PR branch.
+`sjungwon03-ai`는 현재 head commit을 검토한 뒤에만 적절한 `review:*` label을 부여합니다.
+
+두 workflow 모두 `pull_request_target`을 **GitHub metadata API 호출에만** 사용합니다. PR branch를 checkout하거나 PR code를 실행해서는 안 됩니다.
 
 GitHub does not offer a label-only collaborator permission. This policy is therefore
 an automatic enforcement mechanism, not a way to remove the label UI from a
