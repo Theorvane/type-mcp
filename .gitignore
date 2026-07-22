@@ -22,5 +22,5 @@ coverage/
 .vscode/
 
 # Local agent scratch space
-.agent/tasks/
-.agent/reviews/
+.agents/tasks/
+.agents/reviews/

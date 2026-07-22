@@ -1,6 +1,6 @@
 # Agent Harness
 
-`.agent/` is committed project operating context for people and coding agents. It is **not** a runtime dependency, configuration source for published packages, or a substitute for `AGENTS.md`.
+`.agents/` is committed project operating context for people and coding agents. It is **not** a runtime dependency, configuration source for published packages, or a substitute for `AGENTS.md`.
 
 ## Contents
 
