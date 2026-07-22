@@ -1,12 +1,12 @@
 import { DynamicStructuredTool } from "@langchain/core/tools";
 import { readMcpServerDefinition } from "../metadata/read-server-definition.js";
-import type { McpToolDefinition } from "../types.js";
-import type {
-	McpServerConstructor,
-	ZeroArgumentMcpServerConstructor,
-} from "../types.js";
 import type { InstanceResolver } from "../resolver/instance-resolver.js";
 import { resolveMcpServerInstance } from "../resolver/resolve-server-instance.js";
+import type {
+	McpServerConstructor,
+	McpToolDefinition,
+	ZeroArgumentMcpServerConstructor,
+} from "../types.js";
 
 const TOOL_EXECUTION_FAILED = "Tool execution failed";
 

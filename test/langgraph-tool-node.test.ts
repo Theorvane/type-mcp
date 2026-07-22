@@ -2,7 +2,7 @@ import { execFileSync } from "node:child_process";
 import { pathToFileURL } from "node:url";
 
 import { AIMessage, ToolMessage } from "@langchain/core/messages";
-import { describe, expect, it, beforeAll } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
 
 interface LangGraphExampleModule {
 	createCatalogToolNode(): Promise<{

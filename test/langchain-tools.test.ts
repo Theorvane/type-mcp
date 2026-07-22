@@ -1,12 +1,8 @@
-import { TypeMcpDefinitionError } from "../src/errors.js";
-import { createLangChainTools } from "../src/langchain.js";
-import {
-	McpServer,
-	McpTool,
-	type InstanceResolver,
-} from "../src/index.js";
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
+import { TypeMcpDefinitionError } from "../src/errors.js";
+import { type InstanceResolver, McpServer, McpTool } from "../src/index.js";
+import { createLangChainTools } from "../src/langchain.js";
 
 function methodContext(
 	name: string,
@@ -70,7 +66,10 @@ describe("LangChain tool adapter", () => {
 		class InjectedServer {
 			public constructor(private readonly prefix: string) {}
 
-			public details(input: { readonly id: number }): { readonly id: number; readonly label: string } {
+			public details(input: { readonly id: number }): {
+				readonly id: number;
+				readonly label: string;
+			} {
 				return { id: input.id, label: `${this.prefix}-${input.id}` };
 			}
 		}
