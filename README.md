@@ -6,7 +6,7 @@
   **Decorator-first MCP declarations for strict TypeScript.**
 
   [![npm](https://img.shields.io/npm/v/%40theorvane%2Ftype-mcp?style=flat-square&label=npm)](https://www.npmjs.com/package/@theorvane/type-mcp)
-  [![Node](https://img.shields.io/node/v/type-mcp?style=flat-square)](package.json)
+  [![Node](https://img.shields.io/node/v/%40theorvane%2Ftype-mcp?style=flat-square)](package.json)
   [![MCP](https://img.shields.io/badge/Model%20Context%20Protocol-SDK%20first-7C3AED?style=flat-square)](https://modelcontextprotocol.io/)
   [![License](https://img.shields.io/badge/license-MIT-111827?style=flat-square)](LICENSE)
 </div>

@@ -33,6 +33,8 @@ const currentFacingDocuments = [
 	"../README.md",
 	"../AGENTS.md",
 	"../CONTRIBUTING.md",
+	"../SECURITY.md",
+	"../docs/architecture/adr/0002-langchain-langgraph-integration.md",
 	"../docs/product/vision.md",
 	"../docs/product/mvp-scope.md",
 	"../docs/api/decorator-api.md",
