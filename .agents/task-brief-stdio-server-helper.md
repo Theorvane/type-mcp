@@ -23,7 +23,7 @@ Connect an MCP SDK server to the official Node stdio transport through a small, 
 - Exactly-one connection behavior.
 
 **Out:**
-- HTTP, session management, custom framing, process shutdown policy, NestJS, and publishing.
+- HTTP, session management, custom framing, process shutdown policy, application-framework adapters, and publishing.
 
 ## Acceptance criteria
 
@@ -49,7 +49,7 @@ Connect an MCP SDK server to the official Node stdio transport through a small, 
 ## Risks and boundaries
 
 - Delegate framing and lifecycle to the official SDK transport.
-- The root package remains Nest-independent.
+- The root package remains independent of application frameworks and graph runtimes.
 - Test injection must not write to the process standard streams.
 
 ## Review handoff

@@ -23,6 +23,6 @@ Closes #
 - [ ] This PR has one focused purpose and follows `<type>/<issue-number>-<description>` branch naming.
 - [ ] Public API changes include behavior tests and API documentation.
 - [ ] Runtime input is validated and errors do not expose application stacks, secrets, or private data.
-- [ ] I did not add NestJS imports/dependencies to the framework-neutral core.
+- [ ] I did not add application-framework imports/dependencies to the framework-neutral core; LangChain stays isolated in `type-mcp/langchain`.
 - [ ] I updated relevant docs and removed generated artifacts, credentials, and local logs.
 - [ ] I agree to follow the Code of Conduct and license this contribution under the MIT License.

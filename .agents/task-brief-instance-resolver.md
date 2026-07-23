@@ -10,20 +10,20 @@
 
 ## Objective
 
-Provide the framework-neutral, async-capable construction seam needed by the future MCP compiler and a future NestJS adapter.
+Provide the framework-neutral, async-capable construction seam needed by the MCP compiler and explicit consumer-provided construction.
 
 ## Scope
 
 **In:** exported resolver interface, zero-argument default resolver, and a helper that awaits custom resolvers.
 
-**Out:** SDK compiler wiring, NestJS imports/integration, request scoping, transport code, and handler invocation.
+**Out:** SDK compiler wiring, application-framework integration, request scoping, transport code, and handler invocation.
 
 ## Acceptance criteria
 
 - [x] Default resolver creates a zero-argument server instance.
 - [x] Synchronous and asynchronous custom resolvers are awaited.
 - [x] Custom resolver receives the exact supplied constructor.
-- [x] No NestJS dependency/import is introduced.
+- [x] No application-framework dependency/import is introduced.
 
 ## Files
 

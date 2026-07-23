@@ -2,9 +2,9 @@
 
 > **For Hermes:** Use subagent-driven-development skill to implement this plan task-by-task.
 
-**Goal:** Add a tools-only `type-mcp/langchain` adapter that converts decorated TypeMCP tools to LangChain structured tools, proves direct LangGraph `ToolNode` composition, and replaces current-facing NestJS-adapter commitments.
+**Goal:** Add a tools-only `type-mcp/langchain` adapter that converts decorated TypeMCP tools to LangChain structured tools, proves direct LangGraph `ToolNode` composition, and replaces framework-specific adapter commitments.
 
-**Architecture:** Keep the root core and `type-mcp/http` independent of LangChain, LangGraph, and NestJS. Add a `src/langchain.ts` subpath entry that uses the existing metadata reader and `InstanceResolver` to create LangChain `DynamicStructuredTool` instances. LangGraph remains a consumer composition concern: the project verifies `new ToolNode(tools)` in memory but does not introduce a graph wrapper.
+**Architecture:** Keep the root core and `type-mcp/http` independent of application frameworks and graph runtimes. Add a `src/langchain.ts` subpath entry that uses the existing metadata reader and `InstanceResolver` to create LangChain `DynamicStructuredTool` instances. LangGraph remains a consumer composition concern: the project verifies `new ToolNode(tools)` in memory but does not introduce a graph wrapper.
 
 **Tech Stack:** TypeScript 5.8 strict mode, Zod 4, `@langchain/core@1.2.3`, `@langchain/langgraph@1.4.8` (development-only integration test), Vitest, tsup, Biome.
 
@@ -15,7 +15,7 @@
 
 ## Guardrails
 
-- Do not add NestJS, LangChain, or LangGraph imports to `src/index.ts`, `src/http.ts`, or existing MCP compiler modules.
+- Do not add application-framework, LangChain, or LangGraph imports to `src/index.ts`, `src/http.ts`, or existing MCP compiler modules.
 - Publish one unscoped package only. The new public surface is the `type-mcp/langchain` export map subpath—not a workspace and not `@type-mcp/langchain`.
 - `@langchain/core` is an optional peer dependency and an exact development dependency for building/testing the adapter. `@langchain/langgraph` is a development-only dependency for the smoke test; it is not imported by adapter source and is not a package peer.
 - The first adapter release supports decorated `@McpTool` methods only. Resources, prompts, MCP transport startup, LLM calls, StateGraph construction, persistence, authorization, and agent policy are explicitly out of scope.
@@ -185,7 +185,7 @@ export {
 4. invoke methods with `Reflect.get` and `Reflect.apply` so the instance is preserved;
 5. await results and return strings unchanged; use `JSON.stringify` for every other value;
 6. treat `undefined`, `JSON.stringify(...) === undefined`, stringify failures, missing/non-callable methods, and handler rejections as `Tool execution failed`;
-7. never import `@langchain/langgraph`, MCP transport modules, or NestJS.
+7. never import `@langchain/langgraph`, MCP transport modules, or an application framework.
 
 Use overloads matching `createMcpServer()` so a dependency-requiring constructor is only accepted when options contain a resolver.
 
@@ -263,7 +263,7 @@ git add test/langgraph-tool-node.test.ts examples/langgraph-tools
 git commit -m "test(langgraph): verify ToolNode interoperability"
 ```
 
-## Task 4: Update current-facing contracts and retire NestJS direction
+## Task 4: Update current-facing contracts and retire framework-specific adapter direction
 
 **Objective:** Make current documentation describe the new supported extension path accurately while keeping historical records historical.
 
@@ -289,7 +289,7 @@ Create a test that reads the current-facing docs above and asserts:
 
 - `type-mcp/langchain` and LangGraph `ToolNode` are documented as the extension path;
 - docs state the adapter is tools-only;
-- docs do not present a future NestJS adapter, `ModuleRef`, or provider discovery as supported/planned;
+- docs do not present a future framework-specific adapter, container reference, or provider discovery as supported/planned;
 - historical docs (the existing design spec and superseded plan) are excluded from this current-facing assertion;
 - the LangChain guide labels `@langchain/core` peer installation and consumer-owned graph policies.
 
@@ -301,13 +301,13 @@ Run:
 npm test -- --run test/langchain-documentation-contract.test.ts
 ```
 
-Expected: failure because current documentation still promises NestJS integration and no LangChain guide exists.
+Expected: failure because current documentation still promises a framework-specific integration and no LangChain guide exists.
 
 **Step 3: Apply the documentation migration**
 
 - Add ADR 0002 and mark ADR 0001 as superseded; preserve ADR 0001's historical text instead of silently rewriting it.
-- Update current docs to describe `InstanceResolver` as an explicit construction seam without naming NestJS.
-- Replace NestJS roadmap references in public documentation with the LangChain adapter and LangGraph ToolNode guide.
+- Update current docs to describe `InstanceResolver` as an explicit construction seam without naming an application framework.
+- Replace framework-specific roadmap references in public documentation with the LangChain adapter and LangGraph ToolNode guide.
 - Update current README release boundary accurately: do not claim the adapter exists in published `0.1.0` until a release actually contains it. State repository-development availability and the planned release boundary clearly.
 - Link the new guide from `README.md` and `docs/README.md`.
 
@@ -326,7 +326,7 @@ Expected: documentation contract and package exports pass.
 
 ```bash
 git add README.md AGENTS.md CONTRIBUTING.md docs test/langchain-documentation-contract.test.ts
-git commit -m "docs: replace NestJS roadmap with LangChain integration"
+git commit -m "docs: document LangChain integration boundary"
 ```
 
 ## Task 5: Full clean-consumer and regression verification

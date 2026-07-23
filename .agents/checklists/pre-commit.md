@@ -7,7 +7,7 @@ Use this checklist immediately before every commit.
 - [ ] A focused GitHub Issue exists and this branch name includes its number: `<type>/<issue-number>-<description>`.
 - [ ] The diff implements only the linked issue's coherent intent.
 - [ ] No unrelated formatting, generated output, dependency cache, secret, or local environment file is included.
-- [ ] Files are located in the correct package/layer; `core` has no NestJS dependency.
+- [ ] Files are located in the correct package/layer; `core` has no application-framework dependency and LangChain remains isolated in its subpath.
 - [ ] Any public API addition/change has matching docs and behavior tests.
 
 ## Test-first evidence

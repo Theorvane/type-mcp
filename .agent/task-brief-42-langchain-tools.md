@@ -8,7 +8,7 @@
 
 ## Objective
 
-Add a distributable, tools-only `type-mcp/langchain` adapter and prove its direct LangGraph ToolNode interoperability without coupling the core runtime to LangChain, LangGraph, or NestJS.
+Add a distributable, tools-only `type-mcp/langchain` adapter and prove its direct LangGraph ToolNode interoperability without coupling the core runtime to LangChain, LangGraph, or an application framework.
 
 ## Scope
 
@@ -16,14 +16,14 @@ Add a distributable, tools-only `type-mcp/langchain` adapter and prove its direc
 - `type-mcp/langchain` package/export, peer boundary, tool conversion, safe failures, resolver support, ToolNode smoke test, current-facing documentation migration, and packed-consumer verification.
 
 **Out:**
-- NestJS, resources/prompts conversion, models, graph topology/state/persistence, listeners, and authorization policies.
+- Application-framework adapters, resources/prompts conversion, models, graph topology/state/persistence, listeners, and authorization policies.
 
 ## Acceptance criteria
 
 - [ ] `type-mcp/langchain` has ESM/CJS/type artifacts and an optional `@langchain/core` peer dependency.
 - [ ] Decorated MCP tools become LangChain structured tools with resolver support and fixed safe failures.
 - [ ] Generated tools execute through LangGraph `ToolNode` in memory.
-- [ ] Current-facing docs retire the NestJS adapter direction.
+- [ ] Current-facing docs describe LangChain tools and consumer-owned LangGraph composition as the integration boundary.
 - [ ] Full package, publish, test, typecheck, lint, audit, and diff checks pass.
 
 ## Files
@@ -48,7 +48,7 @@ Add a distributable, tools-only `type-mcp/langchain` adapter and prove its direc
 
 ## Risks and boundaries
 
-- Adapter source may import only `@langchain/core`; root, HTTP, and existing MCP compiler source remain free of LangChain, LangGraph, and NestJS imports.
+- Adapter source may import only `@langchain/core`; root, HTTP, and existing MCP compiler source remain free of LangChain, LangGraph, and application-framework imports.
 - A LangGraph test must use no model, listener, API key, or network call.
 - Error results cannot disclose application data.
 

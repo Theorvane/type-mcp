@@ -14,7 +14,7 @@ Make the published `type-mcp@0.1.0` package understandable and usable by develop
 - README exposes npm installation, Node/TypeScript prerequisites, a valid decorator/metadata-inspection example, exact capability status, and an agent quick path.
 - Guides cover getting started, configuration/compatibility, and an evidence-first agent workflow.
 - Examples use only public `0.1.0` exports: decorators and `getMcpServerDefinition()`.
-- Definition validation, resolver APIs, SDK compilation, stdio, HTTP, and NestJS are explicitly marked unreleased or deferred.
+- Definition validation, resolver APIs, SDK compilation, stdio, HTTP, and optional framework integrations are explicitly marked unreleased or deferred.
 
 ## Verification
 

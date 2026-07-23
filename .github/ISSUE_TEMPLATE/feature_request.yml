@@ -36,7 +36,7 @@ body:
       options:
         - label: I checked the existing issues and documentation for duplicates or prior decisions.
           required: true
-        - label: I understand core changes cannot add NestJS coupling, secrets, or undocumented transport behavior.
+        - label: I understand core changes cannot add application-framework coupling, secrets, or undocumented transport behavior; LangGraph composition remains consumer-owned.
           required: true
   - type: dropdown
     id: contribution

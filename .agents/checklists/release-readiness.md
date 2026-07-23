@@ -17,7 +17,7 @@ Use before pushing a release candidate, creating a remote repository, publishing
 - [ ] Package names, exports, dependency/peer dependency ranges, and license are reviewed.
 - [ ] API docs include Accept / Error / Excluded behavior where applicable.
 - [ ] Architecture docs still match the package boundaries.
-- [ ] Examples run against built or workspace packages and do not imply unsupported NestJS functionality.
+- [ ] Examples run against built or workspace packages and do not imply unsupported application-framework or graph-runtime functionality.
 
 ## Security and repository state
 
