@@ -100,6 +100,6 @@ The function returns `undefined` for a class without `@McpServer`. For a decorat
 
 ## Stop at the published version boundary
 
-At `0.1.0`, do not call `createMcpServer()` or import `createMcpHandler()` from `type-mcp/http`. Both entry points deliberately throw because they reserve the future public API shape; they are not a runnable server workflow. TypeMCP also has no published instance resolver, tool invocation, SDK registration, stdio, HTTP, or NestJS adapter in this release.
+At `0.1.0`, do not call `createMcpServer()` or import `createMcpHandler()` from `type-mcp/http`. Both entry points deliberately throw because they reserve the future public API shape; they are not a runnable server workflow. TypeMCP also has no published instance resolver, tool invocation, SDK registration, stdio, HTTP, or LangChain adapter in this release.
 
 The declaration created above is useful for application-owned inspection and for preparing a later migration. Consult the [configuration guide](configuration.md) and [agent guide](agent-integration.md) before automating a change.

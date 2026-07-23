@@ -21,6 +21,10 @@ const exportsToVerify = [
 		key: "./http",
 		symbols: [{ name: "createMcpHandler", runtimeType: "function" }],
 	},
+	{
+		key: "./langchain",
+		symbols: [{ name: "createLangChainTools", runtimeType: "function" }],
+	},
 ];
 
 for (const { key, symbols } of exportsToVerify) {

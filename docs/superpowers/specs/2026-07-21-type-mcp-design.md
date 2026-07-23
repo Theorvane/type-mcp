@@ -155,7 +155,7 @@ Vitest로 test-first 개발한다.
 - `npm run typecheck`, `npm test`, `npm run build`가 모두 통과해야 한다.
 - GitHub Actions는 Node LTS에서 위 세 검증을 실행한다.
 - MIT License, README, 사용 예제를 포함한다.
-- GitHub 저장소: `sjungwon03/type-mcp`, 비공개(private)
+- GitHub repository: public [`Theorvane/type-mcp`](https://github.com/Theorvane/type-mcp)
 
 ## 8. 구현 순서
 
@@ -166,4 +166,4 @@ Vitest로 test-first 개발한다.
 5. stdio helper
 6. Fetch Streamable HTTP adapter
 7. examples 및 README
-8. 전체 검증, private GitHub repository 생성 및 push
+8. 전체 검증, public `Theorvane/type-mcp`에 `dev` 통합 PR을 통한 delivery

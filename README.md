@@ -11,9 +11,9 @@
   [![License](https://img.shields.io/badge/license-MIT-111827?style=flat-square)](LICENSE)
 </div>
 
-> **Published surface — [`type-mcp@0.1.0`](https://www.npmjs.com/package/type-mcp):** standard decorators and immutable metadata reads are available. Definition validation, instance resolvers, MCP SDK compilation, stdio, `type-mcp/http` Streamable HTTP, and NestJS integration are **not included in the published release**.
+> **Published surface — [`type-mcp@0.1.0`](https://www.npmjs.com/package/type-mcp):** standard decorators and immutable metadata reads are available. Definition validation, instance resolvers, MCP SDK compilation, stdio, `type-mcp/http` Streamable HTTP, and `type-mcp/langchain` are **not included in the published release**.
 >
-> **Repository-development status:** the current `main` branch implements declaration validation, the resolver seam, SDK compilation, stdio, and the `type-mcp/http` Streamable HTTP adapter. Those additions are not yet a promise of availability from npm until a release publishes them.
+> **Repository-development status:** the current `main` branch implements declaration validation, the resolver seam, SDK compilation, stdio, the `type-mcp/http` Streamable HTTP adapter, and the tools-only `type-mcp/langchain` adapter. Those additions are not yet a promise of availability from npm until a release publishes them.
 
 TypeMCP keeps MCP declarations beside TypeScript classes without coupling the core to a web framework. Install it when you need a strict, inspectable declaration layer and want application code ready for later runtime support.
 
@@ -113,7 +113,7 @@ The methods above are ordinary application methods; **`0.1.0` does not validate 
 | `type-mcp/http` / `createMcpHandler()` | Reserved / throws | Exported subpath only; no stdio or Streamable HTTP transport exists in `0.1.0`. |
 | Definition validation and `TypeMcpDefinitionError` | Unreleased | Available in repository development, not in the published package. |
 | `InstanceResolver<T>` / `resolveMcpServerInstance()` | Unreleased | Available in repository development, not in the published package. |
-| NestJS integration | Deferred | A future adapter may connect Nest discovery and DI. |
+| `type-mcp/langchain` / `createLangChainTools()` | Unreleased | Tools-only LangChain structured-tool adapter in repository development; LangGraph `ToolNode` composition remains consumer-owned. |
 
 ## Documentation map
 
@@ -122,6 +122,8 @@ The methods above are ordinary application methods; **`0.1.0` does not validate 
 - [Agent integration guide](docs/guides/agent-integration.md) — evidence-first coding-agent workflow and no-runtime rule.
 - [HTTP framework integration](docs/guides/http-and-nextjs.md) — repository-source Streamable HTTP example and Fetch/Next.js route shape; not yet part of npm `0.1.0`.
 - [Standalone HTTP example](examples/standalone-http/README.md) — exact source and smoke-test commands for the repository implementation.
+- [LangChain and LangGraph integration](docs/guides/langchain-langgraph.md) — repository-source tools-only adapter and consumer-owned `ToolNode` composition; not yet part of npm `0.1.0`.
+- [LangGraph ToolNode example](examples/langgraph-tools/README.md) — exact in-memory source example and smoke-test command.
 - [Decorator API contract](docs/api/decorator-api.md) — repository API target; check its status notices before using unreleased APIs.
 - [Architecture overview](docs/architecture/overview.md) — package boundaries and planned runtime direction.
 - [MVP scope](docs/product/mvp-scope.md) — planned product capabilities.
@@ -131,7 +133,7 @@ The methods above are ordinary application methods; **`0.1.0` does not validate 
 ## Develop locally
 
 ```bash
-git clone https://github.com/sjungwon03/type-mcp.git
+git clone https://github.com/Theorvane/type-mcp.git
 cd type-mcp
 npm ci
 npm run lint

@@ -37,7 +37,7 @@ Ensure that labels manually applied by PR authors do not remain on TypeMCP pull 
 - Create: `.github/workflows/enforce-reviewer-managed-pr-labels.yml`
 - Create: `scripts/verify-reviewer-label-policy.mjs`
 - Create: `docs/guides/agile-delivery.md`
-- Create: `.agent/task-brief-reviewer-managed-pr-labels.md`
+- Create: `.agents/task-brief-reviewer-managed-pr-labels.md`
 
 ## Red → green evidence
 

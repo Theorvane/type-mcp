@@ -1,6 +1,6 @@
 # ADR 0001: Keep the core framework-neutral through an instance resolver
 
-- **Status:** Accepted
+- **Status:** Superseded by [ADR 0002](0002-langchain-langgraph-integration.md)
 - **Date:** 2026-07-21
 
 ## Context
