@@ -1,23 +1,22 @@
-# Single-package migration plan
+# Single-package migration record
 
-**Status:** Approved by Issue #14. This plan replaces the two-workspace package layout in `2026-07-21-mvp-implementation-plan.md`.
+**Status:** Superseded package-layout history. The current public package is [`@theorvane/type-mcp`](https://www.npmjs.com/package/@theorvane/type-mcp); see the [npm release guide](../guides/npm-release.md) for the active release contract.
 
-## Goal
+## Historical goal
 
-Ship one public, unscoped npm package named `type-mcp`. The decorators and metadata API are imported from `type-mcp`; the planned Fetch adapter remains available at `type-mcp/http` as a subpath export.
+Issue #14 replaced the original `@type-mcp/core` and `@type-mcp/http` workspaces with one root package. That intermediate unscoped package was later removed from npm. The package is prepared for publication from the Theorvane npm organization as `@theorvane/type-mcp`, with `@theorvane/type-mcp/http` and `@theorvane/type-mcp/langchain` export-map subpaths.
 
-## Steps
+## Historical migration steps
 
-1. Add a failing contract test for root and `./http` ESM/CJS/type artifacts.
-2. Move the core source, tests, and type tests into root `src/`, `test/`, and `type-tests/`; move the HTTP placeholder to `src/http.ts`.
-3. Make the root manifest publishable (`name: "type-mcp"`, public access, root and `./http` export map) and remove workspace manifests.
-4. Configure one root tsup build, TypeScript projects, Vitest test discovery, package export verification, and tarball verification.
-5. Update canonical product, architecture, API, release, README, and contributor documentation. Preserve old design specifications as historical records rather than current implementation contracts.
-6. Verify focused contract test, full lint/typecheck/test/build/package/tarball gates, diff, and a clean install before review.
+1. Add a root/HTTP ESM, CommonJS, and declaration artifact contract.
+2. Move core source, tests, and type tests into root `src/`, `test/`, and `type-tests/`; place HTTP in `src/http.ts`.
+3. Make the root manifest public, remove workspace manifests, and expose root and `./http` export-map entries.
+4. Configure root tsup, TypeScript, Vitest, package-export, and tarball verification.
+5. Preserve prior design specifications as historical records rather than current implementation contracts.
 
-## Acceptance criteria
+## Current acceptance boundary
 
-- `npm pack --dry-run` contains root and HTTP subpath ESM/CJS/type artifacts in one `type-mcp` tarball.
-- Neither `packages/core` nor `packages/http` remains as a workspace/package boundary.
-- No current-facing doc tells users to install or import `@type-mcp/core` or `@type-mcp/http`.
-- Metadata-only implementation status remains explicit.
+- `npm pack --dry-run` contains root, HTTP, and LangChain ESM/CJS/type artifacts in one `@theorvane/type-mcp` tarball.
+- No workspace/package boundary remains under `packages/core` or `packages/http`.
+- Current-facing documentation installs/imports only `@theorvane/type-mcp` and its documented subpaths.
+- Release uses the protected `dev` → `main` path, GitHub OIDC Trusted Publishing, provenance, an annotated tag, and a GitHub Release bound to the exact `main` SHA.

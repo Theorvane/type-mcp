@@ -12,8 +12,8 @@ const { stdout } = await execFileAsync(
 const [tarball] = JSON.parse(stdout);
 const manifest = JSON.parse(await readFile("package.json", "utf8"));
 
-if (tarball?.name !== "type-mcp" || tarball?.version !== manifest.version) {
-	throw new Error("type-mcp: unexpected tarball metadata");
+if (tarball?.name !== manifest.name || tarball?.version !== manifest.version) {
+	throw new Error(`${manifest.name}: unexpected tarball metadata`);
 }
 
 const files = new Set(tarball.files?.map((entry) => entry.path));
@@ -32,19 +32,19 @@ for (const expected of [
 	"dist/langchain.d.ts",
 ]) {
 	if (!files.has(expected)) {
-		throw new Error(`type-mcp: tarball is missing ${expected}`);
+		throw new Error(`${manifest.name}: tarball is missing ${expected}`);
 	}
 }
 
 if (manifest.publishConfig?.access !== "public") {
-	throw new Error("type-mcp: publish access must be public");
+	throw new Error(`${manifest.name}: publish access must be public`);
 }
 if (
 	Object.values(manifest.dependencies ?? {}).some(
 		(version) => typeof version === "string" && version.startsWith("file:"),
 	)
 ) {
-	throw new Error("type-mcp: local file dependency is not publishable");
+	throw new Error(`${manifest.name}: local file dependency is not publishable`);
 }
 
-console.log("type-mcp: publish tarball contract verified");
+console.log(`${manifest.name}: publish tarball contract verified`);

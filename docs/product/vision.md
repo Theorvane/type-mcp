@@ -8,7 +8,7 @@ Teams building MCP servers in TypeScript often assemble protocol registration, r
 
 ## Product statement
 
-`type-mcp` lets TypeScript teams declare MCP servers, tools, resources, and prompts on familiar classes, then compiles those declarations to the official MCP SDK. It prioritizes a small framework-neutral core and interoperable tools for LangChain and consumer-owned LangGraph flows.
+`@theorvane/type-mcp` lets TypeScript teams declare MCP servers, tools, resources, and prompts on familiar classes, then compiles those declarations to the official MCP SDK. It prioritizes a small framework-neutral core and interoperable tools for LangChain and consumer-owned LangGraph flows.
 
 ## Primary users
 
@@ -35,7 +35,7 @@ Teams building MCP servers in TypeScript often assemble protocol registration, r
 
 ## Product principles
 
-- **The MCP SDK remains authoritative.** `type-mcp` is an ergonomic layer, not an alternate protocol implementation.
+- **The MCP SDK remains authoritative.** `@theorvane/type-mcp` is an ergonomic layer, not an alternate protocol implementation.
 - **Metadata is declarative; execution is explicit.** Decorators record definitions; compilation and transport wiring happen deliberately.
 - **A small core beats premature platform lock-in.** LangChain tools are an isolated adapter surface; LangGraph remains consumer-owned composition.
 - **Safe errors are part of the API.** Developer ergonomics must not leak application internals to MCP clients.

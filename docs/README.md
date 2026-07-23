@@ -2,7 +2,7 @@
 
 This directory is the canonical project documentation set. For an installed package, read the release note in the README and then use the guides first; product and architecture documents describe the repository-development target.
 
-1. [Getting started](guides/getting-started.md) — install, declare, inspect, and compile with `type-mcp@0.2.0`
+1. [Getting started](guides/getting-started.md) — install, declare, inspect, and compile with `@theorvane/type-mcp@0.2.0`
 2. [Configuration and compatibility](guides/configuration.md) — Node, ESM/CommonJS, TypeScript decorators, and version boundaries
 3. [Agent integration guide](guides/agent-integration.md) — evidence-first coding-agent workflow and runtime limits
 4. [Decorator API contract](api/decorator-api.md) — repository development contract; compare its release note with the installed package

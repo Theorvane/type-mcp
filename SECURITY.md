@@ -14,4 +14,4 @@ Maintainers must configure a private reporting channel before accepting private 
 
 ## Scope
 
-Report vulnerabilities in this repository, published `type-mcp` artifacts, CI workflows, and documented release/supply-chain paths. Application-specific handler bugs, credentials committed by another project, or unsupported integrations may be out of scope, but reports will be triaged in good faith.
+Report vulnerabilities in this repository, published `@theorvane/type-mcp` artifacts, CI workflows, and documented release/supply-chain paths. Application-specific handler bugs, credentials committed by another project, or unsupported integrations may be out of scope, but reports will be triaged in good faith.

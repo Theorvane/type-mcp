@@ -1,5 +1,5 @@
 import { ToolNode } from "@langchain/langgraph/prebuilt";
-import { createLangChainTools } from "type-mcp/langchain";
+import { createLangChainTools } from "@theorvane/type-mcp/langchain";
 
 import { CatalogTools } from "./catalog-tools.js";
 
