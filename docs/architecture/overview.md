@@ -1,8 +1,8 @@
 # Architecture overview
 
-> **Release note:** This architecture describes the repository-development target. The published [`type-mcp@0.1.0`](https://www.npmjs.com/package/type-mcp) release contains decorator metadata and `getMcpServerDefinition()` only; use the [getting-started guide](../guides/getting-started.md) for installable behavior.
+> **Release note:** The published [`type-mcp@0.2.0`](https://www.npmjs.com/package/type-mcp) release contains the metadata, validation, resolver, compiler, stdio, HTTP, and LangChain adapter surfaces described here. Applications remain responsible for hosting and lifecycle policy.
 
-**Status:** Repository-development architecture — decorator metadata storage, definition validation, the async-capable resolver seam, runtime compiler, Node stdio helper, and Fetch Streamable HTTP adapter are implemented on `main`. The release note above remains authoritative for the currently published npm surface.
+**Status:** Published architecture — decorator metadata storage, definition validation, the async-capable resolver seam, runtime compiler, Node stdio helper, Fetch Streamable HTTP adapter, and tools-only LangChain adapter are available in `0.2.0`.
 
 ## Package surface
 

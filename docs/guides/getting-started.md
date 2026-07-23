@@ -1,6 +1,6 @@
-# Getting started with `type-mcp@0.1.0`
+# Getting started with `type-mcp@0.2.0`
 
-This guide creates and inspects an MCP **declaration** using the published package. Version `0.1.0` does not validate declarations, compile declarations to an SDK server, invoke decorated methods through MCP, or expose a transport. The last step is deliberately metadata inspection.
+This guide creates and inspects an MCP **declaration** using the published package. Version `0.2.0` also validates and compiles decorated definitions through `createMcpServer()`; the [HTTP guide](http-and-nextjs.md) and [LangChain guide](langchain-langgraph.md) cover their focused adapter boundaries.
 
 ## Install the package and configure TypeScript
 
@@ -41,7 +41,7 @@ import {
   McpTool,
 } from "type-mcp";
 
-@McpServer({ name: "notes", version: "0.1.0" })
+@McpServer({ name: "notes", version: "0.2.0" })
 export class NotesServer {
   @McpTool({
     name: "find-note",
@@ -71,7 +71,7 @@ export class NotesServer {
 }
 ```
 
-The public component name defaults to the method name when `name` is omitted. TypeMCP records these options as metadata. In `0.1.0`, it does not reject duplicate names or validate declarations; use your own application test and naming convention until a released validation API is available.
+The public component name defaults to the method name when `name` is omitted. TypeMCP records these options as metadata and `0.2.0` validates the decorated definition before compilation; use application tests for domain-specific naming conventions.
 
 ## Inspect metadata at an application boundary
 
@@ -98,8 +98,8 @@ console.log({
 
 The function returns `undefined` for a class without `@McpServer`. For a decorated class it returns a newly allocated frozen container. Tool input schemas keep their original Zod object identity, because executable schemas cannot safely be cloned or frozen. Do not mutate a schema after passing it to `@McpTool`.
 
-## Stop at the published version boundary
+## Continue through the published runtime boundary
 
-At `0.1.0`, do not call `createMcpServer()` or import `createMcpHandler()` from `type-mcp/http`. Both entry points deliberately throw because they reserve the future public API shape; they are not a runnable server workflow. TypeMCP also has no published instance resolver, tool invocation, SDK registration, stdio, HTTP, or LangChain adapter in this release.
+At `0.2.0`, `createMcpServer()`, `startStdioServer()`, `type-mcp/http`, and `type-mcp/langchain` are published. TypeMCP validates and compiles decorated definitions through an explicit `InstanceResolver`; it does not choose a web host, authorization model, session store, LangGraph topology, model, or persistence policy for the application.
 
-The declaration created above is useful for application-owned inspection and for preparing a later migration. Consult the [configuration guide](configuration.md) and [agent guide](agent-integration.md) before automating a change.
+The declaration created above remains useful for application-owned inspection. Consult the [configuration guide](configuration.md), [HTTP guide](http-and-nextjs.md), [LangChain guide](langchain-langgraph.md), and [agent guide](agent-integration.md) before automating a change.

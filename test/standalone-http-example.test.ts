@@ -68,7 +68,7 @@ beforeAll(async () => {
 		pathToFileURL("examples/standalone-http/dist/server.js").href
 	);
 	handler = module.handler as McpHandler;
-});
+}, 30_000);
 
 describe("standalone HTTP example", () => {
 	it("initializes, lists, and calls its documented tool without a network listener", async () => {

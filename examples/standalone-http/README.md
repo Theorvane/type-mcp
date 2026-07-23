@@ -2,7 +2,7 @@
 
 This example is a minimal TypeScript server declaration compiled into a Fetch-compatible MCP Streamable HTTP handler. It deliberately does **not** start a Node listener or bind to a web framework: a host framework supplies a Web `Request` and returns the handler's `Response`.
 
-> **Repository-source example:** it uses APIs implemented on this repository's `main` branch. The published `type-mcp@0.1.0` release does not yet include `createMcpServer()` or `type-mcp/http`; do not copy this workflow into an npm-only consumer until the next release documents those APIs.
+> **Published example:** `createMcpServer()` and `type-mcp/http` are available from `type-mcp@0.2.0`. This example still leaves hosting, sessions, and authorization to the application.
 
 ## Build from a checkout
 
