@@ -1,7 +1,11 @@
 export function reconcileReleaseState(state) {
 	const published = state.publishedVersion === state.version;
 	const tagExists = Boolean(state.tagSha);
-	const releaseExists = Boolean(state.releaseTargetSha);
+	const releaseExists = Boolean(
+		state.releaseTargetSha &&
+			state.releaseTargetSha !== "null" &&
+			!state.releaseTargetSha.startsWith('{"message":"Not Found"'),
+	);
 
 	if (published && state.publishedGitHead !== state.expectedSha) {
 		throw new Error("published npm artifact does not match the release commit");
