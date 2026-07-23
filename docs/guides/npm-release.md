@@ -1,10 +1,10 @@
 # npm release readiness
 
-TypeMCP publishes one public, unscoped package: `type-mcp`. Its Fetch-compatible HTTP entry point is the `type-mcp/http` subpath. The repository is being prepared for public open-source launch; repository visibility and npm package visibility remain separate controls.
+TypeMCP publishes one public npm organization package: `@theorvane/type-mcp`. Its Fetch-compatible HTTP entry point is the `@theorvane/type-mcp/http` subpath. Repository visibility and npm package visibility remain separate controls.
 
 ## Trusted publication from `main`
 
-1. In npm package settings, configure a Trusted Publisher for package `type-mcp` with GitHub repository `Theorvane/type-mcp`, workflow filename `publish.yml`, and environment `npm`.
+1. In npm package settings, configure a Trusted Publisher for package `@theorvane/type-mcp` with GitHub repository `Theorvane/type-mcp`, workflow filename `.github/workflows/publish.yml`, and environment `npm`.
 2. Do not create an npm token or repository npm secret. The workflow receives npm identity through GitHub Actions OIDC and publishes with provenance.
 3. Make a reviewed version change on `dev`; npm versions are immutable and must not already exist in the registry.
 4. Promote that reviewed `dev` head to `main` through the protected release PR. The `publish.yml` workflow verifies the package, publishes once, then creates annotated `v<version>` tag and a GitHub Release from the exact `main` SHA.

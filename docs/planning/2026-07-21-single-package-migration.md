@@ -4,7 +4,7 @@
 
 ## Goal
 
-Ship one public, unscoped npm package named `type-mcp`. The decorators and metadata API are imported from `type-mcp`; the planned Fetch adapter remains available at `type-mcp/http` as a subpath export.
+Ship one public, unscoped npm package named `type-mcp`. The decorators and metadata API are imported from `type-mcp`; the planned Fetch adapter remains available at `@theorvane/type-mcp/http` as a subpath export.
 
 ## Steps
 

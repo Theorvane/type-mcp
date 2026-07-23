@@ -2,9 +2,9 @@
 
 > **For Hermes:** Use subagent-driven-development skill to implement this plan task-by-task.
 
-**Goal:** Add a tools-only `type-mcp/langchain` adapter that converts decorated TypeMCP tools to LangChain structured tools, proves direct LangGraph `ToolNode` composition, and replaces framework-specific adapter commitments.
+**Goal:** Add a tools-only `@theorvane/type-mcp/langchain` adapter that converts decorated TypeMCP tools to LangChain structured tools, proves direct LangGraph `ToolNode` composition, and replaces framework-specific adapter commitments.
 
-**Architecture:** Keep the root core and `type-mcp/http` independent of application frameworks and graph runtimes. Add a `src/langchain.ts` subpath entry that uses the existing metadata reader and `InstanceResolver` to create LangChain `DynamicStructuredTool` instances. LangGraph remains a consumer composition concern: the project verifies `new ToolNode(tools)` in memory but does not introduce a graph wrapper.
+**Architecture:** Keep the root core and `@theorvane/type-mcp/http` independent of application frameworks and graph runtimes. Add a `src/langchain.ts` subpath entry that uses the existing metadata reader and `InstanceResolver` to create LangChain `DynamicStructuredTool` instances. LangGraph remains a consumer composition concern: the project verifies `new ToolNode(tools)` in memory but does not introduce a graph wrapper.
 
 **Tech Stack:** TypeScript 5.8 strict mode, Zod 4, `@langchain/core@1.2.3`, `@langchain/langgraph@1.4.8` (development-only integration test), Vitest, tsup, Biome.
 
@@ -16,7 +16,7 @@
 ## Guardrails
 
 - Do not add application-framework, LangChain, or LangGraph imports to `src/index.ts`, `src/http.ts`, or existing MCP compiler modules.
-- Publish one unscoped package only. The new public surface is the `type-mcp/langchain` export map subpath—not a workspace and not `@type-mcp/langchain`.
+- Publish one scoped package only: `@theorvane/type-mcp`. The LangChain surface is its `@theorvane/type-mcp/langchain` export-map subpath—not a workspace and not `@type-mcp/langchain`.
 - `@langchain/core` is an optional peer dependency and an exact development dependency for building/testing the adapter. `@langchain/langgraph` is a development-only dependency for the smoke test; it is not imported by adapter source and is not a package peer.
 - The first adapter release supports decorated `@McpTool` methods only. Resources, prompts, MCP transport startup, LLM calls, StateGraph construction, persistence, authorization, and agent policy are explicitly out of scope.
 - The adapter returns fixed safe failure text, `Tool execution failed`, for thrown handlers and JSON-serialization failures. Never expose an error message, stack, source path, or arbitrary object inspection output.
@@ -25,7 +25,7 @@
 ## Public API contract
 
 ```ts
-import { createLangChainTools } from "type-mcp/langchain";
+import { createLangChainTools } from "@theorvane/type-mcp/langchain";
 
 const tools = await createLangChainTools(CatalogServer);
 const resolvedTools = await createLangChainTools(InjectedServer, {
@@ -93,7 +93,7 @@ expect(manifest.dependencies?.["@langchain/core"]).toBeUndefined();
 expect(manifest.dependencies?.["@langchain/langgraph"]).toBeUndefined();
 ```
 
-Add a package-artifact test expectation that `type-mcp/langchain` has ESM, CJS, and type declaration artifacts and exposes `createLangChainTools` at runtime after the implementation entry exists.
+Add a package-artifact test expectation that `@theorvane/type-mcp/langchain` has ESM, CJS, and type declaration artifacts and exposes `createLangChainTools` at runtime after the implementation entry exists.
 
 **Step 2: Verify RED**
 
@@ -287,7 +287,7 @@ git commit -m "test(langgraph): verify ToolNode interoperability"
 
 Create a test that reads the current-facing docs above and asserts:
 
-- `type-mcp/langchain` and LangGraph `ToolNode` are documented as the extension path;
+- `@theorvane/type-mcp/langchain` and LangGraph `ToolNode` are documented as the extension path;
 - docs state the adapter is tools-only;
 - docs do not present a future framework-specific adapter, container reference, or provider discovery as supported/planned;
 - historical docs (the existing design spec and superseded plan) are excluded from this current-facing assertion;
@@ -339,7 +339,7 @@ git commit -m "docs: document LangChain integration boundary"
 
 **Step 1: Add a failing packed-consumer assertion if existing tarball verification lacks `./langchain` coverage**
 
-The test must pack the project, install it in a clean temporary consumer with `@langchain/core`, dynamically import `type-mcp/langchain`, and assert `createLangChainTools` is a function. It must not install LangGraph unless testing the separate smoke path.
+The test must pack the project, install it in a clean temporary consumer with `@langchain/core`, dynamically import `@theorvane/type-mcp/langchain`, and assert `createLangChainTools` is a function. It must not install LangGraph unless testing the separate smoke path.
 
 **Step 2: Verify RED**
 

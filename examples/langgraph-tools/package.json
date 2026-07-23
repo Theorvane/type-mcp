@@ -9,7 +9,7 @@
 	"dependencies": {
 		"@langchain/core": "1.2.3",
 		"@langchain/langgraph": "1.4.8",
-		"type-mcp": "file:../..",
+		"@theorvane/type-mcp": "file:../..",
 		"zod": "^4.4.3"
 	},
 	"devDependencies": {

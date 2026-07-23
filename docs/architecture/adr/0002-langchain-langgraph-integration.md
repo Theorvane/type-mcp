@@ -10,7 +10,7 @@ TypeMCP needs an integration path for agent applications without adding a framew
 
 ## Decision
 
-Keep `type-mcp` framework-neutral and expose a tools-only `type-mcp/langchain` subpath. It reads existing decorated tool metadata, resolves a server through the existing explicit `InstanceResolver`, and returns LangChain structured tools.
+Keep `type-mcp` framework-neutral and expose a tools-only `@theorvane/type-mcp/langchain` subpath. It reads existing decorated tool metadata, resolves a server through the existing explicit `InstanceResolver`, and returns LangChain structured tools.
 
 LangGraph remains consumer-owned composition. Consumers pass a mutable copy of these tools to `ToolNode` and retain ownership of graph topology, models, authorization, persistence, and deployment. The adapter does not import LangGraph.
 

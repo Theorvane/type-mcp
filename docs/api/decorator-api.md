@@ -1,12 +1,12 @@
 # Decorator API contract
 
-**Published npm status:** `type-mcp@0.2.0` includes metadata declarations, definition validation, the resolver seam, MCP SDK compilation for tools/static resources/prompts, the Node stdio helper, and the Fetch Streamable HTTP adapter. LangChain interoperability is exposed separately at `type-mcp/langchain`.
+**Published npm status:** `@theorvane/type-mcp@0.2.0` includes metadata declarations, definition validation, the resolver seam, MCP SDK compilation for tools/static resources/prompts, the Node stdio helper, and the Fetch Streamable HTTP adapter. LangChain interoperability is exposed separately at `@theorvane/type-mcp/langchain`.
 
 ## Server declaration
 
 ```ts
-import { McpServer, McpTool } from "type-mcp";
-import { createMcpHandler } from "type-mcp/http";
+import { McpServer, McpTool } from "@theorvane/type-mcp";
+import { createMcpHandler } from "@theorvane/type-mcp/http";
 
 @McpServer({ name: "catalog", version: "0.2.0" })
 class CatalogServer {}
@@ -79,7 +79,7 @@ summarizeProduct(sku: string) {
 import {
   resolveMcpServerInstance,
   type InstanceResolver,
-} from "type-mcp";
+} from "@theorvane/type-mcp";
 
 class CatalogServer {
   constructor(private readonly catalog: object) {}

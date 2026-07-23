@@ -68,7 +68,7 @@ describe("LangChain current-facing documentation contract", () => {
 			.flat()
 			.join("\n");
 
-		expect(combined).toContain("type-mcp/langchain");
+		expect(combined).toContain("@theorvane/type-mcp/langchain");
 		expect(combined).toContain("LangGraph");
 		expect(trackedDocumentation).not.toMatch(
 			/n[e]st[j]s|@n[e]st[j]s|module[r]ef|discovery[s]ervice/i,

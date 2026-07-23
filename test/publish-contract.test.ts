@@ -14,12 +14,12 @@ interface PackageManifest {
 }
 
 describe("single npm package publish contract", () => {
-	it("declares type-mcp as a public unscoped package with publish verification", async () => {
+	it("declares @theorvane/type-mcp as the public organization package with publish verification", async () => {
 		const manifest = JSON.parse(
 			await readFile(new URL("../package.json", import.meta.url), "utf8"),
 		) as PackageManifest;
 
-		expect(manifest.name).toBe("type-mcp");
+		expect(manifest.name).toBe("@theorvane/type-mcp");
 		expect(manifest.repository).toEqual({
 			type: "git",
 			url: "git+https://github.com/Theorvane/type-mcp.git",

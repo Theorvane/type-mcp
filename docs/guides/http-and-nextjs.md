@@ -10,11 +10,11 @@ npm run example:standalone-http
 npm test -- --run test/standalone-http-example.test.ts
 ```
 
-Its handler is built from a decorated class with the root compiler and the `type-mcp/http` subpath:
+Its handler is built from a decorated class with the root compiler and the `@theorvane/type-mcp/http` subpath:
 
 ```ts
-import { createMcpServer } from "type-mcp";
-import { createMcpHandler } from "type-mcp/http";
+import { createMcpServer } from "@theorvane/type-mcp";
+import { createMcpHandler } from "@theorvane/type-mcp/http";
 
 export const handler = createMcpHandler(() => createMcpServer(CatalogServer));
 ```
@@ -35,4 +35,4 @@ This is a route integration shape, not a full Next.js scaffold. It intentionally
 
 ## Published-release boundary
 
-The published npm `type-mcp@0.2.0` package includes `createMcpServer()` and `type-mcp/http`. This guide demonstrates the package API, while hosting, authentication, persistence, and authorization remain application-owned responsibilities.
+The published npm `@theorvane/type-mcp@0.2.0` package includes `createMcpServer()` and `@theorvane/type-mcp/http`. This guide demonstrates the package API, while hosting, authentication, persistence, and authorization remain application-owned responsibilities.

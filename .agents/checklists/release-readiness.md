@@ -27,7 +27,7 @@ Use before pushing a release candidate, creating a remote repository, publishing
 - [ ] `gh repo view Theorvane/type-mcp --json url,visibility,defaultBranchRef` confirms public `dev` and release-only `main`.
 - [ ] For a release promotion, `git rev-parse HEAD` equals `git ls-remote origin refs/heads/main` after the reviewed `dev` → `main` merge.
 - [ ] npm Trusted Publisher is configured for `Theorvane/type-mcp`, `publish.yml`, and the `npm` environment; no long-lived npm token is stored.
-- [ ] After publication, `npm view type-mcp@<version> version dist-tags --json` returns the intended version and `v<version>` is an annotated tag at the release SHA.
+- [ ] After publication, `npm view @theorvane/type-mcp@<version> version dist-tags --json` returns the intended version and `v<version>` is an annotated tag at the release SHA.
 - [ ] The matching GitHub Release exists and points to `v<version>`.
 
 ## Review and integration

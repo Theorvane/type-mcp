@@ -1,6 +1,6 @@
 # MVP scope
 
-> **Release note:** The published `type-mcp@0.2.0` package includes this MVP's metadata, validation, resolver, compiler, stdio, HTTP, and tools-only LangChain adapter. Start with the [README](../../README.md) and [getting-started guide](../guides/getting-started.md) for exact exports and boundaries.
+> **Release note:** The published `@theorvane/type-mcp@0.2.0` package includes this MVP's metadata, validation, resolver, compiler, stdio, HTTP, and tools-only LangChain adapter. Start with the [README](../../README.md) and [getting-started guide](../guides/getting-started.md) for exact exports and boundaries.
 
 **Status:** Published in `0.2.0`: decorator metadata storage, definition validation, the instance resolver seam, compiler behavior, the Node stdio helper, the Fetch Streamable HTTP adapter, and the tools-only LangChain adapter.
 
@@ -16,7 +16,7 @@
 | Instance construction | Direct constructor default plus async-capable `InstanceResolver` interface |
 | Local transport | stdio helper |
 | Web transport | Fetch-standard Streamable HTTP handler |
-| Agent tool integration | `type-mcp/langchain` converts decorated tools; LangGraph `ToolNode` composition is consumer-owned |
+| Agent tool integration | `@theorvane/type-mcp/langchain` converts decorated tools; LangGraph `ToolNode` composition is consumer-owned |
 | Developer quality | strict TS, Vitest, tsup build, CI, examples, README |
 
 ## Deferred
@@ -35,7 +35,7 @@
 
 - Repository target: public `Theorvane/type-mcp`.
 - Runtime protocol behavior comes from the official MCP SDK.
-- Core and HTTP have no agent-framework runtime or peer dependency; `type-mcp/langchain` has an isolated optional LangChain peer.
+- Core and HTTP have no agent-framework runtime or peer dependency; `@theorvane/type-mcp/langchain` has an isolated optional LangChain peer.
 - Public types are strict and runtime input is validated before handler invocation.
 - No user-visible error may include an unfiltered application stack trace.
 

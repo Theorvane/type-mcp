@@ -1,4 +1,4 @@
-import { McpServer, McpTool } from "type-mcp";
+import { McpServer, McpTool } from "@theorvane/type-mcp";
 import { z } from "zod";
 
 @McpServer({ name: "langgraph-catalog", version: "0.1.0" })

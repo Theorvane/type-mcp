@@ -1,17 +1,17 @@
 # Agent integration guide
 
-This guide gives coding agents a deterministic procedure for adding TypeMCP declarations without inventing application-owned policy. It applies to the published [`type-mcp@0.2.0`](https://www.npmjs.com/package/type-mcp) package.
+This guide gives coding agents a deterministic procedure for adding TypeMCP declarations without inventing application-owned policy. It applies to the published [`@theorvane/type-mcp@0.2.0`](https://www.npmjs.com/package/@theorvane/type-mcp) package.
 
 ## Capability contract agents must honor
 
-An agent may use `@McpServer`, `@McpTool`, `@McpResource`, `@McpPrompt`, `getMcpServerDefinition()`, `readMcpServerDefinition()`, `createMcpServer()`, and the explicit `InstanceResolver` seam. `type-mcp/http` and `type-mcp/langchain` are published subpaths.
+An agent may use `@McpServer`, `@McpTool`, `@McpResource`, `@McpPrompt`, `getMcpServerDefinition()`, `readMcpServerDefinition()`, `createMcpServer()`, and the explicit `InstanceResolver` seam. `@theorvane/type-mcp/http` and `@theorvane/type-mcp/langchain` are published subpaths.
 
 An agent must not claim automatic application-container discovery, OAuth, authorization policy, session persistence, hosting, model selection, LangGraph topology, or a provider integration. TypeMCP's published runtime validates and compiles declarations, but applications own those policies and lifecycle decisions.
 
 ## Evidence-first workflow
 
-1. Read the installed package version with `npm view type-mcp@latest version` or inspect the lockfile. Never infer availability from an issue, branch, or documentation that describes future work.
-2. Inspect the installed package exports using `node --input-type=module -e "import('type-mcp').then((m) => console.log(Object.keys(m)))"` before proposing an API not shown in the README.
+1. Read the installed package version with `npm view @theorvane/type-mcp@latest version` or inspect the lockfile. Never infer availability from an issue, branch, or documentation that describes future work.
+2. Inspect the installed package exports using `node --input-type=module -e "import('@theorvane/type-mcp').then((m) => console.log(Object.keys(m)))"` before proposing an API not shown in the README.
 3. Read the [README capability map](../../README.md#capability-map), [configuration guide](configuration.md), and this guide before editing code.
 4. Add `type-mcp` and `zod` as application dependencies if they are absent. Confirm Node 20+ and standard TypeScript decorator support.
 5. Define a class with `@McpServer` and method decorators. Use a Zod object schema for every `@McpTool`.
@@ -29,7 +29,7 @@ import {
   getMcpServerDefinition,
   McpServer,
   McpTool,
-} from "type-mcp";
+} from "@theorvane/type-mcp";
 
 const searchInput = z.object({ query: z.string().min(1) });
 

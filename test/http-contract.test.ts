@@ -13,7 +13,7 @@ describe("type-mcp HTTP subpath contract", () => {
 			await readFile(new URL("../package.json", import.meta.url), "utf8"),
 		) as PackageManifest;
 
-		expect(manifest.name).toBe("type-mcp");
+		expect(manifest.name).toBe("@theorvane/type-mcp");
 		expect(manifest.exports).toHaveProperty("./http");
 		expect(http.createMcpHandler).toBeTypeOf("function");
 	});

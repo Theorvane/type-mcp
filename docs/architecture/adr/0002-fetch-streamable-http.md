@@ -9,7 +9,7 @@ TypeScript users need an HTTP adapter that works with Next.js route handlers and
 
 ## Decision
 
-The `type-mcp/http` subpath will expose a Fetch-style handler:
+The `@theorvane/type-mcp/http` subpath will expose a Fetch-style handler:
 
 ```ts
 type McpHandler = (request: Request) => Promise<Response>;

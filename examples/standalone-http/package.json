@@ -6,6 +6,6 @@
 		"build": "tsc -p tsconfig.json"
 	},
 	"dependencies": {
-		"type-mcp": "file:../.."
+		"@theorvane/type-mcp": "file:../.."
 	}
 }
