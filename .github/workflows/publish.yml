@@ -27,6 +27,10 @@ jobs:
           node-version: 22
           cache: npm
           registry-url: https://registry.npmjs.org
+      - name: Install npm with Trusted Publishing support
+        run: |
+          npm install --global npm@11.5.1
+          npm --version
       - name: Read the release identity
         id: release
         shell: bash

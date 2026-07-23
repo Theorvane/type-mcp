@@ -12,6 +12,7 @@ describe("trusted npm release workflow", () => {
 		expect(workflow).toContain("branches: [main]");
 		expect(workflow).toContain("id-token: write");
 		expect(workflow).toContain("environment: npm");
+		expect(workflow).toContain("npm install --global npm@11.5.1");
 		expect(workflow).toContain("npm publish --provenance --access public");
 		expect(workflow).toContain("scripts/reconcile-release-state.mjs");
 		expect(workflow).toContain('npm view "$PACKAGE@$VERSION" gitHead');
