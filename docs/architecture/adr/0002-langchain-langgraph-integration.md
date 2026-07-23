@@ -6,7 +6,7 @@
 
 ## Context
 
-TypeMCP needs an integration path for agent applications without adding a framework container, graph runtime, or model policy to the MCP core. The previously proposed NestJS adapter would require lifecycle, discovery, and request-scope commitments that are unrelated to the tool interoperability users need.
+TypeMCP needs an integration path for agent applications without adding a framework container, graph runtime, or model policy to the MCP core. A framework-specific container adapter would require lifecycle, discovery, and request-scope commitments that are unrelated to the tool interoperability users need.
 
 ## Decision
 
@@ -32,6 +32,6 @@ LangGraph remains consumer-owned composition. Consumers pass a mutable copy of t
 
 ## Rejected alternatives
 
-- **NestJS-specific adapter:** introduces framework lifecycle and provider-discovery commitments without meeting agent interoperability needs.
+- **Framework-specific container adapter:** introduces lifecycle and provider-discovery commitments without meeting agent interoperability needs.
 - **A TypeMCP graph runtime:** duplicates LangGraph routing, persistence, and policy APIs.
 - **A separate scoped workspace package:** conflicts with the current one unscoped-package policy before the adapter API is proven.

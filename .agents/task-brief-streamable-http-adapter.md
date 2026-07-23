@@ -23,7 +23,7 @@ Expose a framework-neutral Fetch handler from `type-mcp/http`, delegating Stream
 - Fetch-level initialize, tools list/call, session teardown/reinitialize, and unsupported/unknown-session request tests.
 
 **Out:**
-- OAuth, durable/custom sessions, Express/Node adapters, legacy SSE, handcrafted JSON-RPC framing, NestJS, URI templates, and publishing.
+- OAuth, durable/custom sessions, Express/Node adapters, legacy SSE, handcrafted JSON-RPC framing, application-framework adapters, URI templates, and publishing.
 
 ## Acceptance criteria
 

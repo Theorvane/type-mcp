@@ -9,7 +9,7 @@
 - included: tool name, description, Zod input schema, explicit `InstanceResolver`, safe invocation results;
 - excluded: MCP server startup, HTTP/stdio transport, resources, prompts, models, agent executors, graph topology, persistence, and authorization policy.
 
-The core package and `type-mcp/http` remain independent of LangChain, LangGraph, and NestJS.
+The core package and `type-mcp/http` remain independent of agent frameworks and graph runtimes; only the isolated `type-mcp/langchain` subpath depends on the LangChain peer.
 
 ## Dependency boundary
 

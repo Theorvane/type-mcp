@@ -4,7 +4,7 @@
 
 > **For Hermes:** Implement active plans task-by-task using test-driven development. Every production behavior starts with a focused failing Vitest test; run the test before and after the smallest implementation.
 
-**Original goal:** Publish a decorator-first TypeScript MCP framework with a framework-neutral runtime, a Fetch-compatible Streamable HTTP subpath, and an explicit NestJS integration seam.
+**Original goal:** Publish a decorator-first TypeScript MCP framework with a framework-neutral runtime, a Fetch-compatible Streamable HTTP subpath, and an explicit construction seam.
 
 **Historical architecture:** The original `@type-mcp/core` and `@type-mcp/http` workspace layout has been superseded by one unscoped `type-mcp` package. The root export owns metadata and future compilation; `type-mcp/http` remains the Fetch handler subpath.
 
@@ -15,9 +15,9 @@
 ## Historical delivery constraints
 
 - The active package boundary is one public, unscoped `type-mcp` package with a `type-mcp/http` subpath; do not implement the retired workspace layout below.
-- The root `type-mcp` API must not import NestJS packages.
+- The root `type-mcp` API must not import application-framework packages.
 - All public runtime input must be typed as `unknown` until validated; no public `any`, `@ts-ignore`, or unsafe error stack exposure.
-- No authentication, resource templates, persistence layer, legacy SSE transport, or Nest module is included in this MVP.
+- No authentication, resource templates, persistence layer, legacy SSE transport, or application-framework module is included in this MVP.
 - Each completed task is committed with a focused conventional commit.
 
 ## Acceptance matrix
@@ -27,7 +27,7 @@
 | Decorators | Class and methods produce immutable definitions | Missing server metadata and duplicate public names fail at compilation | Parameter decorators and reflection-based inferred schemas |
 | Tools | Zod schema validates object input; sync/async handlers resolve | Invalid arguments and thrown handler errors become safe MCP errors | Automatic authorization and retries |
 | Resources/prompts | Static URI resource and named prompt register through the SDK | Invalid decorator options fail before server becomes usable | URI templates and prompt argument inference |
-| Resolver | Default constructor resolver and custom resolver work | Resolver rejection fails server construction clearly | Nest scope/context implementation |
+| Resolver | Default constructor resolver and custom resolver work | Resolver rejection fails server construction clearly | Application-specific scope/context implementation |
 | HTTP | Fetch handler processes MCP streamable HTTP requests | Unsupported method returns valid HTTP error; sessions follow SDK transport behavior | OAuth, Redis/session persistence, legacy SSE |
 | Packaging | strict typecheck, tests, package builds, CI all pass | build/type/test failures block publishing | npm publication/release automation |
 
@@ -82,7 +82,7 @@ git commit -m "docs: add contributor and agent harness"
 
 **Step 3:** Write product vision and MVP-scope documents. Explicitly distinguish user problems, primary users, success criteria, included work, and non-goals.
 
-**Step 4:** Write architecture overview plus ADRs documenting (a) core/NestJS decoupling through `InstanceResolver`, and (b) Fetch-first Streamable HTTP transport.
+**Step 4:** Write architecture overview plus ADRs documenting (a) framework-neutral construction through `InstanceResolver`, and (b) Fetch-first Streamable HTTP transport.
 
 **Step 5:** Write decorator API documentation with examples and Accept/Error/Excluded behavior tables. Do not document uncommitted behavior as available.
 
@@ -203,7 +203,7 @@ git commit -m "feat(core): validate decorated server definitions"
 
 ## Task 6: Add instance resolver contract
 
-**Objective:** Establish the NestJS-compatible construction seam while retaining direct construction as the default.
+**Objective:** Establish the framework-neutral construction seam while retaining direct construction as the default.
 
 **Files:**
 - Create: `packages/core/src/resolver/instance-resolver.ts`
@@ -215,7 +215,7 @@ git commit -m "feat(core): validate decorated server definitions"
 
 **Step 2: Verify red** with `npm test -- --run packages/core/test/instance-resolver.test.ts`.
 
-**Step 3: Implement `InstanceResolver` and the direct-construction default.** The contract returns a value or Promise, enabling a later Nest adapter.
+**Step 3: Implement `InstanceResolver` and the direct-construction default.** The contract returns a value or Promise, enabling consumer-provided construction.
 
 **Step 4: Verify green** with the focused test command.
 
@@ -332,7 +332,7 @@ git commit -m "feat(http): add streamable HTTP handler"
 
 ## Task 11: Document runnable examples and package APIs
 
-**Objective:** Ensure documented developer flows are executable and explicitly distinguish implemented from deferred NestJS support.
+**Objective:** Ensure documented developer flows are executable and explicitly distinguish implemented from deferred framework integration support.
 
 **Files:**
 - Create: `examples/standalone-http/package.json`
@@ -342,7 +342,7 @@ git commit -m "feat(http): add streamable HTTP handler"
 - Modify: `README.md`
 - Modify: `docs/api/decorator-api.md`
 - Create: `docs/guides/http-and-nextjs.md`
-- Create: `docs/guides/nestjs-integration-roadmap.md`
+- Create: `docs/guides/langchain-langgraph.md`
 
 **Step 1: Write an example smoke test** or command-driven assertion that loads the standalone example and verifies its decorated server can list/call a sample tool.
 
@@ -406,4 +406,4 @@ git status --short --branch
 
 Historical expectation: visibility is `PUBLIC`, default branch is `dev`, remote SHA equals local `HEAD`, and the working tree is clean. Current releases require a separately reviewed `dev` → `main` promotion.
 
-**Step 5: Report only verified command results, repository URL, package scope, intentionally deferred features, and the next recommended issue (`@type-mcp/nestjs` implementation).**
+**Step 5: Report only verified command results, repository URL, package scope, intentionally deferred features, and the LangChain/LangGraph integration boundary.**
