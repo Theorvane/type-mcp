@@ -33,13 +33,20 @@ const currentFacingDocuments = [
 	"../README.md",
 	"../AGENTS.md",
 	"../CONTRIBUTING.md",
+	"../SECURITY.md",
+	"../docs/architecture/adr/0002-langchain-langgraph-integration.md",
 	"../docs/product/vision.md",
 	"../docs/product/mvp-scope.md",
 	"../docs/api/decorator-api.md",
 	"../docs/architecture/overview.md",
 	"../docs/guides/agent-integration.md",
+	"../docs/guides/configuration.md",
 	"../docs/guides/getting-started.md",
+	"../docs/guides/http-and-nextjs.md",
+	"../docs/guides/langchain-langgraph.md",
 	"../docs/README.md",
+	"../examples/standalone-http/README.md",
+	"../examples/langgraph-tools/README.md",
 ];
 
 describe("LangChain current-facing documentation contract", () => {
@@ -68,8 +75,13 @@ describe("LangChain current-facing documentation contract", () => {
 			.flat()
 			.join("\n");
 
-		expect(combined).toContain("type-mcp/langchain");
+		expect(combined).toContain("@theorvane/type-mcp/langchain");
 		expect(combined).toContain("LangGraph");
+		expect(combined).not.toContain("`type-mcp");
+		expect(combined).not.toContain('"type-mcp"');
+		expect(combined).not.toMatch(
+			/(?:published|available).*@theorvane\/type-mcp@0\.2\.0|@theorvane\/type-mcp@0\.2\.0.*(?:published|available)/i,
+		);
 		expect(trackedDocumentation).not.toMatch(
 			/n[e]st[j]s|@n[e]st[j]s|module[r]ef|discovery[s]ervice/i,
 		);

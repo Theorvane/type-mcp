@@ -6,7 +6,7 @@
 
 **Original goal:** Publish a decorator-first TypeScript MCP framework with a framework-neutral runtime, a Fetch-compatible Streamable HTTP subpath, and an explicit construction seam.
 
-**Historical architecture:** The original `@type-mcp/core` and `@type-mcp/http` workspace layout has been superseded by one unscoped `type-mcp` package. The root export owns metadata and future compilation; `type-mcp/http` remains the Fetch handler subpath.
+**Historical architecture:** The original `@type-mcp/core` and `@type-mcp/http` workspace layout was first superseded by an unscoped package and is now superseded by the public `@theorvane/type-mcp` package. The root export owns metadata and future compilation; `@theorvane/type-mcp/http` remains the Fetch handler subpath.
 
 **Tech Stack:** TypeScript (strict mode, stage-3 decorators), npm, `@modelcontextprotocol/sdk`, Zod, Vitest, tsup, GitHub Actions, Node 22 LTS.
 
@@ -14,7 +14,7 @@
 
 ## Historical delivery constraints
 
-- The active package boundary is one public, unscoped `type-mcp` package with a `type-mcp/http` subpath; do not implement the retired workspace layout below.
+- The active package boundary is one public `@theorvane/type-mcp` package with a `@theorvane/type-mcp/http` subpath; do not implement the retired workspace layout below.
 - The root `type-mcp` API must not import application-framework packages.
 - All public runtime input must be typed as `unknown` until validated; no public `any`, `@ts-ignore`, or unsafe error stack exposure.
 - No authentication, resource templates, persistence layer, legacy SSE transport, or application-framework module is included in this MVP.

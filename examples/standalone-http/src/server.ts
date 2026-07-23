@@ -1,5 +1,5 @@
-import { createMcpServer } from "type-mcp";
-import { createMcpHandler } from "type-mcp/http";
+import { createMcpServer } from "@theorvane/type-mcp";
+import { createMcpHandler } from "@theorvane/type-mcp/http";
 
 import { CatalogServer } from "./catalog-server.js";
 

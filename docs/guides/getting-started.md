@@ -1,13 +1,13 @@
-# Getting started with `type-mcp@0.2.0`
+# Getting started with `@theorvane/type-mcp@0.2.0`
 
-This guide creates and inspects an MCP **declaration** using the published package. Version `0.2.0` also validates and compiles decorated definitions through `createMcpServer()`; the [HTTP guide](http-and-nextjs.md) and [LangChain guide](langchain-langgraph.md) cover their focused adapter boundaries.
+This guide creates and inspects an MCP **declaration** using the `0.2.0` repository release target. That source also validates and compiles decorated definitions through `createMcpServer()`; the [HTTP guide](http-and-nextjs.md) and [LangChain guide](langchain-langgraph.md) cover their focused adapter boundaries.
 
 ## Install the package and configure TypeScript
 
-Install the package and import Zod directly in the application that owns its schemas:
+After `npm view @theorvane/type-mcp@0.2.0 version` succeeds, install the package and import Zod directly in the application that owns its schemas:
 
 ```bash
-npm install type-mcp zod
+npm install @theorvane/type-mcp zod
 ```
 
 Run on Node.js 20 or later. Use standard TypeScript decorators with Node-aware ESM settings. A minimal `tsconfig.json` is:
@@ -39,7 +39,7 @@ import {
   McpResource,
   McpServer,
   McpTool,
-} from "type-mcp";
+} from "@theorvane/type-mcp";
 
 @McpServer({ name: "notes", version: "0.2.0" })
 export class NotesServer {
@@ -79,7 +79,7 @@ Call `getMcpServerDefinition()` to retrieve the declaration associated with a de
 
 ```ts
 // src/inspect-notes-server.ts
-import { getMcpServerDefinition } from "type-mcp";
+import { getMcpServerDefinition } from "@theorvane/type-mcp";
 import { NotesServer } from "./notes-server.js";
 
 const definition = getMcpServerDefinition(NotesServer);
@@ -98,8 +98,8 @@ console.log({
 
 The function returns `undefined` for a class without `@McpServer`. For a decorated class it returns a newly allocated frozen container. Tool input schemas keep their original Zod object identity, because executable schemas cannot safely be cloned or frozen. Do not mutate a schema after passing it to `@McpTool`.
 
-## Continue through the published runtime boundary
+## Continue through the runtime boundary
 
-At `0.2.0`, `createMcpServer()`, `startStdioServer()`, `type-mcp/http`, and `type-mcp/langchain` are published. TypeMCP validates and compiles decorated definitions through an explicit `InstanceResolver`; it does not choose a web host, authorization model, session store, LangGraph topology, model, or persistence policy for the application.
+The `0.2.0` release target contains `createMcpServer()`, `startStdioServer()`, `@theorvane/type-mcp/http`, and `@theorvane/type-mcp/langchain`; verify the installed package before relying on them. TypeMCP validates and compiles decorated definitions through an explicit `InstanceResolver`; it does not choose a web host, authorization model, session store, LangGraph topology, model, or persistence policy for the application.
 
 The declaration created above remains useful for application-owned inspection. Consult the [configuration guide](configuration.md), [HTTP guide](http-and-nextjs.md), [LangChain guide](langchain-langgraph.md), and [agent guide](agent-integration.md) before automating a change.

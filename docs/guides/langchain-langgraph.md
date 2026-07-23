@@ -1,22 +1,22 @@
 # LangChain and LangGraph integration
 
-> **Release boundary:** `type-mcp/langchain` is available in the published `type-mcp@0.2.0` package. It is tools-only; LangGraph remains a consumer-owned composition choice.
+> **Release boundary:** `@theorvane/type-mcp/langchain` is part of the `@theorvane/type-mcp@0.2.0` repository release target; verify the installed package exports it. It is tools-only; LangGraph remains a consumer-owned composition choice.
 
 ## Scope
 
-`type-mcp/langchain` converts decorated `@McpTool` methods into LangChain `DynamicStructuredTool` instances. It is **tools only**:
+`@theorvane/type-mcp/langchain` converts decorated `@McpTool` methods into LangChain `DynamicStructuredTool` instances. It is **tools only**:
 
 - included: tool name, description, Zod input schema, explicit `InstanceResolver`, safe invocation results;
 - excluded: MCP server startup, HTTP/stdio transport, resources, prompts, models, agent executors, graph topology, persistence, and authorization policy.
 
-The core package and `type-mcp/http` remain independent of agent frameworks and graph runtimes; only the isolated `type-mcp/langchain` subpath depends on the LangChain peer.
+The core package and `@theorvane/type-mcp/http` remain independent of agent frameworks and graph runtimes; only the isolated `@theorvane/type-mcp/langchain` subpath depends on the LangChain peer.
 
 ## Dependency boundary
 
 The adapter has an optional peer dependency on `@langchain/core`. A consumer that imports the adapter must install a compatible peer:
 
 ```bash
-npm install type-mcp @langchain/core zod
+npm install @theorvane/type-mcp @langchain/core zod
 ```
 
 LangGraph is a consumer choice, not an adapter dependency. Install it only when using a graph:
@@ -28,7 +28,7 @@ npm install @langchain/langgraph
 ## Convert decorated tools
 
 ```ts
-import { createLangChainTools } from "type-mcp/langchain";
+import { createLangChainTools } from "@theorvane/type-mcp/langchain";
 
 const tools = await createLangChainTools(CatalogTools);
 const result = await tools[0].invoke({ sku: "SKU-7" });
@@ -50,7 +50,7 @@ The consumer owns its graph and policies. Pass a mutable copy of the adapter res
 
 ```ts
 import { ToolNode } from "@langchain/langgraph/prebuilt";
-import { createLangChainTools } from "type-mcp/langchain";
+import { createLangChainTools } from "@theorvane/type-mcp/langchain";
 
 const tools = await createLangChainTools(CatalogTools);
 const toolNode = new ToolNode([...tools]);

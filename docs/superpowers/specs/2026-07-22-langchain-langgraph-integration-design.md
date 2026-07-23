@@ -6,7 +6,7 @@
 
 ## Decision
 
-TypeMCP stays framework-neutral. Its supported agent integration boundary is the tools-only `type-mcp/langchain` subpath, which converts decorated TypeMCP tools into LangChain structured tools. LangGraph integration is consumer-owned composition: applications pass those tools to `ToolNode` and retain ownership of graph topology, models, authorization, persistence, and deployment.
+TypeMCP stays framework-neutral. Its supported agent integration boundary is the tools-only `@theorvane/type-mcp/langchain` subpath, which converts decorated TypeMCP tools into LangChain structured tools. LangGraph integration is consumer-owned composition: applications pass those tools to `ToolNode` and retain ownership of graph topology, models, authorization, persistence, and deployment.
 
 ## Rationale
 
@@ -15,8 +15,8 @@ A container-specific integration would force lifecycle, discovery, and scope com
 ## Package boundary
 
 - `type-mcp` root: decorators, metadata, validation, resolver, compiler, and stdio.
-- `type-mcp/http`: Fetch-standard Streamable HTTP adapter.
-- `type-mcp/langchain`: tools-only adapter with an optional `@langchain/core` peer dependency.
+- `@theorvane/type-mcp/http`: Fetch-standard Streamable HTTP adapter.
+- `@theorvane/type-mcp/langchain`: tools-only adapter with an optional `@langchain/core` peer dependency.
 - `@langchain/langgraph`: consumer dependency; used only by the repository integration test and example, not adapter source.
 
 The root and HTTP subpaths do not import agent-framework or graph-runtime packages.
@@ -24,7 +24,7 @@ The root and HTTP subpaths do not import agent-framework or graph-runtime packag
 ## Public contract
 
 ```ts
-import { createLangChainTools } from "type-mcp/langchain";
+import { createLangChainTools } from "@theorvane/type-mcp/langchain";
 
 const tools = await createLangChainTools(CatalogServer, { resolver });
 ```
@@ -43,7 +43,7 @@ TypeMCP does not create graph topology, select models, make LLM calls, manage st
 
 ## Verification
 
-- `type-mcp/langchain` has ESM, CJS, and type artifacts.
+- `@theorvane/type-mcp/langchain` has ESM, CJS, and type artifacts.
 - Adapter tests cover resolver behavior, schema validation, result normalization, and safe errors.
 - The LangGraph ToolNode example runs in memory without a model, API key, listener, persistence store, or network request.
 - Documentation contracts require the LangChain/LangGraph boundary in public and contributor documentation.

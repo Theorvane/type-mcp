@@ -14,7 +14,7 @@ describe("type-mcp single-package contract", () => {
 			await readFile(new URL("../package.json", import.meta.url), "utf8"),
 		) as PackageManifest;
 
-		expect(manifest.name).toBe("type-mcp");
+		expect(manifest.name).toBe("@theorvane/type-mcp");
 		expect(manifest.exports).toHaveProperty(".");
 		expect(manifest.exports).toHaveProperty("./http");
 		expect(createMcpServer).toBeTypeOf("function");

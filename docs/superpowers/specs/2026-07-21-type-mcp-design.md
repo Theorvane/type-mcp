@@ -3,7 +3,7 @@
 **Status:** Historical design record — package layout and integration direction superseded
 **Date:** 2026-07-21
 
-> **Current direction:** Use the single unscoped `type-mcp` package, the `type-mcp/http` subpath, and the tools-only `type-mcp/langchain` adapter. LangGraph composition belongs to the consuming application. See the [documentation index](../../README.md) and [LangChain/LangGraph integration design](2026-07-22-langchain-langgraph-integration-design.md).
+> **Current direction:** Use the single public `@theorvane/type-mcp` package, the `@theorvane/type-mcp/http` subpath, and the tools-only `@theorvane/type-mcp/langchain` adapter. LangGraph composition belongs to the consuming application. See the [documentation index](../../README.md) and [LangChain/LangGraph integration design](2026-07-22-langchain-langgraph-integration-design.md).
 
 ## Original goal
 
@@ -26,13 +26,13 @@ Decorators record immutable metadata. `createMcpServer()` reads validated defini
 
 ## Agent integration boundary
 
-`type-mcp/langchain` turns decorated tools into LangChain `DynamicStructuredTool` instances. A consumer can supply those tools to LangGraph `ToolNode`; the consumer retains ownership of graph routing, models, policies, state, persistence, and deployment. TypeMCP does not ship a graph wrapper.
+`@theorvane/type-mcp/langchain` turns decorated tools into LangChain `DynamicStructuredTool` instances. A consumer can supply those tools to LangGraph `ToolNode`; the consumer retains ownership of graph routing, models, policies, state, persistence, and deployment. TypeMCP does not ship a graph wrapper.
 
 ## Safety and transport boundaries
 
 - Tool input is validated through Zod before handler invocation.
 - Invalid input and handler failures return safe MCP-visible results without application stack traces.
-- `type-mcp/http` delegates protocol/session semantics to the official SDK Web Standard transport.
+- `@theorvane/type-mcp/http` delegates protocol/session semantics to the official SDK Web Standard transport.
 - OAuth, legacy SSE, dynamic resource templates, external session storage, graph runtimes, model providers, and framework-specific adapters remain out of scope.
 
 ## Verification
