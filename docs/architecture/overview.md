@@ -1,8 +1,8 @@
 # Architecture overview
 
-> **Release note:** The published [`@theorvane/type-mcp@0.2.0`](https://www.npmjs.com/package/@theorvane/type-mcp) release contains the metadata, validation, resolver, compiler, stdio, HTTP, and LangChain adapter surfaces described here. Applications remain responsible for hosting and lifecycle policy.
+> **Release target:** The `@theorvane/type-mcp@0.2.0` repository release target contains the metadata, validation, resolver, compiler, stdio, HTTP, and LangChain adapter surfaces described here. Applications remain responsible for hosting and lifecycle policy.
 
-**Status:** Published architecture — decorator metadata storage, definition validation, the async-capable resolver seam, runtime compiler, Node stdio helper, Fetch Streamable HTTP adapter, and tools-only LangChain adapter are available in `0.2.0`.
+**Status:** Release-target architecture — decorator metadata storage, definition validation, the async-capable resolver seam, runtime compiler, Node stdio helper, Fetch Streamable HTTP adapter, and tools-only LangChain adapter are implemented in the `0.2.0` release target; verify npm publication before installing.
 
 ## Package surface
 

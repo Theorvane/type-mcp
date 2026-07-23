@@ -1,6 +1,6 @@
 # Decorator API contract
 
-**Published npm status:** `@theorvane/type-mcp@0.2.0` includes metadata declarations, definition validation, the resolver seam, MCP SDK compilation for tools/static resources/prompts, the Node stdio helper, and the Fetch Streamable HTTP adapter. LangChain interoperability is exposed separately at `@theorvane/type-mcp/langchain`.
+**Repository release target:** `@theorvane/type-mcp@0.2.0` includes metadata declarations, definition validation, the resolver seam, MCP SDK compilation for tools/static resources/prompts, the Node stdio helper, and the Fetch Streamable HTTP adapter. LangChain interoperability is exposed separately at `@theorvane/type-mcp/langchain`.
 
 ## Server declaration
 

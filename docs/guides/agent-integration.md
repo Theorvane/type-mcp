@@ -1,10 +1,10 @@
 # Agent integration guide
 
-This guide gives coding agents a deterministic procedure for adding TypeMCP declarations without inventing application-owned policy. It applies to the published [`@theorvane/type-mcp@0.2.0`](https://www.npmjs.com/package/@theorvane/type-mcp) package.
+This guide gives coding agents a deterministic procedure for adding TypeMCP declarations without inventing application-owned policy. It applies to the `@theorvane/type-mcp@0.2.0` repository release target; before installing, confirm the version exists in npm.
 
 ## Capability contract agents must honor
 
-An agent may use `@McpServer`, `@McpTool`, `@McpResource`, `@McpPrompt`, `getMcpServerDefinition()`, `readMcpServerDefinition()`, `createMcpServer()`, and the explicit `InstanceResolver` seam. `@theorvane/type-mcp/http` and `@theorvane/type-mcp/langchain` are published subpaths.
+An agent may use `@McpServer`, `@McpTool`, `@McpResource`, `@McpPrompt`, `getMcpServerDefinition()`, `readMcpServerDefinition()`, `createMcpServer()`, and the explicit `InstanceResolver` seam. `@theorvane/type-mcp/http` and `@theorvane/type-mcp/langchain` are documented release-target subpaths; verify the installed package exports them.
 
 An agent must not claim automatic application-container discovery, OAuth, authorization policy, session persistence, hosting, model selection, LangGraph topology, or a provider integration. TypeMCP's published runtime validates and compiles declarations, but applications own those policies and lifecycle decisions.
 
@@ -44,7 +44,7 @@ export class SearchServer {
 export const searchDefinition = getMcpServerDefinition(SearchServer);
 ```
 
-This code records a declaration and reads it. To expose a runnable server, use the published compiler or adapter with an explicit resolver and application-owned host policy. An agent must state that boundary explicitly in a PR summary or handoff.
+This code records a declaration and reads it. To expose a runnable server, use a compiler or adapter exported by the installed package with an explicit resolver and application-owned host policy. An agent must state that boundary explicitly in a PR summary or handoff.
 
 ## Required output for an agent handoff
 

@@ -1,22 +1,22 @@
 # Configuration and compatibility
 
-`@theorvane/type-mcp@0.2.0` is a TypeScript declaration and runtime package. Configuration determines whether TypeScript emits standard decorators and whether the runtime can resolve the package's ESM/CJS exports; applications configure their own hosting and transport lifecycle around the published MCP adapters.
+`@theorvane/type-mcp@0.2.0` is the repository release target for this TypeScript declaration and runtime package. Configuration determines whether TypeScript emits standard decorators and whether the runtime can resolve the package's ESM/CJS exports; applications configure their own hosting and transport lifecycle around installed MCP adapters.
 
 ## Runtime and package manager
 
-Use Node.js 20 or later. Install TypeMCP and Zod as application dependencies:
+Use Node.js 20 or later. After `npm view @theorvane/type-mcp@0.2.0 version` succeeds, install TypeMCP and Zod as application dependencies:
 
 ```bash
 npm install @theorvane/type-mcp zod
 ```
 
-The package name and import are unscoped:
+The package name and import are scoped to Theorvane:
 
 ```ts
 import { McpServer, McpTool } from "@theorvane/type-mcp";
 ```
 
-The package exports `@theorvane/type-mcp/http` in `0.2.0`. Add it only where the application owns Fetch hosting, session handling, and authorization.
+The `0.2.0` release target exports `@theorvane/type-mcp/http`. Add it only where the application owns Fetch hosting, session handling, and authorization.
 
 ## TypeScript decorators
 
@@ -69,8 +69,8 @@ find({ id }: z.infer<typeof findInput>) {
 
 A missing component `name` defaults to the method name. `0.2.0` validates the decorated definition before compilation; application tests should still protect domain naming conventions.
 
-## Published versus repository development
+## Registry release versus repository development
 
-The npm tag is [`@theorvane/type-mcp@0.2.0`](https://www.npmjs.com/package/@theorvane/type-mcp). Its root exports include `McpServer`, `McpTool`, `McpResource`, `McpPrompt`, `getMcpServerDefinition`, `readMcpServerDefinition`, `TypeMcpDefinitionError`, `InstanceResolver`, `resolveMcpServerInstance`, `createMcpServer`, and `startStdioServer`. The `@theorvane/type-mcp/http` and `@theorvane/type-mcp/langchain` subpaths expose their respective adapters.
+The repository release target is `@theorvane/type-mcp@0.2.0`. After publication, verify the npm version before treating it as installable. Its root exports include `McpServer`, `McpTool`, `McpResource`, `McpPrompt`, `getMcpServerDefinition`, `readMcpServerDefinition`, `TypeMcpDefinitionError`, `InstanceResolver`, `resolveMcpServerInstance`, `createMcpServer`, and `startStdioServer`. The `@theorvane/type-mcp/http` and `@theorvane/type-mcp/langchain` subpaths expose their respective adapters.
 
 Before upgrading, read the release notes and inspect the package's generated type declarations. Treat a feature as available only when a released version documents it and the installed package exports it.

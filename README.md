@@ -11,7 +11,7 @@
   [![License](https://img.shields.io/badge/license-MIT-111827?style=flat-square)](LICENSE)
 </div>
 
-> **Published surface — [`@theorvane/type-mcp@0.2.0`](https://www.npmjs.com/package/@theorvane/type-mcp):** standard decorators, definition validation, explicit instance resolution, MCP SDK compilation, stdio, `@theorvane/type-mcp/http` Streamable HTTP, and the tools-only `@theorvane/type-mcp/langchain` adapter are available.
+> **Release target — `@theorvane/type-mcp@0.2.0`:** this repository source contains standard decorators, definition validation, explicit instance resolution, MCP SDK compilation, stdio, `@theorvane/type-mcp/http` Streamable HTTP, and the tools-only `@theorvane/type-mcp/langchain` adapter. Before installing, confirm the version exists with `npm view @theorvane/type-mcp@0.2.0 version`.
 >
 > **Integration boundary:** LangGraph `ToolNode` composition, graph topology, model choice, authorization, state, persistence, and deployment remain consumer responsibilities.
 
@@ -20,7 +20,7 @@ TypeMCP keeps MCP declarations beside TypeScript classes without coupling the co
 ## Fast path for developers and agents
 
 1. Check the published capability table below. Do not call an API marked **reserved** or **planned**.
-2. Install [`@theorvane/type-mcp` from npm](https://www.npmjs.com/package/@theorvane/type-mcp) with `zod`.
+2. After the release version is visible in npm, install [`@theorvane/type-mcp`](https://www.npmjs.com/package/@theorvane/type-mcp) with `zod`.
 3. Use standard TypeScript decorators to declare a server surface.
 4. Inspect the declaration through `getMcpServerDefinition()` at an application boundary.
 5. Use `createMcpServer()`, `startStdioServer()`, or `@theorvane/type-mcp/http` only when the application owns the surrounding transport, authorization, and lifecycle policy.
@@ -98,7 +98,7 @@ console.log(definition?.tools[0]?.name); // "findProduct"
 
 `getMcpServerDefinition()` returns `undefined` for a class without `@McpServer`. For a decorated class, it returns a newly allocated frozen metadata container on every call. Zod schemas retain their original identity, so treat a schema passed to a decorator as immutable after declaration.
 
-The methods above are ordinary application methods. In `0.2.0`, use `createMcpServer()` to validate and compile this declaration through an explicit resolver; choose a published transport adapter only when the application owns its hosting, authorization, and lifecycle policy. Follow the [getting-started guide](docs/guides/getting-started.md) for the complete version boundary.
+The methods above are ordinary application methods. In `0.2.0`, use `createMcpServer()` to validate and compile this declaration through an explicit resolver; choose an adapter exported by the installed package only when the application owns its hosting, authorization, and lifecycle policy. Follow the [getting-started guide](docs/guides/getting-started.md) for the complete version boundary.
 
 ## Capability map
 

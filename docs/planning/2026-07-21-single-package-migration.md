@@ -4,7 +4,7 @@
 
 ## Historical goal
 
-Issue #14 replaced the original `@type-mcp/core` and `@type-mcp/http` workspaces with one root package. That intermediate unscoped package was later removed from npm. The package is now published from the Theorvane npm organization as `@theorvane/type-mcp`, with `@theorvane/type-mcp/http` and `@theorvane/type-mcp/langchain` export-map subpaths.
+Issue #14 replaced the original `@type-mcp/core` and `@type-mcp/http` workspaces with one root package. That intermediate unscoped package was later removed from npm. The package is prepared for publication from the Theorvane npm organization as `@theorvane/type-mcp`, with `@theorvane/type-mcp/http` and `@theorvane/type-mcp/langchain` export-map subpaths.
 
 ## Historical migration steps
 
