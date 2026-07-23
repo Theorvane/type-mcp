@@ -2,12 +2,12 @@
 
 TypeMCP publishes one public, unscoped package: `type-mcp`. Its Fetch-compatible HTTP entry point is the `type-mcp/http` subpath. The repository is being prepared for public open-source launch; repository visibility and npm package visibility remain separate controls.
 
-## What must happen before the first release
+## Trusted publication from `main`
 
-1. Confirm the unscoped npm name `type-mcp` remains available and that the authenticated npm user owns the publish right.
-2. Configure npm trusted publishing for this GitHub repository and a reviewed release workflow. Trusted publishing uses GitHub Actions OIDC instead of a long-lived npm token.
-3. Complete the release-readiness requirements: verify HTTP behavior, configure trusted publishing, and obtain the required release issue/PR approval. Tool/resource/prompt compilation, Node stdio, and the Fetch HTTP handler are implemented.
-4. Pick a version that has never been published. npm versions are immutable. Use a prerelease such as `0.1.0-alpha.1` for an early public preview if desired.
+1. In npm package settings, configure a Trusted Publisher for package `type-mcp` with GitHub repository `Theorvane/type-mcp`, workflow filename `publish.yml`, and environment `npm`.
+2. Do not create an npm token or repository npm secret. The workflow receives npm identity through GitHub Actions OIDC and publishes with provenance.
+3. Make a reviewed version change on `dev`; npm versions are immutable and must not already exist in the registry.
+4. Promote that reviewed `dev` head to `main` through the protected release PR. The `publish.yml` workflow verifies the package, publishes once, then creates annotated `v<version>` tag and a GitHub Release from the exact `main` SHA.
 5. Run the repository checks and inspect the generated tarball:
 
    ```bash
@@ -19,17 +19,12 @@ TypeMCP publishes one public, unscoped package: `type-mcp`. Its Fetch-compatible
    npm run verify:publish
    ```
 
-## First public publish
+## Safety controls
 
-After the prerequisites are complete and an authorized release issue/PR has been merged, publish the root package:
-
-```bash
-npm login
-npm whoami
-npm publish --access public
-```
-
-The manifest sets `publishConfig.access` to `public`, so the explicit access argument is a defensive confirmation. Do not run this command until the version, package contents, and release review are approved.
+- Publication runs only on `main` and only after an approved release PR is merged.
+- The workflow refuses an existing npm version or `v<version>` tag before publishing, so a version bump is an explicit release decision.
+- `npm publish --provenance --access public` completes before the tag and GitHub Release are created. A failed publish therefore cannot leave a misleading release tag.
+- The release environment is named `npm`; maintainers can add GitHub Environment approvals there without changing the workflow.
 
 ## Safety controls in this repository
 

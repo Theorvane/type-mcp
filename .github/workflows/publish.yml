@@ -1,0 +1,87 @@
+name: publish
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  id-token: write
+
+concurrency:
+  group: publish-${{ github.repository }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.repository == 'Theorvane/type-mcp'
+    runs-on: ubuntu-latest
+    environment: npm
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          registry-url: https://registry.npmjs.org
+      - name: Read the release identity
+        id: release
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION="$(node -p "require('./package.json').version")"
+          PACKAGE="$(node -p "require('./package.json').name")"
+          test -n "$VERSION"
+          test -n "$PACKAGE"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "package=$PACKAGE" >> "$GITHUB_OUTPUT"
+      - name: Require an unpublished npm version and unused Git tag
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+          PACKAGE: ${{ steps.release.outputs.package }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if npm view "$PACKAGE@$VERSION" version --json >/dev/null 2>&1; then
+            echo "Refusing to republish existing npm version $PACKAGE@$VERSION" >&2
+            exit 1
+          fi
+          if git ls-remote --exit-code --tags origin "refs/tags/v$VERSION" >/dev/null 2>&1; then
+            echo "Refusing to reuse existing Git tag v$VERSION" >&2
+            exit 1
+          fi
+          if gh release view "v$VERSION" >/dev/null 2>&1; then
+            echo "Refusing to reuse existing GitHub Release v$VERSION" >&2
+            exit 1
+          fi
+      - name: Verify the release artifact
+        run: |
+          npm ci
+          npm run lint
+          npm run typecheck
+          npm test
+          npm run build
+          npm run verify:package
+          npm run verify:publish
+          npm audit --omit=dev --audit-level=high
+          git diff --check
+      - name: Publish to npm with provenance
+        run: npm publish --provenance --access public
+      - name: Create immutable Git tag
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "v$VERSION" -m "type-mcp v$VERSION" "$GITHUB_SHA"
+          git push origin "v$VERSION"
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.release.outputs.version }}
+        run: gh release create "v$VERSION" --target "$GITHUB_SHA" --title "type-mcp v$VERSION" --generate-notes

@@ -2,7 +2,7 @@
 
 ## Supported versions
 
-Security fixes are applied to the latest release line. Before the first post-`0.1.0` public release, report issues against the current `main` branch and identify the package version or commit you tested.
+Security fixes are applied to the latest release line. Report issues against the current `main` branch and identify the published package version or commit you tested.
 
 ## Reporting a vulnerability
 

@@ -11,9 +11,9 @@
   [![License](https://img.shields.io/badge/license-MIT-111827?style=flat-square)](LICENSE)
 </div>
 
-> **Published surface — [`type-mcp@0.1.0`](https://www.npmjs.com/package/type-mcp):** standard decorators and immutable metadata reads are available. Definition validation, instance resolvers, MCP SDK compilation, stdio, `type-mcp/http` Streamable HTTP, and `type-mcp/langchain` are **not included in the published release**.
+> **Published surface — [`type-mcp@0.2.0`](https://www.npmjs.com/package/type-mcp):** standard decorators, definition validation, explicit instance resolution, MCP SDK compilation, stdio, `type-mcp/http` Streamable HTTP, and the tools-only `type-mcp/langchain` adapter are available.
 >
-> **Repository-development status:** the current `main` branch implements declaration validation, the resolver seam, SDK compilation, stdio, the `type-mcp/http` Streamable HTTP adapter, and the tools-only `type-mcp/langchain` adapter. Those additions are not yet a promise of availability from npm until a release publishes them.
+> **Integration boundary:** LangGraph `ToolNode` composition, graph topology, model choice, authorization, state, persistence, and deployment remain consumer responsibilities.
 
 TypeMCP keeps MCP declarations beside TypeScript classes without coupling the core to a web framework. Install it when you need a strict, inspectable declaration layer and want application code ready for later runtime support.
 
@@ -23,7 +23,7 @@ TypeMCP keeps MCP declarations beside TypeScript classes without coupling the co
 2. Install [`type-mcp` from npm](https://www.npmjs.com/package/type-mcp) with `zod`.
 3. Use standard TypeScript decorators to declare a server surface.
 4. Inspect the declaration through `getMcpServerDefinition()` at an application boundary.
-5. Stop at the metadata boundary in `0.1.0`; do not register a transport or invoke an MCP runtime through TypeMCP.
+5. Use `createMcpServer()`, `startStdioServer()`, or `type-mcp/http` only when the application owns the surrounding transport, authorization, and lifecycle policy.
 
 Agents should start with [the agent integration guide](docs/guides/agent-integration.md). It defines an evidence-first workflow and prevents unavailable runtime APIs from being mistaken for supported features.
 
@@ -66,7 +66,7 @@ import {
   McpTool,
 } from "type-mcp";
 
-@McpServer({ name: "catalog", version: "0.1.0" })
+@McpServer({ name: "catalog", version: "0.2.0" })
 export class CatalogServer {
   @McpTool({
     description: "Look up a catalog item by SKU.",
@@ -98,31 +98,31 @@ console.log(definition?.tools[0]?.name); // "findProduct"
 
 `getMcpServerDefinition()` returns `undefined` for a class without `@McpServer`. For a decorated class, it returns a newly allocated frozen metadata container on every call. Zod schemas retain their original identity, so treat a schema passed to a decorator as immutable after declaration.
 
-The methods above are ordinary application methods; **`0.1.0` does not validate declarations, compile, invoke, or transport them as MCP operations**. This example proves the declaration surface, not a runnable MCP server. Follow the [getting-started guide](docs/guides/getting-started.md) for the complete version boundary.
+The methods above are ordinary application methods. In `0.2.0`, use `createMcpServer()` to validate and compile this declaration through an explicit resolver; choose a published transport adapter only when the application owns its hosting, authorization, and lifecycle policy. Follow the [getting-started guide](docs/guides/getting-started.md) for the complete version boundary.
 
 ## Capability map
 
-| Surface | `type-mcp@0.1.0` | What it does |
+| Surface | `type-mcp@0.2.0` | What it does |
 | --- | --- | --- |
 | `@McpServer` | Available | Records server name and version metadata. |
 | `@McpTool` | Available | Records a method name, optional public name/description, and Zod object schema. |
 | `@McpResource` | Available | Records a static resource URI and optional metadata. |
 | `@McpPrompt` | Available | Records a named prompt declaration. |
 | `getMcpServerDefinition()` | Available | Reads a fresh frozen metadata copy; returns `undefined` for undecorated classes. |
-| `createMcpServer()` | Reserved / throws | Exported only as a future stable entry point; not usable in `0.1.0`. |
-| `type-mcp/http` / `createMcpHandler()` | Reserved / throws | Exported subpath only; no stdio or Streamable HTTP transport exists in `0.1.0`. |
-| Definition validation and `TypeMcpDefinitionError` | Unreleased | Available in repository development, not in the published package. |
-| `InstanceResolver<T>` / `resolveMcpServerInstance()` | Unreleased | Available in repository development, not in the published package. |
-| `type-mcp/langchain` / `createLangChainTools()` | Unreleased | Tools-only LangChain structured-tool adapter in repository development; LangGraph `ToolNode` composition remains consumer-owned. |
+| `createMcpServer()` | Available | Validates declarations and compiles the decorated server surface with an explicit resolver seam. |
+| `type-mcp/http` / `createMcpHandler()` | Available | Fetch/Streamable HTTP adapter; applications own hosting, sessions, and authorization. |
+| Definition validation and `TypeMcpDefinitionError` | Available | Validates declarations and reports safe definition errors. |
+| `InstanceResolver<T>` / `resolveMcpServerInstance()` | Available | Explicit application-owned instance construction contract. |
+| `type-mcp/langchain` / `createLangChainTools()` | Available | Tools-only LangChain structured-tool adapter; LangGraph `ToolNode` composition remains consumer-owned. |
 
 ## Documentation map
 
-- [Getting started](docs/guides/getting-started.md) — install, declare, inspect, and respect the `0.1.0` boundary.
+- [Getting started](docs/guides/getting-started.md) — install, declare, inspect, and compile a TypeMCP server.
 - [Configuration and compatibility](docs/guides/configuration.md) — Node, ESM/CommonJS, TypeScript decorators, schemas, and release boundaries.
-- [Agent integration guide](docs/guides/agent-integration.md) — evidence-first coding-agent workflow and no-runtime rule.
-- [HTTP framework integration](docs/guides/http-and-nextjs.md) — repository-source Streamable HTTP example and Fetch/Next.js route shape; not yet part of npm `0.1.0`.
+- [Agent integration guide](docs/guides/agent-integration.md) — evidence-first coding-agent workflow and explicit runtime boundaries.
+- [HTTP framework integration](docs/guides/http-and-nextjs.md) — published Streamable HTTP example and Fetch/Next.js route shape.
 - [Standalone HTTP example](examples/standalone-http/README.md) — exact source and smoke-test commands for the repository implementation.
-- [LangChain and LangGraph integration](docs/guides/langchain-langgraph.md) — repository-source tools-only adapter and consumer-owned `ToolNode` composition; not yet part of npm `0.1.0`.
+- [LangChain and LangGraph integration](docs/guides/langchain-langgraph.md) — published tools-only adapter and consumer-owned `ToolNode` composition.
 - [LangGraph ToolNode example](examples/langgraph-tools/README.md) — exact in-memory source example and smoke-test command.
 - [Decorator API contract](docs/api/decorator-api.md) — repository API target; check its status notices before using unreleased APIs.
 - [Architecture overview](docs/architecture/overview.md) — package boundaries and planned runtime direction.

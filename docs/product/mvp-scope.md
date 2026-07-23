@@ -1,8 +1,8 @@
 # MVP scope
 
-> **Release note:** This document describes the product and repository-development target, not the currently published npm surface. For `type-mcp@0.1.0` installation and exact exports, start with the [README](../../README.md) and [getting-started guide](../guides/getting-started.md).
+> **Release note:** The published `type-mcp@0.2.0` package includes this MVP's metadata, validation, resolver, compiler, stdio, HTTP, and tools-only LangChain adapter. Start with the [README](../../README.md) and [getting-started guide](../guides/getting-started.md) for exact exports and boundaries.
 
-**Status:** On the repository-development line, decorator metadata storage, definition validation, the instance resolver seam, compiler behavior, the Node stdio helper, and the Fetch Streamable HTTP adapter are implemented. The release note above remains authoritative for `type-mcp@0.1.0` installation behavior.
+**Status:** Published in `0.2.0`: decorator metadata storage, definition validation, the instance resolver seam, compiler behavior, the Node stdio helper, the Fetch Streamable HTTP adapter, and the tools-only LangChain adapter.
 
 ## Included
 
