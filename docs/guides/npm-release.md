@@ -22,7 +22,7 @@ TypeMCP publishes one public, unscoped package: `type-mcp`. Its Fetch-compatible
 ## Safety controls
 
 - Publication runs only on `main` and only after an approved release PR is merged.
-- The workflow refuses an existing npm version or `v<version>` tag before publishing, so a version bump is an explicit release decision.
+- The workflow reconciles a prior partial success only when the published npm artifact, annotated tag, and GitHub Release all resolve to the same `main` SHA. It publishes only missing steps; a mismatched artifact is rejected.
 - `npm publish --provenance --access public` completes before the tag and GitHub Release are created. A failed publish therefore cannot leave a misleading release tag.
 - The release environment is named `npm`; maintainers can add GitHub Environment approvals there without changing the workflow.
 

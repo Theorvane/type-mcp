@@ -13,6 +13,15 @@ describe("trusted npm release workflow", () => {
 		expect(workflow).toContain("id-token: write");
 		expect(workflow).toContain("environment: npm");
 		expect(workflow).toContain("npm publish --provenance --access public");
+		expect(workflow).toContain("scripts/reconcile-release-state.mjs");
+		expect(workflow).toContain('npm view "$PACKAGE@$VERSION" gitHead');
+		expect(workflow).toContain("steps.release-state.outputs.publish == 'true'");
+		expect(workflow).toContain(
+			"steps.release-state.outputs.create_tag == 'true'",
+		);
+		expect(workflow).toContain(
+			"steps.release-state.outputs.create_release == 'true'",
+		);
 		expect(workflow).toContain('git tag -a "v$VERSION"');
 		expect(workflow).toContain("gh release create");
 		expect(

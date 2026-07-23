@@ -38,25 +38,23 @@ jobs:
           test -n "$PACKAGE"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "package=$PACKAGE" >> "$GITHUB_OUTPUT"
-      - name: Require an unpublished npm version and unused Git tag
+      - name: Reconcile any prior partial release state
+        id: release-state
         env:
+          GH_TOKEN: ${{ github.token }}
           VERSION: ${{ steps.release.outputs.version }}
           PACKAGE: ${{ steps.release.outputs.package }}
         shell: bash
         run: |
           set -euo pipefail
-          if npm view "$PACKAGE@$VERSION" version --json >/dev/null 2>&1; then
-            echo "Refusing to republish existing npm version $PACKAGE@$VERSION" >&2
-            exit 1
-          fi
-          if git ls-remote --exit-code --tags origin "refs/tags/v$VERSION" >/dev/null 2>&1; then
-            echo "Refusing to reuse existing Git tag v$VERSION" >&2
-            exit 1
-          fi
-          if gh release view "v$VERSION" >/dev/null 2>&1; then
-            echo "Refusing to reuse existing GitHub Release v$VERSION" >&2
-            exit 1
-          fi
+          PUBLISHED_VERSION="$(npm view "$PACKAGE@$VERSION" version 2>/dev/null || true)"
+          PUBLISHED_GIT_HEAD="$(npm view "$PACKAGE@$VERSION" gitHead 2>/dev/null || true)"
+          TAG_SHA="$(git ls-remote --tags origin "refs/tags/v$VERSION^{}" | cut -f1 || true)"
+          RELEASE_TARGET_SHA="$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/v$VERSION" --jq .target_commitish 2>/dev/null || true)"
+          ACTIONS="$(node scripts/reconcile-release-state.mjs "$GITHUB_SHA" "$VERSION" "$PUBLISHED_VERSION" "$PUBLISHED_GIT_HEAD" "$TAG_SHA" "$RELEASE_TARGET_SHA")"
+          echo "publish=$(node -p 'JSON.parse(process.argv[1]).publish' "$ACTIONS")" >> "$GITHUB_OUTPUT"
+          echo "create_tag=$(node -p 'JSON.parse(process.argv[1]).createTag' "$ACTIONS")" >> "$GITHUB_OUTPUT"
+          echo "create_release=$(node -p 'JSON.parse(process.argv[1]).createRelease' "$ACTIONS")" >> "$GITHUB_OUTPUT"
       - name: Verify the release artifact
         run: |
           npm ci
@@ -69,8 +67,10 @@ jobs:
           npm audit --omit=dev --audit-level=high
           git diff --check
       - name: Publish to npm with provenance
+        if: steps.release-state.outputs.publish == 'true'
         run: npm publish --provenance --access public
       - name: Create immutable Git tag
+        if: steps.release-state.outputs.create_tag == 'true'
         env:
           VERSION: ${{ steps.release.outputs.version }}
         shell: bash
@@ -81,6 +81,7 @@ jobs:
           git tag -a "v$VERSION" -m "type-mcp v$VERSION" "$GITHUB_SHA"
           git push origin "v$VERSION"
       - name: Create GitHub Release
+        if: steps.release-state.outputs.create_release == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
           VERSION: ${{ steps.release.outputs.version }}
