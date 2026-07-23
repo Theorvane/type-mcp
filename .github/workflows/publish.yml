@@ -55,7 +55,17 @@ jobs:
           PUBLISHED_GIT_HEAD="$(npm view "$PACKAGE@$VERSION" gitHead 2>/dev/null || true)"
           TAG_REF_SHA="$(git ls-remote --tags origin "refs/tags/v$VERSION" | cut -f1 || true)"
           TAG_SHA="$(git ls-remote --tags origin "refs/tags/v$VERSION^{}" | cut -f1 || true)"
-          RELEASE_TARGET_SHA="$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/v$VERSION" --jq .target_commitish 2>/dev/null || true)"
+          RELEASE_LOOKUP="$(mktemp)"
+          if gh api --include "repos/$GITHUB_REPOSITORY/releases/tags/v$VERSION" >"$RELEASE_LOOKUP" 2>&1; then
+            RELEASE_JSON="$(sed -n '/^{/,$p' "$RELEASE_LOOKUP")"
+            RELEASE_TARGET_SHA="$(node -e 'const release = JSON.parse(process.argv[1]); process.stdout.write(release.target_commitish ?? "")' "$RELEASE_JSON")"
+          elif grep -q "^HTTP/[0-9.]* 404 " "$RELEASE_LOOKUP"; then
+            RELEASE_TARGET_SHA=""
+          else
+            cat "$RELEASE_LOOKUP" >&2
+            exit 1
+          fi
+          rm -f "$RELEASE_LOOKUP"
           ACTIONS="$(node scripts/reconcile-release-state.mjs "$GITHUB_SHA" "$VERSION" "$PUBLISHED_VERSION" "$PUBLISHED_GIT_HEAD" "$TAG_REF_SHA" "$TAG_SHA" "$RELEASE_TARGET_SHA")"
           echo "publish=$(node -p 'JSON.parse(process.argv[1]).publish' "$ACTIONS")" >> "$GITHUB_OUTPUT"
           echo "create_tag=$(node -p 'JSON.parse(process.argv[1]).createTag' "$ACTIONS")" >> "$GITHUB_OUTPUT"

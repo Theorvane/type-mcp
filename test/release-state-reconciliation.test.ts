@@ -60,6 +60,26 @@ describe("release-state reconciliation", () => {
 		).toThrow(/not annotated/);
 	});
 
+	it("treats a missing GitHub Release API response as absent state", () => {
+		expect(
+			reconcileReleaseState({
+				expectedSha,
+				version,
+				releaseTargetSha: "null",
+			}),
+		).toEqual({ publish: true, createTag: true, createRelease: true });
+	});
+
+	it("treats a missing GitHub Release API error body as absent state", () => {
+		expect(
+			reconcileReleaseState({
+				expectedSha,
+				version,
+				releaseTargetSha: '{"message":"Not Found","status":"404"}',
+			}),
+		).toEqual({ publish: true, createTag: true, createRelease: true });
+	});
+
 	it("does nothing when the complete release already matches the exact main commit", () => {
 		expect(
 			reconcileReleaseState({
