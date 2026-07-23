@@ -59,4 +59,18 @@ describe("release-state reconciliation", () => {
 			}),
 		).toThrow(/not annotated/);
 	});
+
+	it("does nothing when the complete release already matches the exact main commit", () => {
+		expect(
+			reconcileReleaseState({
+				expectedSha,
+				version,
+				publishedVersion: version,
+				publishedGitHead: expectedSha,
+				tagRefSha: "c".repeat(40),
+				tagSha: expectedSha,
+				releaseTargetSha: expectedSha,
+			}),
+		).toEqual({ publish: false, createTag: false, createRelease: false });
+	});
 });
