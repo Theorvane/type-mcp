@@ -1,6 +1,6 @@
 # Configuration and compatibility
 
-`type-mcp@0.1.0` is a TypeScript declaration and metadata package. Configuration determines whether TypeScript emits standard decorators and whether the runtime can resolve the package's ESM/CJS exports; it does not configure an MCP transport because no transport is published yet.
+`type-mcp@0.2.0` is a TypeScript declaration and runtime package. Configuration determines whether TypeScript emits standard decorators and whether the runtime can resolve the package's ESM/CJS exports; applications configure their own hosting and transport lifecycle around the published MCP adapters.
 
 ## Runtime and package manager
 
@@ -16,7 +16,7 @@ The package name and import are unscoped:
 import { McpServer, McpTool } from "type-mcp";
 ```
 
-The package exports `type-mcp/http`, but its handler throws in `0.1.0`. Do not add that import to a running application yet.
+The package exports `type-mcp/http` in `0.2.0`. Add it only where the application owns Fetch hosting, session handling, and authorization.
 
 ## TypeScript decorators
 
@@ -67,10 +67,10 @@ find({ id }: z.infer<typeof findInput>) {
 }
 ```
 
-A missing component `name` defaults to the method name. The `0.1.0` package records names without enforcing uniqueness. Application tests should protect naming conventions until a future released validation API explicitly documents duplicate detection.
+A missing component `name` defaults to the method name. `0.2.0` validates the decorated definition before compilation; application tests should still protect domain naming conventions.
 
 ## Published versus repository development
 
-The npm tag is [`type-mcp@0.1.0`](https://www.npmjs.com/package/type-mcp). Its runtime exports are `McpServer`, `McpTool`, `McpResource`, `McpPrompt`, `getMcpServerDefinition`, and reserved `createMcpServer`. It does not include `readMcpServerDefinition`, `TypeMcpDefinitionError`, `InstanceResolver`, or `resolveMcpServerInstance`, even if those names appear in repository development work or unreleased documentation.
+The npm tag is [`type-mcp@0.2.0`](https://www.npmjs.com/package/type-mcp). Its root exports include `McpServer`, `McpTool`, `McpResource`, `McpPrompt`, `getMcpServerDefinition`, `readMcpServerDefinition`, `TypeMcpDefinitionError`, `InstanceResolver`, `resolveMcpServerInstance`, `createMcpServer`, and `startStdioServer`. The `type-mcp/http` and `type-mcp/langchain` subpaths expose their respective adapters.
 
 Before upgrading, read the release notes and inspect the package's generated type declarations. Treat a feature as available only when a released version documents it and the installed package exports it.

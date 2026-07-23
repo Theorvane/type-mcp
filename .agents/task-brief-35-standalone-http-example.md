@@ -18,7 +18,7 @@ Provide a small runnable TypeScript example that exposes one decorated `type-mcp
 - README and docs navigation links for the example.
 
 **Out:**
-- Next.js or NestJS scaffolding, network/listening-server setup, OAuth, persistence, custom session stores, legacy SSE, and npm publication.
+- Next.js or other application-framework scaffolding, network/listening-server setup, OAuth, persistence, custom session stores, legacy SSE, and npm publication.
 
 ## Acceptance criteria
 

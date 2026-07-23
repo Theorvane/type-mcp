@@ -1,6 +1,6 @@
 # Decorator API contract
 
-**Repository development status:** Metadata declarations, definition validation, the resolver seam, MCP SDK compilation for tools/static resources/prompts, the Node stdio helper, and the Fetch Streamable HTTP adapter are implemented on `main`. **Published npm status:** `type-mcp@0.1.0` exposes decorators and `getMcpServerDefinition()` only; validation/resolver/compiler/transport APIs remain unreleased until a future npm release.
+**Published npm status:** `type-mcp@0.2.0` includes metadata declarations, definition validation, the resolver seam, MCP SDK compilation for tools/static resources/prompts, the Node stdio helper, and the Fetch Streamable HTTP adapter. LangChain interoperability is exposed separately at `type-mcp/langchain`.
 
 ## Server declaration
 
@@ -8,14 +8,14 @@
 import { McpServer, McpTool } from "type-mcp";
 import { createMcpHandler } from "type-mcp/http";
 
-@McpServer({ name: "catalog", version: "0.1.0" })
+@McpServer({ name: "catalog", version: "0.2.0" })
 class CatalogServer {}
 ```
 
 | Case | Behavior |
 | --- | --- |
 | Accept | `name` and `version` identify one decorated server class. The decorator records an immutable server definition for later compilation. `readMcpServerDefinition()` rejects an undecorated class with `TypeMcpDefinitionError`. |
-| Deferred | SDK compilation remains planned. |
+| Accept | `createMcpServer()` validates and compiles a decorated definition through an explicit resolver. |
 | Excluded | Automatic application-container discovery and inferred application metadata. |
 
 ## Tool declaration

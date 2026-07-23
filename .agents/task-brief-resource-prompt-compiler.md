@@ -22,7 +22,7 @@ Compile decorated static resources and named prompts into the official MCP SDK s
 - Sync/async handlers, SDK-valid result normalization, and safe handler errors.
 
 **Out:**
-- URI templates, subscriptions, prompt parameter inference, stdio, HTTP, NestJS, authorization, retries, and publishing.
+- URI templates, subscriptions, prompt parameter inference, stdio, HTTP, application-framework adapters, authorization, retries, and publishing.
 
 ## Acceptance criteria
 
@@ -49,7 +49,7 @@ Compile decorated static resources and named prompts into the official MCP SDK s
 ## Risks and boundaries
 
 - Use only official MCP SDK registration/result contracts.
-- Do not add dynamic URI-template semantics or NestJS coupling.
+- Do not add dynamic URI-template semantics or application-framework coupling.
 - Never expose handler error text or application stacks to clients.
 
 ## Review handoff

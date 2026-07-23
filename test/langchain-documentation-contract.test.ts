@@ -1,6 +1,33 @@
-import { readFile } from "node:fs/promises";
+import { readdir, readFile } from "node:fs/promises";
 
 import { describe, expect, it } from "vitest";
+
+const trackedDocumentationRoots = [
+	"../README.md",
+	"../AGENTS.md",
+	"../CONTRIBUTING.md",
+	"../docs",
+	"../.agents",
+	"../.agent",
+	"../.github",
+];
+
+async function readTrackedDocumentation(path: URL): Promise<readonly string[]> {
+	const entry = await readdir(path, { withFileTypes: true });
+	const nested = await Promise.all(
+		entry.map(async (item) => {
+			const child = new URL(
+				`${item.name}${item.isDirectory() ? "/" : ""}`,
+				path,
+			);
+			if (item.isDirectory()) return readTrackedDocumentation(child);
+			if (/\.(?:md|ya?ml)$/i.test(item.name))
+				return [await readFile(child, "utf8")];
+			return [];
+		}),
+	);
+	return nested.flat();
+}
 
 const currentFacingDocuments = [
 	"../README.md",
@@ -16,7 +43,7 @@ const currentFacingDocuments = [
 ];
 
 describe("LangChain current-facing documentation contract", () => {
-	it("documents the tools-only LangChain and consumer-owned LangGraph path without a NestJS roadmap", async () => {
+	it("documents the tools-only LangChain and consumer-owned LangGraph integration boundary", async () => {
 		const documents = await Promise.all(
 			currentFacingDocuments.map((path) =>
 				readFile(new URL(path, import.meta.url), "utf8"),
@@ -28,9 +55,24 @@ describe("LangChain current-facing documentation contract", () => {
 		);
 		const combined = documents.join("\n");
 
+		const trackedDocumentation = (
+			await Promise.all(
+				trackedDocumentationRoots.map(async (root) => {
+					const location = new URL(root, import.meta.url);
+					return root.endsWith(".md")
+						? [await readFile(location, "utf8")]
+						: readTrackedDocumentation(new URL(`${root}/`, import.meta.url));
+				}),
+			)
+		)
+			.flat()
+			.join("\n");
+
 		expect(combined).toContain("type-mcp/langchain");
 		expect(combined).toContain("LangGraph");
-		expect(combined).not.toMatch(/future NestJS|NestJS integration|ModuleRef/i);
+		expect(trackedDocumentation).not.toMatch(
+			/n[e]st[j]s|@n[e]st[j]s|module[r]ef|discovery[s]ervice/i,
+		);
 		expect(langchainGuide).toContain("@langchain/core");
 		expect(langchainGuide).toContain("tools only");
 		expect(langchainGuide).toContain("consumer");

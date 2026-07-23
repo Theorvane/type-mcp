@@ -35,4 +35,4 @@ This is a route integration shape, not a full Next.js scaffold. It intentionally
 
 ## Published-release boundary
 
-The example exercises APIs implemented on the repository-development line. The published npm `type-mcp@0.1.0` package provides decorators and metadata reads only. It does **not** yet publish `createMcpServer()` or `type-mcp/http`; wait for a release note that explicitly makes those runtime APIs available before using this guide from an npm-only application.
+The published npm `type-mcp@0.2.0` package includes `createMcpServer()` and `type-mcp/http`. This guide demonstrates the package API, while hosting, authentication, persistence, and authorization remain application-owned responsibilities.

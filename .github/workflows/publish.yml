@@ -1,0 +1,93 @@
+name: publish
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  id-token: write
+
+concurrency:
+  group: publish-${{ github.repository }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.repository == 'Theorvane/type-mcp'
+    runs-on: ubuntu-latest
+    environment: npm
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22
+          cache: npm
+          registry-url: https://registry.npmjs.org
+      - name: Install npm with Trusted Publishing support
+        run: |
+          npm install --global npm@11.5.1
+          npm --version
+      - name: Read the release identity
+        id: release
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION="$(node -p "require('./package.json').version")"
+          PACKAGE="$(node -p "require('./package.json').name")"
+          test -n "$VERSION"
+          test -n "$PACKAGE"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "package=$PACKAGE" >> "$GITHUB_OUTPUT"
+      - name: Reconcile any prior partial release state
+        id: release-state
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.release.outputs.version }}
+          PACKAGE: ${{ steps.release.outputs.package }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          PUBLISHED_VERSION="$(npm view "$PACKAGE@$VERSION" version 2>/dev/null || true)"
+          PUBLISHED_GIT_HEAD="$(npm view "$PACKAGE@$VERSION" gitHead 2>/dev/null || true)"
+          TAG_REF_SHA="$(git ls-remote --tags origin "refs/tags/v$VERSION" | cut -f1 || true)"
+          TAG_SHA="$(git ls-remote --tags origin "refs/tags/v$VERSION^{}" | cut -f1 || true)"
+          RELEASE_TARGET_SHA="$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/v$VERSION" --jq .target_commitish 2>/dev/null || true)"
+          ACTIONS="$(node scripts/reconcile-release-state.mjs "$GITHUB_SHA" "$VERSION" "$PUBLISHED_VERSION" "$PUBLISHED_GIT_HEAD" "$TAG_REF_SHA" "$TAG_SHA" "$RELEASE_TARGET_SHA")"
+          echo "publish=$(node -p 'JSON.parse(process.argv[1]).publish' "$ACTIONS")" >> "$GITHUB_OUTPUT"
+          echo "create_tag=$(node -p 'JSON.parse(process.argv[1]).createTag' "$ACTIONS")" >> "$GITHUB_OUTPUT"
+          echo "create_release=$(node -p 'JSON.parse(process.argv[1]).createRelease' "$ACTIONS")" >> "$GITHUB_OUTPUT"
+      - name: Verify the release artifact
+        run: |
+          npm ci
+          npm run lint
+          npm run typecheck
+          npm test
+          npm run build
+          npm run verify:package
+          npm run verify:publish
+          npm audit --omit=dev --audit-level=high
+          git diff --check
+      - name: Publish to npm with provenance
+        if: steps.release-state.outputs.publish == 'true'
+        run: npm publish --provenance --access public
+      - name: Create immutable Git tag
+        if: steps.release-state.outputs.create_tag == 'true'
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "v$VERSION" -m "type-mcp v$VERSION" "$GITHUB_SHA"
+          git push origin "v$VERSION"
+      - name: Create GitHub Release
+        if: steps.release-state.outputs.create_release == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.release.outputs.version }}
+        run: gh release create "v$VERSION" --target "$GITHUB_SHA" --title "type-mcp v$VERSION" --generate-notes

@@ -1,6 +1,6 @@
 # LangChain and LangGraph integration
 
-> **Release boundary:** `type-mcp/langchain` is implemented on this repository's development line but is **not** available from the published `type-mcp@0.1.0` package. Use it from this checkout or wait for a release that explicitly includes this subpath.
+> **Release boundary:** `type-mcp/langchain` is available in the published `type-mcp@0.2.0` package. It is tools-only; LangGraph remains a consumer-owned composition choice.
 
 ## Scope
 
@@ -9,7 +9,7 @@
 - included: tool name, description, Zod input schema, explicit `InstanceResolver`, safe invocation results;
 - excluded: MCP server startup, HTTP/stdio transport, resources, prompts, models, agent executors, graph topology, persistence, and authorization policy.
 
-The core package and `type-mcp/http` remain independent of LangChain, LangGraph, and NestJS.
+The core package and `type-mcp/http` remain independent of agent frameworks and graph runtimes; only the isolated `type-mcp/langchain` subpath depends on the LangChain peer.
 
 ## Dependency boundary
 

@@ -17,7 +17,7 @@ Use before pushing a release candidate, creating a remote repository, publishing
 - [ ] Package names, exports, dependency/peer dependency ranges, and license are reviewed.
 - [ ] API docs include Accept / Error / Excluded behavior where applicable.
 - [ ] Architecture docs still match the package boundaries.
-- [ ] Examples run against built or workspace packages and do not imply unsupported NestJS functionality.
+- [ ] Examples run against built or workspace packages and do not imply unsupported application-framework or graph-runtime functionality.
 
 ## Security and repository state
 
@@ -26,6 +26,9 @@ Use before pushing a release candidate, creating a remote repository, publishing
 - [ ] The repository visibility matches the approved scope (**public** for `Theorvane/type-mcp`).
 - [ ] `gh repo view Theorvane/type-mcp --json url,visibility,defaultBranchRef` confirms public `dev` and release-only `main`.
 - [ ] For a release promotion, `git rev-parse HEAD` equals `git ls-remote origin refs/heads/main` after the reviewed `dev` → `main` merge.
+- [ ] npm Trusted Publisher is configured for `Theorvane/type-mcp`, `publish.yml`, and the `npm` environment; no long-lived npm token is stored.
+- [ ] After publication, `npm view type-mcp@<version> version dist-tags --json` returns the intended version and `v<version>` is an annotated tag at the release SHA.
+- [ ] The matching GitHub Release exists and points to `v<version>`.
 
 ## Review and integration
 

@@ -2,7 +2,7 @@
 
 This repository-source example turns a decorated TypeMCP tool into a standard LangChain tool and passes it to LangGraph's `ToolNode`. TypeMCP supplies the tool declaration and adapter only; the application retains ownership of graph topology, models, authorization, persistence, and deployment.
 
-> **Repository-source example:** this checkout contains the development-line `type-mcp/langchain` adapter. The published `type-mcp@0.1.0` package does not include this working API. Do not use this import from an npm-only consumer until a release explicitly documents it.
+> **Published example:** `type-mcp/langchain` is available from `type-mcp@0.2.0`. It creates tools only; applications own their LangGraph graph, model, state, and policy.
 
 ## Build from a checkout
 

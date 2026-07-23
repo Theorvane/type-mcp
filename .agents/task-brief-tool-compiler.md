@@ -21,7 +21,7 @@ Compile validated `@McpTool` declarations to an official MCP SDK `McpServer`, wh
 
 **Out:**
 - Resource and prompt compilation.
-- stdio, Streamable HTTP, NestJS integration, publishing, and package version changes.
+- stdio, Streamable HTTP, application-framework integration, publishing, and package version changes.
 
 ## Acceptance criteria
 
@@ -51,7 +51,7 @@ Compile validated `@McpTool` declarations to an official MCP SDK `McpServer`, wh
 
 ## Risks and boundaries
 
-- The core imports only the official SDK and its own resolver/metadata contracts; it has no NestJS or transport implementation.
+- The core imports only the official SDK and its own resolver/metadata contracts; it has no application-framework or transport implementation.
 - The compiler returns generic safe errors and never serializes application exception text.
 - Only an object with an array `content` is considered a candidate raw MCP tool result; other JSON-compatible objects are normalized to text.
 
