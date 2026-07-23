@@ -6,6 +6,9 @@ export function reconcileReleaseState(state) {
 	if (published && state.publishedGitHead !== state.expectedSha) {
 		throw new Error("published npm artifact does not match the release commit");
 	}
+	if (state.tagRefSha && !tagExists) {
+		throw new Error("existing version tag is not annotated");
+	}
 	if (tagExists && state.tagSha !== state.expectedSha) {
 		throw new Error("existing version tag does not match the release commit");
 	}
@@ -34,6 +37,7 @@ if (process.argv[1] === new URL(import.meta.url).pathname) {
 		version,
 		publishedVersion,
 		publishedGitHead,
+		tagRefSha,
 		tagSha,
 		releaseTargetSha,
 	] = process.argv.slice(2);
@@ -47,6 +51,7 @@ if (process.argv[1] === new URL(import.meta.url).pathname) {
 				version,
 				...(publishedVersion ? { publishedVersion } : {}),
 				...(publishedGitHead ? { publishedGitHead } : {}),
+				...(tagRefSha ? { tagRefSha } : {}),
 				...(tagSha ? { tagSha } : {}),
 				...(releaseTargetSha ? { releaseTargetSha } : {}),
 			}),

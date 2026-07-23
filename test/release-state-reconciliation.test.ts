@@ -47,4 +47,16 @@ describe("release-state reconciliation", () => {
 			}),
 		).toThrow(/does not match/);
 	});
+
+	it("rejects an existing lightweight tag instead of treating it as missing", () => {
+		expect(() =>
+			reconcileReleaseState({
+				expectedSha,
+				version,
+				publishedVersion: version,
+				publishedGitHead: expectedSha,
+				tagRefSha: expectedSha,
+			}),
+		).toThrow(/not annotated/);
+	});
 });

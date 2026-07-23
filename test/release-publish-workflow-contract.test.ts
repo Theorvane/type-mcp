@@ -15,6 +15,8 @@ describe("trusted npm release workflow", () => {
 		expect(workflow).toContain("npm publish --provenance --access public");
 		expect(workflow).toContain("scripts/reconcile-release-state.mjs");
 		expect(workflow).toContain('npm view "$PACKAGE@$VERSION" gitHead');
+		expect(workflow).toContain('refs/tags/v$VERSION" | cut -f1');
+		expect(workflow).toContain("refs/tags/v$VERSION^{}");
 		expect(workflow).toContain("steps.release-state.outputs.publish == 'true'");
 		expect(workflow).toContain(
 			"steps.release-state.outputs.create_tag == 'true'",

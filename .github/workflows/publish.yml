@@ -49,9 +49,10 @@ jobs:
           set -euo pipefail
           PUBLISHED_VERSION="$(npm view "$PACKAGE@$VERSION" version 2>/dev/null || true)"
           PUBLISHED_GIT_HEAD="$(npm view "$PACKAGE@$VERSION" gitHead 2>/dev/null || true)"
+          TAG_REF_SHA="$(git ls-remote --tags origin "refs/tags/v$VERSION" | cut -f1 || true)"
           TAG_SHA="$(git ls-remote --tags origin "refs/tags/v$VERSION^{}" | cut -f1 || true)"
           RELEASE_TARGET_SHA="$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/v$VERSION" --jq .target_commitish 2>/dev/null || true)"
-          ACTIONS="$(node scripts/reconcile-release-state.mjs "$GITHUB_SHA" "$VERSION" "$PUBLISHED_VERSION" "$PUBLISHED_GIT_HEAD" "$TAG_SHA" "$RELEASE_TARGET_SHA")"
+          ACTIONS="$(node scripts/reconcile-release-state.mjs "$GITHUB_SHA" "$VERSION" "$PUBLISHED_VERSION" "$PUBLISHED_GIT_HEAD" "$TAG_REF_SHA" "$TAG_SHA" "$RELEASE_TARGET_SHA")"
           echo "publish=$(node -p 'JSON.parse(process.argv[1]).publish' "$ACTIONS")" >> "$GITHUB_OUTPUT"
           echo "create_tag=$(node -p 'JSON.parse(process.argv[1]).createTag' "$ACTIONS")" >> "$GITHUB_OUTPUT"
           echo "create_release=$(node -p 'JSON.parse(process.argv[1]).createRelease' "$ACTIONS")" >> "$GITHUB_OUTPUT"
