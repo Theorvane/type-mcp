@@ -59,7 +59,7 @@ jobs:
           if gh api --include "repos/$GITHUB_REPOSITORY/releases/tags/v$VERSION" >"$RELEASE_LOOKUP" 2>&1; then
             RELEASE_JSON="$(sed -n '/^{/,$p' "$RELEASE_LOOKUP")"
             RELEASE_TARGET_SHA="$(node -e 'const release = JSON.parse(process.argv[1]); process.stdout.write(release.target_commitish ?? "")' "$RELEASE_JSON")"
-          elif grep -q " 404 " "$RELEASE_LOOKUP"; then
+          elif grep -q "^HTTP/[0-9.]* 404 " "$RELEASE_LOOKUP"; then
             RELEASE_TARGET_SHA=""
           else
             cat "$RELEASE_LOOKUP" >&2
