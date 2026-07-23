@@ -5,7 +5,7 @@
 
   **Decorator-first MCP declarations for strict TypeScript.**
 
-  [![npm](https://img.shields.io/npm/v/type-mcp?style=flat-square&label=npm)](https://www.npmjs.com/package/@theorvane/type-mcp)
+  [![npm](https://img.shields.io/npm/v/%40theorvane%2Ftype-mcp?style=flat-square&label=npm)](https://www.npmjs.com/package/@theorvane/type-mcp)
   [![Node](https://img.shields.io/node/v/type-mcp?style=flat-square)](package.json)
   [![MCP](https://img.shields.io/badge/Model%20Context%20Protocol-SDK%20first-7C3AED?style=flat-square)](https://modelcontextprotocol.io/)
   [![License](https://img.shields.io/badge/license-MIT-111827?style=flat-square)](LICENSE)
@@ -20,7 +20,7 @@ TypeMCP keeps MCP declarations beside TypeScript classes without coupling the co
 ## Fast path for developers and agents
 
 1. Check the published capability table below. Do not call an API marked **reserved** or **planned**.
-2. Install [`type-mcp` from npm](https://www.npmjs.com/package/@theorvane/type-mcp) with `zod`.
+2. Install [`@theorvane/type-mcp` from npm](https://www.npmjs.com/package/@theorvane/type-mcp) with `zod`.
 3. Use standard TypeScript decorators to declare a server surface.
 4. Inspect the declaration through `getMcpServerDefinition()` at an application boundary.
 5. Use `createMcpServer()`, `startStdioServer()`, or `@theorvane/type-mcp/http` only when the application owns the surrounding transport, authorization, and lifecycle policy.

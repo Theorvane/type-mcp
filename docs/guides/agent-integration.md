@@ -13,7 +13,7 @@ An agent must not claim automatic application-container discovery, OAuth, author
 1. Read the installed package version with `npm view @theorvane/type-mcp@latest version` or inspect the lockfile. Never infer availability from an issue, branch, or documentation that describes future work.
 2. Inspect the installed package exports using `node --input-type=module -e "import('@theorvane/type-mcp').then((m) => console.log(Object.keys(m)))"` before proposing an API not shown in the README.
 3. Read the [README capability map](../../README.md#capability-map), [configuration guide](configuration.md), and this guide before editing code.
-4. Add `type-mcp` and `zod` as application dependencies if they are absent. Confirm Node 20+ and standard TypeScript decorator support.
+4. Add `@theorvane/type-mcp` and `zod` as application dependencies if they are absent. Confirm Node 20+ and standard TypeScript decorator support.
 5. Define a class with `@McpServer` and method decorators. Use a Zod object schema for every `@McpTool`.
 6. Add a focused test that calls `getMcpServerDefinition(TheClass)` and asserts the public declaration names.
 7. Run the application's typecheck and focused test. State whether it stops at metadata inspection or uses a published runtime adapter, and name the application-owned policy boundary.
