@@ -21,6 +21,10 @@ describe("trusted npm release workflow", () => {
 		expect(workflow).toContain("npm install --global npm@11.5.1");
 		expect(workflow).toContain("npm publish --provenance --access public");
 		expect(workflow).toContain("scripts/reconcile-release-state.mjs");
+		expect(workflow).toContain("gh api --include");
+		expect(workflow).toContain('grep -q "^HTTP/[0-9.]* 404 "');
+		expect(workflow).toContain('cat "$RELEASE_LOOKUP" >&2');
+		expect(workflow).toContain("exit 1");
 		expect(workflow).toContain('npm view "$PACKAGE@$VERSION" gitHead');
 		expect(workflow).toContain('refs/tags/v$VERSION" | cut -f1');
 		expect(workflow).toContain("refs/tags/v$VERSION^{}");
