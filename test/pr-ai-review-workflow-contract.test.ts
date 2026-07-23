@@ -12,7 +12,7 @@ describe("AI pull-request review workflow", () => {
 		const workflow = await readFile(workflowUrl, "utf8");
 
 		const usedActions = Array.from(
-			workflow.matchAll(/^\s*uses:\s*([^\s]+)\s*$/gm),
+			workflow.matchAll(/^\s*uses:\s*([^\s]+)(?:\s+#.*)?\s*$/gm),
 			([, action]) => action,
 		);
 
@@ -23,7 +23,9 @@ describe("AI pull-request review workflow", () => {
 		expect(workflow).toContain("synchronize");
 		expect(workflow).toContain("pull-requests: write");
 		expect(workflow).not.toMatch(/^\s*contents:\s*/m);
-		expect(usedActions).toEqual(["actions/github-script@v7"]);
+		expect(usedActions).toEqual([
+			"actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b",
+		]);
 		expect(workflow).toContain("sjungwon03-ai");
 		expect(workflow).toContain(
 			'pullRequest.user.login === "sjungwon03-ai" ? "sjungwon03" : "sjungwon03-ai"',
