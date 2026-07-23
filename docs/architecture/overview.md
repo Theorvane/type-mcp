@@ -15,7 +15,8 @@ type-mcp
   ├─ InstanceResolver
   ├─ compiler → official MCP SDK McpServer
   ├─ stdio helper
-  └─ type-mcp/http → Web Standard Streamable HTTP transport
+  ├─ type-mcp/http → Web Standard Streamable HTTP transport
+  └─ type-mcp/langchain → LangChain structured tools
 ```
 
 The root `type-mcp` export owns decorator definitions, definition validation, and the resolver seam, and will own compilation. The `type-mcp/http` subpath will consume compiled-server contracts and own Web Standard request/response adaptation. Today, decorator metadata storage, declaration validation, and resolver contracts are implemented; applications own business handlers and dependencies.
@@ -42,7 +43,7 @@ export interface InstanceResolver<T> {
 }
 ```
 
-This interface intentionally permits asynchronous resolution so a future NestJS integration can obtain providers from `ModuleRef` without changing root metadata or compiler APIs.
+This interface intentionally permits asynchronous resolution without binding the core to an application container. The LangChain adapter reuses it for explicit construction; it does not perform provider discovery or graph lifecycle management.
 
 ## Target error boundary
 
@@ -56,6 +57,6 @@ The following error behavior is planned for compiler and HTTP work; it is not pr
 | Unsupported HTTP method | return an HTTP method error compatible with the adapter contract |
 | Transport/session behavior | delegate to the official SDK transport rather than reimplement protocol state |
 
-## Deferred NestJS integration
+## LangChain and LangGraph boundary
 
-A later NestJS integration may discover `@McpServer` providers with Nest `DiscoveryService` and resolve instances with `ModuleRef`. It must integrate with `type-mcp` through `InstanceResolver`; the root package must not depend on NestJS. See [ADR 0001](adr/0001-framework-neutral-core.md).
+The `type-mcp/langchain` subpath converts decorated tools into LangChain structured tools while retaining TypeMCP's validation, explicit resolver, and safe error boundary. Consumers may pass a copied tool list to LangGraph `ToolNode`, but graph topology, models, authorization, state, persistence, and deployment remain outside TypeMCP. See [ADR 0002](adr/0002-langchain-langgraph-integration.md) and the [integration guide](../guides/langchain-langgraph.md).

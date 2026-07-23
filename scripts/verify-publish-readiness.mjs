@@ -27,6 +27,9 @@ for (const expected of [
 	"dist/http.js",
 	"dist/http.cjs",
 	"dist/http.d.ts",
+	"dist/langchain.js",
+	"dist/langchain.cjs",
+	"dist/langchain.d.ts",
 ]) {
 	if (!files.has(expected)) {
 		throw new Error(`type-mcp: tarball is missing ${expected}`);

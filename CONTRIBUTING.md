@@ -5,7 +5,7 @@ Thank you for contributing. TypeMCP is an open-source TypeScript project release
 ## Before changing code
 
 1. Read [AGENTS.md](AGENTS.md), the relevant document in [docs/](docs/README.md), and the active task in [the single-package migration plan](docs/planning/2026-07-21-single-package-migration.md) or a later approved plan.
-2. Keep the root package framework-neutral: no NestJS dependency or import in `src/`.
+2. Keep the root package framework-neutral: no application-framework dependency or import in core source; `src/langchain.ts` may depend only on its declared LangChain peer.
 3. Confirm whether the requested behavior is MVP scope. Add an ADR and revised plan before implementing a deferred capability.
 
 ## Development loop

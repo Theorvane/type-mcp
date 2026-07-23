@@ -6,7 +6,7 @@ This guide gives coding agents a deterministic procedure for adding TypeMCP decl
 
 An agent may use `@McpServer`, `@McpTool`, `@McpResource`, `@McpPrompt`, and `getMcpServerDefinition()`. The latter returns a frozen declaration copy or `undefined` for an undecorated class.
 
-An agent must not call or claim working support for `createMcpServer()`, `createMcpHandler()`, stdio helpers, Streamable HTTP transport, automatic tool invocation, runtime MCP input validation, declaration validation, resource/prompt registration, instance resolvers, or NestJS provider discovery. They are not available in the `0.1.0` release. The public [`type-mcp/http` export](../../package.json) is a reserved subpath, not an HTTP server implementation.
+An agent must not call or claim working support for `createMcpServer()`, `createMcpHandler()`, stdio helpers, Streamable HTTP transport, automatic tool invocation, runtime MCP input validation, declaration validation, resource/prompt registration, instance resolvers, or automatic application-container discovery. They are not available in the `0.1.0` release. The public [`type-mcp/http` export](../../package.json) is a reserved subpath, not an HTTP server implementation.
 
 ## Evidence-first workflow
 
@@ -52,4 +52,4 @@ A reliable handoff names the installed package version, lists the decorated clas
 
 ## When to open a new issue instead
 
-Open a scoped issue before attempting SDK registration, tool-result normalization, input validation during tool calls, declaration validation, stdio, HTTP session handling, OAuth, authorization, dynamic resource templates, prompt argument inference, instance construction through a DI container, or a NestJS adapter. Each changes the runtime contract and needs its own tests, API documentation, and architecture decision.
+Open a scoped issue before attempting SDK registration, tool-result normalization, input validation during tool calls, declaration validation, stdio, HTTP session handling, OAuth, authorization, dynamic resource templates, prompt argument inference, instance construction through an application container, or a new framework adapter. Each changes the runtime contract and needs its own tests, API documentation, and architecture decision.

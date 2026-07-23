@@ -13,8 +13,10 @@ This directory is the canonical project documentation set. For an installed pack
 9. [Single-package migration plan](planning/2026-07-21-single-package-migration.md) — active packaging plan
 10. [HTTP framework integration](guides/http-and-nextjs.md) — repository-source Fetch/Next.js route integration boundary
 11. [Standalone HTTP example](../examples/standalone-http/README.md) — executable repository example and smoke test
-12. [Open-source launch checklist](guides/open-source-launch.md) — community health, security, and public-repository safeguards
-13. [Historical MVP implementation plan](planning/2026-07-21-mvp-implementation-plan.md) — superseded two-workspace task history
+12. [LangChain and LangGraph integration](guides/langchain-langgraph.md) — tools-only adapter and consumer-owned ToolNode composition
+13. [LangGraph ToolNode example](../examples/langgraph-tools/README.md) — executable in-memory repository example
+14. [Open-source launch checklist](guides/open-source-launch.md) — community health, security, and public-repository safeguards
+15. [Historical MVP implementation plan](planning/2026-07-21-mvp-implementation-plan.md) — superseded two-workspace task history
 
 ## Sections
 
