@@ -20,10 +20,16 @@ describe("workflow action pinning", () => {
 			),
 		);
 
-		for (const source of sources) {
-			for (const action of source.matchAll(/^\s*uses:\s+[^\s@]+@([^\s#]+)/gm)) {
-				expect(action[1]).toMatch(/^[a-f0-9]{40}$/);
-			}
+		const actions = sources.flatMap((source) =>
+			Array.from(
+				source.matchAll(/^\s*(?:-\s*)?uses:\s+[^\s@]+@([^\s#]+)/gm),
+				([, action]) => action,
+			),
+		);
+
+		expect(actions).toHaveLength(6);
+		for (const action of actions) {
+			expect(action).toMatch(/^[a-f0-9]{40}$/);
 		}
 	});
 });
