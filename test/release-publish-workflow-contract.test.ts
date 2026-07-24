@@ -23,12 +23,10 @@ describe("trusted npm release workflow", () => {
 			"Determine whether this push changes release inputs",
 		);
 		expect(workflow).toContain(
-			'git diff --quiet "$BEFORE" "$GITHUB_SHA" -- package.json package-lock.json',
+			'node scripts/determine-release-intent.mjs "$BEFORE" "$GITHUB_SHA" >> "$GITHUB_OUTPUT"',
 		);
-		expect(workflow).toContain("release_required=false");
-		expect(workflow).toContain("release_required=true");
 		expect(workflow).toContain(
-			"docs-only main promotion; skipping npm publication and release reconciliation",
+			"steps.release-intent.outputs.release_required == 'true'",
 		);
 		expect(workflow).toContain("npm publish --provenance --access public");
 		expect(workflow).toContain("scripts/reconcile-release-state.mjs");

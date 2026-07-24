@@ -38,17 +38,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          if [[ "$BEFORE" =~ ^0{40}$ ]]; then
-            # A branch creation or rewritten history has no safe comparison base.
-            # Fail closed into the existing release-reconciliation path.
-            release_required=true
-          elif git diff --quiet "$BEFORE" "$GITHUB_SHA" -- package.json package-lock.json; then
-            release_required=false
-            echo "docs-only main promotion; skipping npm publication and release reconciliation"
-          else
-            release_required=true
-          fi
-          echo "release_required=$release_required" >> "$GITHUB_OUTPUT"
+          node scripts/determine-release-intent.mjs "$BEFORE" "$GITHUB_SHA" >> "$GITHUB_OUTPUT"
       - name: Read the release identity
         if: steps.release-intent.outputs.release_required == 'true'
         id: release
