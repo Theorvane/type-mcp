@@ -11,16 +11,16 @@
   [![License](https://img.shields.io/badge/license-MIT-111827?style=flat-square)](LICENSE)
 </div>
 
-> **Release target — `@theorvane/type-mcp@0.2.0`:** this repository source contains standard decorators, definition validation, explicit instance resolution, MCP SDK compilation, stdio, `@theorvane/type-mcp/http` Streamable HTTP, and the tools-only `@theorvane/type-mcp/langchain` adapter. Before installing, confirm the version exists with `npm view @theorvane/type-mcp@0.2.0 version`.
+> **Published package — `@theorvane/type-mcp@0.2.0`:** provides standard decorators, definition validation, explicit instance resolution, MCP SDK compilation, stdio, `@theorvane/type-mcp/http` Streamable HTTP, and the tools-only `@theorvane/type-mcp/langchain` adapter.
 >
 > **Integration boundary:** LangGraph `ToolNode` composition, graph topology, model choice, authorization, state, persistence, and deployment remain consumer responsibilities.
 
-TypeMCP keeps MCP declarations beside TypeScript classes without coupling the core to a web framework. Install it when you need a strict, inspectable declaration layer and want application code ready for later runtime support.
+TypeMCP keeps MCP declarations beside TypeScript classes without coupling the core to a web framework. Install it when you need strict declarations, validation, MCP SDK compilation, stdio, or Streamable HTTP while keeping application policy explicit.
 
 ## Fast path for developers and agents
 
-1. Check the published capability table below. Do not call an API marked **reserved** or **planned**.
-2. After the release version is visible in npm, install [`@theorvane/type-mcp`](https://www.npmjs.com/package/@theorvane/type-mcp) with `zod`.
+1. Check the published capability table below and choose only the package entry point your application hosts and authorizes.
+2. Install [`@theorvane/type-mcp`](https://www.npmjs.com/package/@theorvane/type-mcp) with `zod`.
 3. Use standard TypeScript decorators to declare a server surface.
 4. Inspect the declaration through `getMcpServerDefinition()` at an application boundary.
 5. Use `createMcpServer()`, `startStdioServer()`, or `@theorvane/type-mcp/http` only when the application owns the surrounding transport, authorization, and lifecycle policy.
@@ -110,7 +110,7 @@ The methods above are ordinary application methods. In `0.2.0`, use `createMcpSe
 | `@McpPrompt` | Available | Records a named prompt declaration. |
 | `getMcpServerDefinition()` | Available | Reads a fresh frozen metadata copy; returns `undefined` for undecorated classes. |
 | `createMcpServer()` | Available | Validates declarations and compiles the decorated server surface with an explicit resolver seam. |
-| `@theorvane/type-mcp/http` / `createMcpHandler()` | Available | Fetch/Streamable HTTP adapter; applications own hosting, sessions, and authorization. |
+| `@theorvane/type-mcp/http` / `createMcpHandler()` | Available | Fetch/Streamable HTTP adapter; TypeMCP owns in-process MCP session routing while applications own route hosting, durable session policy, and authorization. |
 | Definition validation and `TypeMcpDefinitionError` | Available | Validates declarations and reports safe definition errors. |
 | `InstanceResolver<T>` / `resolveMcpServerInstance()` | Available | Explicit application-owned instance construction contract. |
 | `@theorvane/type-mcp/langchain` / `createLangChainTools()` | Available | Tools-only LangChain structured-tool adapter; LangGraph `ToolNode` composition remains consumer-owned. |
@@ -125,7 +125,7 @@ The methods above are ordinary application methods. In `0.2.0`, use `createMcpSe
 - [LangChain and LangGraph integration](docs/guides/langchain-langgraph.md) — published tools-only adapter and consumer-owned `ToolNode` composition.
 - [LangGraph ToolNode example](examples/langgraph-tools/README.md) — exact in-memory source example and smoke-test command.
 - [Decorator API contract](docs/api/decorator-api.md) — repository API target; check its status notices before using unreleased APIs.
-- [Architecture overview](docs/architecture/overview.md) — package boundaries and planned runtime direction.
+- [Architecture overview](docs/architecture/overview.md) — published runtime and package boundaries.
 - [MVP scope](docs/product/mvp-scope.md) — planned product capabilities.
 - [Contributing](CONTRIBUTING.md) — contribution workflow and local verification.
 - [npm package](https://www.npmjs.com/package/@theorvane/type-mcp) — published releases and install metadata.

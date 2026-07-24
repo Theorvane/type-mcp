@@ -1,6 +1,6 @@
 # Configuration and compatibility
 
-`@theorvane/type-mcp@0.2.0` is the repository release target for this TypeScript declaration and runtime package. Configuration determines whether TypeScript emits standard decorators and whether the runtime can resolve the package's ESM/CJS exports; applications configure their own hosting and transport lifecycle around installed MCP adapters.
+`@theorvane/type-mcp@0.2.0` is the published TypeScript declaration and runtime package. Configuration determines whether TypeScript emits standard decorators and whether the runtime can resolve the package's ESM/CJS exports; applications configure their own hosting and transport lifecycle around installed MCP adapters.
 
 ## Runtime and package manager
 
@@ -16,7 +16,7 @@ The package name and import are scoped to Theorvane:
 import { McpServer, McpTool } from "@theorvane/type-mcp";
 ```
 
-The `0.2.0` release target exports `@theorvane/type-mcp/http`. Add it only where the application owns Fetch hosting, session handling, and authorization.
+The public `@theorvane/type-mcp@0.2.0` package exports `@theorvane/type-mcp/http`. Add it where the application owns Fetch route hosting, durable session policy, and authorization; the adapter owns in-process MCP session routing around the SDK transport.
 
 ## TypeScript decorators
 
@@ -71,6 +71,6 @@ A missing component `name` defaults to the method name. `0.2.0` validates the de
 
 ## Registry release versus repository development
 
-The repository release target is `@theorvane/type-mcp@0.2.0`. After publication, verify the npm version before treating it as installable. Its root exports include `McpServer`, `McpTool`, `McpResource`, `McpPrompt`, `getMcpServerDefinition`, `readMcpServerDefinition`, `TypeMcpDefinitionError`, `InstanceResolver`, `resolveMcpServerInstance`, `createMcpServer`, and `startStdioServer`. The `@theorvane/type-mcp/http` and `@theorvane/type-mcp/langchain` subpaths expose their respective adapters.
+The published `@theorvane/type-mcp@0.2.0` root exports `McpServer`, `McpTool`, `McpResource`, `McpPrompt`, `getMcpServerDefinition`, `readMcpServerDefinition`, `TypeMcpDefinitionError`, `InstanceResolver`, `resolveMcpServerInstance`, `createMcpServer`, and `startStdioServer`. The `@theorvane/type-mcp/http` and `@theorvane/type-mcp/langchain` subpaths expose their respective adapters.
 
 Before upgrading, read the release notes and inspect the package's generated type declarations. Treat a feature as available only when a released version documents it and the installed package exports it.

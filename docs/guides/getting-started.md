@@ -1,10 +1,10 @@
 # Getting started with `@theorvane/type-mcp@0.2.0`
 
-This guide creates and inspects an MCP **declaration** using the `0.2.0` repository release target. That source also validates and compiles decorated definitions through `createMcpServer()`; the [HTTP guide](http-and-nextjs.md) and [LangChain guide](langchain-langgraph.md) cover their focused adapter boundaries.
+This guide creates and inspects an MCP **declaration** using the published `@theorvane/type-mcp@0.2.0` package. It also validates and compiles decorated definitions through `createMcpServer()`; the [HTTP guide](http-and-nextjs.md) and [LangChain guide](langchain-langgraph.md) cover their focused adapter boundaries.
 
 ## Install the package and configure TypeScript
 
-After `npm view @theorvane/type-mcp@0.2.0 version` succeeds, install the package and import Zod directly in the application that owns its schemas:
+Install the package and import Zod directly in the application that owns its schemas:
 
 ```bash
 npm install @theorvane/type-mcp zod
@@ -100,6 +100,6 @@ The function returns `undefined` for a class without `@McpServer`. For a decorat
 
 ## Continue through the runtime boundary
 
-The `0.2.0` release target contains `createMcpServer()`, `startStdioServer()`, `@theorvane/type-mcp/http`, and `@theorvane/type-mcp/langchain`; verify the installed package before relying on them. TypeMCP validates and compiles decorated definitions through an explicit `InstanceResolver`; it does not choose a web host, authorization model, session store, LangGraph topology, model, or persistence policy for the application.
+The published `@theorvane/type-mcp@0.2.0` package contains `createMcpServer()`, `startStdioServer()`, `@theorvane/type-mcp/http`, and `@theorvane/type-mcp/langchain`. TypeMCP validates and compiles decorated definitions through an explicit `InstanceResolver`; it does not choose a web host, authorization model, session store, LangGraph topology, model, or persistence policy for the application.
 
 The declaration created above remains useful for application-owned inspection. Consult the [configuration guide](configuration.md), [HTTP guide](http-and-nextjs.md), [LangChain guide](langchain-langgraph.md), and [agent guide](agent-integration.md) before automating a change.
