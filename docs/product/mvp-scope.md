@@ -1,8 +1,8 @@
 # MVP scope
 
-> **Release target:** The `@theorvane/type-mcp@0.2.0` repository release target includes this MVP's metadata, validation, resolver, compiler, stdio, HTTP, and tools-only LangChain adapter. Start with the [README](../../README.md) and [getting-started guide](../guides/getting-started.md) for exact exports and boundaries.
+> **Published package:** `@theorvane/type-mcp@0.2.0` includes this MVP's metadata, validation, resolver, compiler, stdio, HTTP, and tools-only LangChain adapter. Start with the [README](../../README.md) and [getting-started guide](../guides/getting-started.md) for exact exports and boundaries.
 
-**Status:** Implemented in the `0.2.0` release target: decorator metadata storage, definition validation, the instance resolver seam, compiler behavior, the Node stdio helper, the Fetch Streamable HTTP adapter, and the tools-only LangChain adapter.
+**Status:** Implemented and published in `@theorvane/type-mcp@0.2.0`: decorator metadata storage, definition validation, the instance resolver seam, compiler behavior, the Node stdio helper, the Fetch Streamable HTTP adapter, and the tools-only LangChain adapter.
 
 ## Included
 
