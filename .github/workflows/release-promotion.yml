@@ -13,5 +13,7 @@ jobs:
     env:
       HEAD_REF: ${{ github.head_ref }}
     steps:
-      - name: Require the dev integration branch
-        run: test "$HEAD_REF" = "dev"
+      - name: Require dev or an issue-numbered release branch
+        shell: bash
+        run: |
+          [[ "$HEAD_REF" == "dev" || "$HEAD_REF" =~ ^release/[1-9][0-9]*-[a-z0-9]+(-[a-z0-9]+)*$ ]]

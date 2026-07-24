@@ -1,6 +1,6 @@
 # LangChain and LangGraph integration
 
-> **Release boundary:** `@theorvane/type-mcp/langchain` is part of the `@theorvane/type-mcp@0.2.0` repository release target; verify the installed package exports it. It is tools-only; LangGraph remains a consumer-owned composition choice.
+> **Published boundary:** `@theorvane/type-mcp/langchain` is part of the published `@theorvane/type-mcp@0.2.0` package. It is tools-only; LangGraph remains a consumer-owned composition choice.
 
 ## Scope
 

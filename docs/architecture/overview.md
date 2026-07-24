@@ -1,8 +1,6 @@
 # Architecture overview
 
-> **Release target:** The `@theorvane/type-mcp@0.2.0` repository release target contains the metadata, validation, resolver, compiler, stdio, HTTP, and LangChain adapter surfaces described here. Applications remain responsible for hosting and lifecycle policy.
-
-**Status:** Release-target architecture — decorator metadata storage, definition validation, the async-capable resolver seam, runtime compiler, Node stdio helper, Fetch Streamable HTTP adapter, and tools-only LangChain adapter are implemented in the `0.2.0` release target; verify npm publication before installing.
+> **Public release:** [`@theorvane/type-mcp@0.2.0`](https://www.npmjs.com/package/@theorvane/type-mcp) implements the metadata, validation, resolver, compiler, stdio, HTTP, and LangChain adapter surfaces described here. Applications remain responsible for hosting and lifecycle policy.
 
 ## Package surface
 
@@ -11,27 +9,24 @@ application class
   │ decorators write definitions
   ▼
 @theorvane/type-mcp
-  ├─ metadata reader + validation
+  ├─ metadata reader + definition validation
   ├─ InstanceResolver
   ├─ compiler → official MCP SDK McpServer
-  ├─ stdio helper
+  ├─ Node stdio helper
   ├─ @theorvane/type-mcp/http → Web Standard Streamable HTTP transport
   └─ @theorvane/type-mcp/langchain → LangChain structured tools
 ```
 
-The root `@theorvane/type-mcp` export owns decorator definitions, definition validation, and the resolver seam, and will own compilation. The `@theorvane/type-mcp/http` subpath will consume compiled-server contracts and own Web Standard request/response adaptation. Today, decorator metadata storage, declaration validation, and resolver contracts are implemented; applications own business handlers and dependencies.
+The root `@theorvane/type-mcp` export owns decorator definitions, definition validation, explicit instance resolution, MCP SDK compilation, and the Node stdio helper. The `@theorvane/type-mcp/http` subpath adapts Web Standard requests and responses to Streamable HTTP. The `@theorvane/type-mcp/langchain` subpath converts decorated tools to LangChain structured tools without taking ownership of an agent or graph runtime.
 
-## Target runtime flow
+## Runtime flow
 
-The following is planned behavior, not the current runtime implementation:
-
-1. `@McpServer`, `@McpTool`, `@McpResource`, and `@McpPrompt` record definition data associated with a class. This metadata step is implemented.
-2. `readMcpServerDefinition()` validates decorated declarations and returns a frozen definition copy. This declaration-validation step is implemented.
-3. `resolveMcpServerInstance()` uses the synchronous `defaultInstanceResolver` for zero-argument server classes or awaits a supplied `InstanceResolver<T>`. This resolver seam is implemented.
-4. `createMcpServer()` will consume the validated definition and resolved instance before opening a transport.
-5. The compiler will register validated tools, static resources, and prompts against the official SDK `McpServer`.
-6. A transport will connect to the SDK server. For HTTP, the `@theorvane/type-mcp/http` subpath will use the SDK's Web Standard Streamable HTTP transport.
-7. Tool inputs will cross the Zod validation boundary before application code runs, and errors will become safe MCP errors.
+1. `@McpServer`, `@McpTool`, `@McpResource`, and `@McpPrompt` record immutable definition data associated with a class.
+2. `readMcpServerDefinition()` validates decorated declarations and returns a frozen definition copy.
+3. `resolveMcpServerInstance()` uses the synchronous `defaultInstanceResolver` for zero-argument server classes or awaits a supplied `InstanceResolver<T>`.
+4. `createMcpServer()` validates the definition, resolves an instance, and compiles tools, static resources, and prompts against the official MCP SDK `McpServer`.
+5. Tool inputs cross the Zod validation boundary before application code runs. The runtime returns safe tool results instead of exposing application errors.
+6. The application chooses a transport boundary: use the root stdio helper for a Node process, or use `@theorvane/type-mcp/http` for the SDK Streamable HTTP transport.
 
 ## Core contracts
 
@@ -43,20 +38,19 @@ export interface InstanceResolver<T> {
 }
 ```
 
-This interface intentionally permits asynchronous resolution without binding the core to an application container. The LangChain adapter reuses it for explicit construction; it does not perform provider discovery or graph lifecycle management.
+This interface intentionally permits asynchronous resolution without binding the core to an application container. Applications own construction policy and dependencies. The LangChain adapter reuses the same explicit resolver seam; it does not perform provider discovery or graph lifecycle management.
 
-## Target error boundary
+## Error and transport boundary
 
-The following error behavior is planned for compiler and HTTP work; it is not provided by the current metadata-only implementation.
-
-| Failure source | Target behavior |
-| --- | --- |
-| Decorator/definition conflict | fail fast during server compilation with a typed framework error |
-| Invalid tool input | return a safe MCP-visible validation error; do not invoke the handler |
-| Application handler throws | return generic safe MCP error; log/observability integration is deferred |
-| Unsupported HTTP method | return an HTTP method error compatible with the adapter contract |
-| Transport/session behavior | delegate to the official SDK transport rather than reimplement protocol state |
+| Failure source | Runtime behavior | Owner |
+| --- | --- | --- |
+| Decorator/definition conflict | fail fast with a typed TypeMCP definition error before server compilation | TypeMCP |
+| Invalid tool input | return a safe MCP-visible validation result without invoking the handler | TypeMCP |
+| Application handler failure | return the package's safe result boundary without leaking application errors | TypeMCP; application owns logging/observability policy |
+| Unsupported HTTP method | return the adapter's HTTP method result | TypeMCP HTTP adapter |
+| Transport/session protocol state | delegate MCP framing and Streamable HTTP sessions to the official SDK | TypeMCP + SDK |
+| Authentication, authorization, persistence, deployment, durable session policy | explicit host integration decisions | Application |
 
 ## LangChain and LangGraph boundary
 
-The `@theorvane/type-mcp/langchain` subpath converts decorated tools into LangChain structured tools while retaining TypeMCP's validation, explicit resolver, and safe error boundary. Consumers may pass a copied tool list to LangGraph `ToolNode`, but graph topology, models, authorization, state, persistence, and deployment remain outside TypeMCP. See [ADR 0002](adr/0002-langchain-langgraph-integration.md) and the [integration guide](../guides/langchain-langgraph.md).
+The `@theorvane/type-mcp/langchain` subpath converts decorated tools into LangChain structured tools while retaining TypeMCP's validation, explicit resolver, and safe invocation boundary. Consumers may pass a copied tool list to LangGraph `ToolNode`, but graph topology, models, authorization, state, persistence, and deployment remain outside TypeMCP. See [ADR 0002](adr/0002-langchain-langgraph-integration.md) and the [integration guide](../guides/langchain-langgraph.md).

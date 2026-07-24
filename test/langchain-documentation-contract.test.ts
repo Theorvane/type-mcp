@@ -75,12 +75,23 @@ describe("LangChain current-facing documentation contract", () => {
 			.flat()
 			.join("\n");
 
+		expect(combined).toContain("@theorvane/type-mcp@0.2.0");
+		expect(combined).toContain(
+			"strict declarations, validation, MCP SDK compilation, stdio, or Streamable HTTP",
+		);
+		expect(combined).toContain("TypeMCP owns in-process MCP session routing");
+		expect(combined).toContain(
+			"applications own route hosting, durable session policy, and authorization",
+		);
 		expect(combined).toContain("@theorvane/type-mcp/langchain");
 		expect(combined).toContain("LangGraph");
 		expect(combined).not.toContain("`type-mcp");
 		expect(combined).not.toContain('"type-mcp"');
 		expect(combined).not.toMatch(
-			/(?:published|available).*@theorvane\/type-mcp@0\.2\.0|@theorvane\/type-mcp@0\.2\.0.*(?:published|available)/i,
+			/(?:metadata-only implementation|runtime validation and invocation are planned|createMcpServer\(\) remains a placeholder|createMcpHandler\(\) currently remains a placeholder|The following is planned behavior, not the current runtime implementation)/i,
+		);
+		expect(combined).not.toMatch(
+			/(?:0\.2\.0.*release[- ]target|release[- ]target.*0\.2\.0|release[- ]target boundary|verify npm publication|before installing, confirm the version exists|after publication, verify the npm version before treating it as installable|after the release version is visible in npm)/i,
 		);
 		expect(trackedDocumentation).not.toMatch(
 			/n[e]st[j]s|@n[e]st[j]s|module[r]ef|discovery[s]ervice/i,
