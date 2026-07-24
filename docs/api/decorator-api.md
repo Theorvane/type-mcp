@@ -62,8 +62,8 @@ readConfig() {
   name: "summarize-product",
   description: "Prepare a product-summary prompt.",
 })
-summarizeProduct(sku: string) {
-  return `Summarize product ${sku}.`;
+summarizeProduct() {
+  return "Summarize the current product catalog.";
 }
 ```
 

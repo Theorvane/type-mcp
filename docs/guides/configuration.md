@@ -16,7 +16,7 @@ The package name and import are scoped to Theorvane:
 import { McpServer, McpTool } from "@theorvane/type-mcp";
 ```
 
-The `0.2.0` release target exports `@theorvane/type-mcp/http`. Add it only where the application owns Fetch hosting, session handling, and authorization.
+The public `@theorvane/type-mcp@0.2.0` package exports `@theorvane/type-mcp/http`. Add it where the application owns Fetch route hosting, durable session policy, and authorization; the adapter owns in-process MCP session routing around the SDK transport.
 
 ## TypeScript decorators
 

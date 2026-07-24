@@ -76,6 +76,13 @@ describe("LangChain current-facing documentation contract", () => {
 			.join("\n");
 
 		expect(combined).toContain("@theorvane/type-mcp@0.2.0");
+		expect(combined).toContain(
+			"strict declarations, validation, MCP SDK compilation, stdio, or Streamable HTTP",
+		);
+		expect(combined).toContain("TypeMCP owns in-process MCP session routing");
+		expect(combined).toContain(
+			"applications own route hosting, durable session policy, and authorization",
+		);
 		expect(combined).toContain("@theorvane/type-mcp/langchain");
 		expect(combined).toContain("LangGraph");
 		expect(combined).not.toContain("`type-mcp");
