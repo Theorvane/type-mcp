@@ -19,6 +19,17 @@ describe("trusted npm release workflow", () => {
 		expect(workflow).toContain("id-token: write");
 		expect(workflow).toContain("environment: npm");
 		expect(workflow).toContain("npm install --global npm@11.5.1");
+		expect(workflow).toContain(
+			"Determine whether this push changes release inputs",
+		);
+		expect(workflow).toContain(
+			'git diff --quiet "$BEFORE" "$GITHUB_SHA" -- package.json package-lock.json',
+		);
+		expect(workflow).toContain("release_required=false");
+		expect(workflow).toContain("release_required=true");
+		expect(workflow).toContain(
+			"docs-only main promotion; skipping npm publication and release reconciliation",
+		);
 		expect(workflow).toContain("npm publish --provenance --access public");
 		expect(workflow).toContain("scripts/reconcile-release-state.mjs");
 		expect(workflow).toContain("gh api --include");
