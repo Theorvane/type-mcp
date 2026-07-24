@@ -1,10 +1,10 @@
 # Agent integration guide
 
-This guide gives coding agents a deterministic procedure for adding TypeMCP declarations without inventing application-owned policy. It applies to the `@theorvane/type-mcp@0.2.0` repository release target; before installing, confirm the version exists in npm.
+This guide gives coding agents a deterministic procedure for adding TypeMCP declarations without inventing application-owned policy. It applies to the published `@theorvane/type-mcp@0.2.0` package.
 
 ## Capability contract agents must honor
 
-An agent may use `@McpServer`, `@McpTool`, `@McpResource`, `@McpPrompt`, `getMcpServerDefinition()`, `readMcpServerDefinition()`, `createMcpServer()`, and the explicit `InstanceResolver` seam. `@theorvane/type-mcp/http` and `@theorvane/type-mcp/langchain` are documented release-target subpaths; verify the installed package exports them.
+An agent may use `@McpServer`, `@McpTool`, `@McpResource`, `@McpPrompt`, `getMcpServerDefinition()`, `readMcpServerDefinition()`, `createMcpServer()`, and the explicit `InstanceResolver` seam. The published `@theorvane/type-mcp/http` and `@theorvane/type-mcp/langchain` subpaths provide the HTTP and tools-only LangChain boundaries.
 
 An agent must not claim automatic application-container discovery, OAuth, authorization policy, session persistence, hosting, model selection, LangGraph topology, or a provider integration. TypeMCP's published runtime validates and compiles declarations, but applications own those policies and lifecycle decisions.
 
