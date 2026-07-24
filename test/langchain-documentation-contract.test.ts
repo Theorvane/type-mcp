@@ -91,7 +91,7 @@ describe("LangChain current-facing documentation contract", () => {
 			/(?:metadata-only implementation|runtime validation and invocation are planned|createMcpServer\(\) remains a placeholder|createMcpHandler\(\) currently remains a placeholder|The following is planned behavior, not the current runtime implementation)/i,
 		);
 		expect(combined).not.toMatch(
-			/(?:0\.2\.0.*release target|release target.*0\.2\.0|verify npm publication|before installing, confirm the version exists|after publication, verify the npm version before treating it as installable|after the release version is visible in npm)/i,
+			/(?:0\.2\.0.*release[- ]target|release[- ]target.*0\.2\.0|release[- ]target boundary|verify npm publication|before installing, confirm the version exists|after publication, verify the npm version before treating it as installable|after the release version is visible in npm)/i,
 		);
 		expect(trackedDocumentation).not.toMatch(
 			/n[e]st[j]s|@n[e]st[j]s|module[r]ef|discovery[s]ervice/i,

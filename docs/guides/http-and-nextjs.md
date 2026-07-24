@@ -33,6 +33,6 @@ export { handler as DELETE, handler as GET, handler as POST };
 
 This is a route integration shape, not a full Next.js scaffold. It intentionally does not prescribe hosting, authentication, persistence, or a database.
 
-## Release-target boundary
+## Published package boundary
 
 The published `@theorvane/type-mcp@0.2.0` package includes `createMcpServer()` and `@theorvane/type-mcp/http`. This guide demonstrates the package API, while hosting, authentication, persistence, and authorization remain application-owned responsibilities.
