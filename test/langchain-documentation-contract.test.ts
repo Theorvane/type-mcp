@@ -75,12 +75,13 @@ describe("LangChain current-facing documentation contract", () => {
 			.flat()
 			.join("\n");
 
+		expect(combined).toContain("@theorvane/type-mcp@0.2.0");
 		expect(combined).toContain("@theorvane/type-mcp/langchain");
 		expect(combined).toContain("LangGraph");
 		expect(combined).not.toContain("`type-mcp");
 		expect(combined).not.toContain('"type-mcp"');
 		expect(combined).not.toMatch(
-			/(?:published|available).*@theorvane\/type-mcp@0\.2\.0|@theorvane\/type-mcp@0\.2\.0.*(?:published|available)/i,
+			/(?:metadata-only implementation|runtime validation and invocation are planned|createMcpServer\(\) remains a placeholder|createMcpHandler\(\) currently remains a placeholder|The following is planned behavior, not the current runtime implementation)/i,
 		);
 		expect(trackedDocumentation).not.toMatch(
 			/n[e]st[j]s|@n[e]st[j]s|module[r]ef|discovery[s]ervice/i,
