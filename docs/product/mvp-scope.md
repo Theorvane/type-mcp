@@ -29,11 +29,11 @@
 | Dynamic resource URI templates | Static resource semantics provide a smaller, testable first surface. |
 | Prompt argument inference | Explicit options avoid unstable reflection behavior. |
 | Multi-server route registry | One compiled server per handler keeps the first adapter simple. |
-| npm publishing/release automation | Public `Theorvane/type-mcp` is the delivery target; package publication follows a separate release plan. |
+| Additional release automation | Initial publication is complete. Future versions use the reviewed `dev` to `main` promotion and OIDC Trusted Publishing workflow. |
 
 ## Constraints
 
-- Repository target: public `Theorvane/type-mcp`.
+- Public distribution: `@theorvane/type-mcp@0.2.0` on npm; the repository is `Theorvane/type-mcp`.
 - Runtime protocol behavior comes from the official MCP SDK.
 - Core and HTTP have no agent-framework runtime or peer dependency; `@theorvane/type-mcp/langchain` has an isolated optional LangChain peer.
 - Public types are strict and runtime input is validated before handler invocation.

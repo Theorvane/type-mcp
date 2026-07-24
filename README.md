@@ -124,9 +124,9 @@ The methods above are ordinary application methods. In `0.2.0`, use `createMcpSe
 - [Standalone HTTP example](examples/standalone-http/README.md) — exact source and smoke-test commands for the repository implementation.
 - [LangChain and LangGraph integration](docs/guides/langchain-langgraph.md) — published tools-only adapter and consumer-owned `ToolNode` composition.
 - [LangGraph ToolNode example](examples/langgraph-tools/README.md) — exact in-memory source example and smoke-test command.
-- [Decorator API contract](docs/api/decorator-api.md) — repository API target; check its status notices before using unreleased APIs.
+- [Decorator API contract](docs/api/decorator-api.md) — published decorator, validation, compilation, and transport API contract.
 - [Architecture overview](docs/architecture/overview.md) — published runtime and package boundaries.
-- [MVP scope](docs/product/mvp-scope.md) — planned product capabilities.
+- [MVP scope](docs/product/mvp-scope.md) — published MVP capabilities and explicitly deferred extensions.
 - [Contributing](CONTRIBUTING.md) — contribution workflow and local verification.
 - [npm package](https://www.npmjs.com/package/@theorvane/type-mcp) — published releases and install metadata.
 

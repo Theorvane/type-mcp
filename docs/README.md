@@ -1,13 +1,13 @@
 # type-mcp documentation
 
-This directory is the canonical project documentation set. For an installed package, read the release note in the README and then use the guides first; product and architecture documents describe the repository-development target.
+This directory is the canonical project documentation set. For an installed package, read the release note in the README and then use the guides first; product and architecture documents distinguish published runtime behavior from repository decisions and future product work.
 
 1. [Getting started](guides/getting-started.md) — install, declare, inspect, and compile with `@theorvane/type-mcp@0.2.0`
 2. [Configuration and compatibility](guides/configuration.md) — Node, ESM/CommonJS, TypeScript decorators, and version boundaries
 3. [Agent integration guide](guides/agent-integration.md) — evidence-first coding-agent workflow and runtime limits
-4. [Decorator API contract](api/decorator-api.md) — repository development contract; compare its release note with the installed package
+4. [Decorator API contract](api/decorator-api.md) — published decorator, validation, compiler, and transport contract
 5. [Product vision](product/vision.md) — problem, users, and success criteria
-6. [MVP scope](product/mvp-scope.md) — delivery boundary and exclusions
+6. [MVP scope](product/mvp-scope.md) — published MVP boundary, deferred extensions, and exclusions
 7. [Architecture overview](architecture/overview.md) — components and runtime flow
 8. [npm release readiness](guides/npm-release.md) — package ownership and pre-publish safeguards
 9. [Single-package migration plan](planning/2026-07-21-single-package-migration.md) — active packaging plan
