@@ -31,7 +31,16 @@ jobs:
         run: |
           npm install --global npm@11.5.1
           npm --version
+      - name: Determine whether this push changes release inputs
+        id: release-intent
+        env:
+          BEFORE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/determine-release-intent.mjs "$BEFORE" "$GITHUB_SHA" >> "$GITHUB_OUTPUT"
       - name: Read the release identity
+        if: steps.release-intent.outputs.release_required == 'true'
         id: release
         shell: bash
         run: |
@@ -43,6 +52,7 @@ jobs:
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "package=$PACKAGE" >> "$GITHUB_OUTPUT"
       - name: Reconcile any prior partial release state
+        if: steps.release-intent.outputs.release_required == 'true'
         id: release-state
         env:
           GH_TOKEN: ${{ github.token }}
@@ -82,10 +92,10 @@ jobs:
           npm audit --omit=dev --audit-level=high
           git diff --check
       - name: Publish to npm with provenance
-        if: steps.release-state.outputs.publish == 'true'
+        if: steps.release-intent.outputs.release_required == 'true' && steps.release-state.outputs.publish == 'true'
         run: npm publish --provenance --access public
       - name: Create immutable Git tag
-        if: steps.release-state.outputs.create_tag == 'true'
+        if: steps.release-intent.outputs.release_required == 'true' && steps.release-state.outputs.create_tag == 'true'
         env:
           VERSION: ${{ steps.release.outputs.version }}
         shell: bash
@@ -96,7 +106,7 @@ jobs:
           git tag -a "v$VERSION" -m "type-mcp v$VERSION" "$GITHUB_SHA"
           git push origin "v$VERSION"
       - name: Create GitHub Release
-        if: steps.release-state.outputs.create_release == 'true'
+        if: steps.release-intent.outputs.release_required == 'true' && steps.release-state.outputs.create_release == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
           VERSION: ${{ steps.release.outputs.version }}
