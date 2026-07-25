@@ -104,6 +104,49 @@ describe("OpenAI Responses provider", () => {
 		expect(fetchImplementation).not.toHaveBeenCalled();
 	});
 
+	it("returns a safe configuration failure for malformed runtime request values", async () => {
+		const fetchImplementation = vi.fn<typeof fetch>();
+		const provider = createOpenAiResponsesProvider({
+			apiKey: "test-key",
+			fetch: fetchImplementation,
+		});
+
+		const results = await Promise.all([
+			provider.generate(null as never),
+			provider.generate(undefined as never),
+			provider.generate({
+				model: "gpt-4.1-mini",
+				input: "Hello",
+				instructions: "",
+			}),
+		]);
+
+		expect(results).toEqual([
+			{
+				ok: false,
+				error: {
+					code: "configuration",
+					message: "OpenAI provider is not configured",
+				},
+			},
+			{
+				ok: false,
+				error: {
+					code: "configuration",
+					message: "OpenAI provider is not configured",
+				},
+			},
+			{
+				ok: false,
+				error: {
+					code: "configuration",
+					message: "OpenAI provider is not configured",
+				},
+			},
+		]);
+		expect(fetchImplementation).not.toHaveBeenCalled();
+	});
+
 	it("returns fixed safe failures for request and response problems", async () => {
 		const responseFailure = createOpenAiResponsesProvider({
 			apiKey: "test-key",

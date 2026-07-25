@@ -34,7 +34,7 @@ type OpenAiResponsesResult =
 
 | A/E/X case | Behavior |
 | --- | --- |
-| Accept | `model` and `input` must be non-empty strings. Optional `instructions` is sent only when defined. |
+| Accept | `model` and `input` must be non-empty strings. Optional `instructions`, when defined, must also be a non-empty string and is sent only then. |
 | Accept | The provider sends one JSON `POST` request to `{baseUrl}/responses` with `Authorization: Bearer <apiKey>`. |
 | Accept | `output[].content[]` values with `type: "output_text"` are joined in order into `text`. |
 | Error | A blank/missing key, malformed base URL, or invalid request returns `ok: false` with code `configuration`; Fetch is not called. |

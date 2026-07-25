@@ -30,6 +30,9 @@ for (const expected of [
 	"dist/langchain.js",
 	"dist/langchain.cjs",
 	"dist/langchain.d.ts",
+	"dist/openai.js",
+	"dist/openai.cjs",
+	"dist/openai.d.ts",
 ]) {
 	if (!files.has(expected)) {
 		throw new Error(`${manifest.name}: tarball is missing ${expected}`);

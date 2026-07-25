@@ -112,8 +112,9 @@ function readConfiguration(
 	};
 }
 
-function isValidRequest(request: OpenAiResponsesRequest): boolean {
+function isValidRequest(request: unknown): request is OpenAiResponsesRequest {
 	return (
+		isRecord(request) &&
 		nonEmptyString(request.model) !== undefined &&
 		nonEmptyString(request.input) !== undefined &&
 		(request.instructions === undefined ||
