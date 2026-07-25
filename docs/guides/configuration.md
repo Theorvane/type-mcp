@@ -18,6 +18,8 @@ import { McpServer, McpTool } from "@theorvane/type-mcp";
 
 The public `@theorvane/type-mcp@0.2.0` package exports `@theorvane/type-mcp/http`. Add it where the application owns Fetch route hosting, durable session policy, and authorization; the adapter owns in-process MCP session routing around the SDK transport.
 
+Repository development for issue #91 also contains `@theorvane/type-mcp/openai`, a direct OpenAI-compatible Responses client. It is not published in `0.2.0`; see the [OpenAI-compatible provider guide](openai-provider.md) for its credential and endpoint boundary.
+
 ## TypeScript decorators
 
 Use TypeScript's standard decorator implementation. The configuration must include the decorator library and should retain strict checking:

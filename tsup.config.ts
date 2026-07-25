@@ -5,6 +5,7 @@ export default defineConfig({
 		index: "src/index.ts",
 		http: "src/http.ts",
 		langchain: "src/langchain.ts",
+		openai: "src/openai.ts",
 	},
 	format: ["esm", "cjs"],
 	dts: true,

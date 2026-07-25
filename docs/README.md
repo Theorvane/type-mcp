@@ -15,8 +15,10 @@ This directory is the canonical project documentation set. For an installed pack
 11. [Standalone HTTP example](../examples/standalone-http/README.md) — executable repository example and smoke test
 12. [LangChain and LangGraph integration](guides/langchain-langgraph.md) — tools-only adapter and consumer-owned ToolNode composition
 13. [LangGraph ToolNode example](../examples/langgraph-tools/README.md) — executable in-memory repository example
-14. [Open-source launch checklist](guides/open-source-launch.md) — community health, security, and public-repository safeguards
-15. [Historical MVP implementation plan](planning/2026-07-21-mvp-implementation-plan.md) — superseded two-workspace task history
+14. [OpenAI-compatible provider](guides/openai-provider.md) — repository implementation of a direct, non-streaming Responses API client
+15. [OpenAI provider API](api/openai-provider.md) — A/E/X contract and safe failure behavior
+16. [Open-source launch checklist](guides/open-source-launch.md) — community health, security, and public-repository safeguards
+17. [Historical MVP implementation plan](planning/2026-07-21-mvp-implementation-plan.md) — superseded two-workspace task history
 
 ## Sections
 

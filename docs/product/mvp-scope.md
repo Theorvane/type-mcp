@@ -17,6 +17,7 @@
 | Local transport | stdio helper |
 | Web transport | Fetch-standard Streamable HTTP handler |
 | Agent tool integration | `@theorvane/type-mcp/langchain` converts decorated tools; LangGraph `ToolNode` composition is consumer-owned |
+| OpenAI-compatible provider | Repository implementation for issue #91: an isolated, direct non-streaming Responses client; it is not in published `0.2.0`. |
 | Developer quality | strict TS, Vitest, tsup build, CI, examples, README |
 
 ## Deferred

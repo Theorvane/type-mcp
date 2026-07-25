@@ -114,6 +114,7 @@ The methods above are ordinary application methods. In `0.2.0`, use `createMcpSe
 | Definition validation and `TypeMcpDefinitionError` | Available | Validates declarations and reports safe definition errors. |
 | `InstanceResolver<T>` / `resolveMcpServerInstance()` | Available | Explicit application-owned instance construction contract. |
 | `@theorvane/type-mcp/langchain` / `createLangChainTools()` | Available | Tools-only LangChain structured-tool adapter; LangGraph `ToolNode` composition remains consumer-owned. |
+| `@theorvane/type-mcp/openai` / `createOpenAiResponsesProvider()` | Repository implementation; unreleased | Isolated, non-streaming OpenAI Responses client. It uses application-owned credentials and does not provide an agent loop, tool orchestration, or provider discovery. |
 
 ## Documentation map
 
@@ -124,6 +125,8 @@ The methods above are ordinary application methods. In `0.2.0`, use `createMcpSe
 - [Standalone HTTP example](examples/standalone-http/README.md) — exact source and smoke-test commands for the repository implementation.
 - [LangChain and LangGraph integration](docs/guides/langchain-langgraph.md) — published tools-only adapter and consumer-owned `ToolNode` composition.
 - [LangGraph ToolNode example](examples/langgraph-tools/README.md) — exact in-memory source example and smoke-test command.
+- [OpenAI-compatible provider](docs/guides/openai-provider.md) — repository implementation, credential boundary, compatible endpoints, and safe failure contract.
+- [OpenAI provider example](examples/openai-provider/README.md) — minimal direct Responses API call.
 - [Decorator API contract](docs/api/decorator-api.md) — published decorator, validation, compilation, and transport API contract.
 - [Architecture overview](docs/architecture/overview.md) — published runtime and package boundaries.
 - [MVP scope](docs/product/mvp-scope.md) — published MVP capabilities and explicitly deferred extensions.

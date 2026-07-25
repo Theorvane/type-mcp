@@ -30,6 +30,11 @@
 			"types": "./dist/langchain.d.ts",
 			"import": "./dist/langchain.js",
 			"require": "./dist/langchain.cjs"
+		},
+		"./openai": {
+			"types": "./dist/openai.d.ts",
+			"import": "./dist/openai.js",
+			"require": "./dist/openai.cjs"
 		}
 	},
 	"files": [

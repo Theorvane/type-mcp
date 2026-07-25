@@ -25,6 +25,12 @@ const exportsToVerify = [
 		key: "./langchain",
 		symbols: [{ name: "createLangChainTools", runtimeType: "function" }],
 	},
+	{
+		key: "./openai",
+		symbols: [
+			{ name: "createOpenAiResponsesProvider", runtimeType: "function" },
+		],
+	},
 ];
 
 for (const { key, symbols } of exportsToVerify) {

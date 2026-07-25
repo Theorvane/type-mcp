@@ -14,10 +14,11 @@ application class
   ├─ compiler → official MCP SDK McpServer
   ├─ Node stdio helper
   ├─ @theorvane/type-mcp/http → Web Standard Streamable HTTP transport
-  └─ @theorvane/type-mcp/langchain → LangChain structured tools
+  ├─ @theorvane/type-mcp/langchain → LangChain structured tools
+  └─ @theorvane/type-mcp/openai → isolated OpenAI-compatible Responses client (repository development)
 ```
 
-The root `@theorvane/type-mcp` export owns decorator definitions, definition validation, explicit instance resolution, MCP SDK compilation, and the Node stdio helper. The `@theorvane/type-mcp/http` subpath adapts Web Standard requests and responses to Streamable HTTP. The `@theorvane/type-mcp/langchain` subpath converts decorated tools to LangChain structured tools without taking ownership of an agent or graph runtime.
+The root `@theorvane/type-mcp` export owns decorator definitions, definition validation, explicit instance resolution, MCP SDK compilation, and the Node stdio helper. The `@theorvane/type-mcp/http` subpath adapts Web Standard requests and responses to Streamable HTTP. The `@theorvane/type-mcp/langchain` subpath converts decorated tools to LangChain structured tools without taking ownership of an agent or graph runtime. The repository-only `@theorvane/type-mcp/openai` subpath is a direct non-streaming provider client; it does not change MCP compilation or own an agent loop.
 
 ## Runtime flow
 
