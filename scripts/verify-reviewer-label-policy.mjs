@@ -13,8 +13,8 @@ const requiredSnippets = [
 	"opened",
 	"labeled",
 	"issues: write",
+	"pull-requests: write",
 	"github.event.sender.login != 'sjungwon03-ai'",
-	"actions/github-script@v7",
 	"removeLabel",
 	"listLabelsOnIssue",
 ];
@@ -25,6 +25,16 @@ for (const snippet of requiredSnippets) {
 			`Label-policy workflow is missing required contract: ${snippet}`,
 		);
 	}
+}
+
+if (
+	!/^\s*uses:\s+actions\/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b\s+#\s+v7\.1\.0\s*$/mu.test(
+		workflow,
+	)
+) {
+	throw new Error(
+		"Label-policy workflow must pin actions/github-script to the reviewed v7.1.0 commit.",
+	);
 }
 
 if (/reopened/u.test(workflow)) {
