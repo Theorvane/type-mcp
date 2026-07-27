@@ -28,12 +28,12 @@ for (const snippet of requiredSnippets) {
 }
 
 if (
-	!/^\s*uses:\s+actions\/github-script@[0-9a-f]{40}\s+#\s+v7\.0\.1\s*$/mu.test(
+	!/^\s*uses:\s+actions\/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b\s+#\s+v7\.1\.0\s*$/mu.test(
 		workflow,
 	)
 ) {
 	throw new Error(
-		"Label-policy workflow must pin actions/github-script to the reviewed v7.0.1 commit.",
+		"Label-policy workflow must pin actions/github-script to the reviewed v7.1.0 commit.",
 	);
 }
 
