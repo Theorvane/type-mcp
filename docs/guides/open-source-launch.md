@@ -21,6 +21,6 @@ The repository is public. Use this checklist to finish and periodically audit th
 
 ## Release and operations
 
-- [ ] Run `npm ci`, `npm run lint`, `npm run typecheck`, `npm test`, `npm run build`, `npm run verify:package`, `npm run verify:publish`, `npm audit --omit=dev --audit-level=high`, and `git diff --check`.
+- [ ] Run `npm ci`, `npm run lint`, `npm run typecheck`, `npm test`, `npm run build`, `npm run verify:package`, `npm run verify:publish`, `npm run audit:prod`, and `git diff --check`.
 - [ ] Complete [npm release readiness](npm-release.md) separately before any new package publication.
 - [ ] Publish a maintainer policy for security/CODE OF CONDUCT reporting contacts, triage, review turnaround, and supported versions once a regular release cadence is chosen.
