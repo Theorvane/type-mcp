@@ -89,7 +89,7 @@ jobs:
           npm run build
           npm run verify:package
           npm run verify:publish
-          npm audit --omit=dev --audit-level=high
+          npm audit --omit=dev --audit-level=low
           git diff --check
       - name: Publish to npm with provenance
         if: steps.release-intent.outputs.release_required == 'true' && steps.release-state.outputs.publish == 'true'
