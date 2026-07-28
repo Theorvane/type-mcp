@@ -1,6 +1,6 @@
 {
 	"name": "@theorvane/type-mcp",
-	"version": "0.2.1",
+	"version": "0.2.2",
 	"description": "Decorator-first TypeScript framework for Model Context Protocol servers",
 	"repository": {
 		"type": "git",
@@ -55,10 +55,12 @@
 		"example:standalone-http": "npm run build && npm --prefix examples/standalone-http ci && npm --prefix examples/standalone-http run build",
 		"example:langgraph-tools": "npm run build && npm --prefix examples/langgraph-tools ci && npm --prefix examples/langgraph-tools run build",
 		"prepublishOnly": "npm run verify:publish",
-		"clean": "rimraf dist coverage"
+		"clean": "rimraf dist coverage",
+		"audit:prod": "npm audit --omit=dev --audit-level=low"
 	},
 	"dependencies": {
-		"@modelcontextprotocol/sdk": "1.26.0",
+		"@hono/node-server": "2.0.12",
+		"@modelcontextprotocol/sdk": "1.30.0",
 		"zod": "^4.4.3"
 	},
 	"devDependencies": {
