@@ -12,6 +12,8 @@ TypeMCP is a decorator-first TypeScript package for describing an MCP server and
 | **Run over stdio** for an MCP-capable local client | [Choose a runtime boundary](guides/runtime-selection.md#connect-stdio-when-the-process-is-the-boundary) | `startStdioServer()` |
 | **Serve Streamable HTTP** from a Fetch or Next.js route | [HTTP framework integration](guides/http-and-nextjs.md) | `@theorvane/type-mcp/http` |
 | **Reuse tools with LangChain** or an application-owned LangGraph graph | [LangChain and LangGraph](guides/langchain-langgraph.md) | `@theorvane/type-mcp/langchain` |
+| Start a strict Petstore project | [Petstore project setup](guides/petstore-project-setup.md) | ESM, Stage 3 decorators, and application client seam |
+| Compile and run the first local server | [Petstore TypeMCP foundation](guides/petstore-typemcp-foundation.md) | Explicit resolver plus `startStdioServer()` |
 | Follow one small end-to-end example | [Petstore walkthrough](guides/petstore-walkthrough.md) | Root compiler plus a selected boundary |
 | Inspect exact decorators and resolver contracts | [Decorator API contract](api/decorator-api.md) | Semver-governed package API |
 
@@ -28,6 +30,8 @@ Read [core concepts](guides/core-concepts.md) before selecting a transport, then
 
 ### Start
 
+- [Petstore project setup](guides/petstore-project-setup.md) — a new strict TypeScript workspace and application-owned client seam.
+- [Petstore TypeMCP foundation](guides/petstore-typemcp-foundation.md) — inspect, compile through an explicit resolver, and run stdio locally.
 - [Getting started](guides/getting-started.md) — install, configure standard decorators, declare, and inspect a server.
 - [Core concepts](guides/core-concepts.md) — definitions, validation/compiler, resolver, and responsibility boundaries.
 - [Petstore walkthrough](guides/petstore-walkthrough.md) — a compact catalog server from declaration to selected integration.

@@ -29,4 +29,51 @@ describe("reference-first TypeMCP documentation", () => {
 			/TypeMCP (?:chooses|owns) (?:a model|authorization|LangGraph)/i,
 		);
 	});
+
+	it("requires the project-starting Petstore curriculum to preserve published resolver and application boundaries", async () => {
+		const curriculumDocuments = [
+			"docs/guides/petstore-project-setup.md",
+			"docs/guides/petstore-typemcp-foundation.md",
+			"docs/guides/petstore-walkthrough.md",
+		] as const;
+		const contents = await Promise.all(
+			curriculumDocuments.map(async (path) => ({
+				content: await readFile(path, "utf8"),
+				path,
+			})),
+		);
+		const allContent = contents.map(({ content }) => content).join("\n");
+		const consumerScript = await readFile(
+			"scripts/verify-documentation-consumer.mjs",
+			"utf8",
+		);
+
+		for (const { content, path } of contents) {
+			expect(content, path).toMatch(/## Before you start/);
+			expect(content, path).toMatch(/## Workspace checkpoint/);
+			expect(content, path).toMatch(/## Install/);
+			expect(content, path).toMatch(/## Run and verify/);
+			expect(content, path).toMatch(/## Expected behavior/);
+			expect(content, path).toMatch(/## Failure guide/);
+			expect(content, path).toMatch(/## Responsibility boundary/);
+			expect(content, path).toMatch(/## Next steps/);
+		}
+
+		expect(allContent).toContain("@theorvane/type-mcp@0.2.2");
+		expect(allContent).not.toMatch(/npm install @theorvane\/type-mcp(?:\s|$)/);
+		expect(allContent).toContain("npm run stdio");
+		expect(consumerScript).toContain(
+			"packed clean consumer compiled documented Petstore foundation, HTTP handler, and LangChain adapter",
+		);
+		expect(allContent).toContain("Repository maintainers only");
+		expect(allContent).toContain("createMcpServer(PetstoreServer, resolver)");
+		expect(allContent).toContain("startStdioServer");
+		expect(allContent).toContain("declare const petstoreClient");
+		expect(allContent).toMatch(
+			/hosting, authorization, persistence, models,.*deployment/i,
+		);
+		expect(allContent).not.toMatch(
+			/TypeMCP (?:owns|chooses) (?:a model|authorization|deployment)/i,
+		);
+	});
 });

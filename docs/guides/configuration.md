@@ -7,7 +7,7 @@
 Use Node.js 20 or later. After `npm view @theorvane/type-mcp@0.2.2 version` succeeds, install TypeMCP and Zod as application dependencies:
 
 ```bash
-npm install @theorvane/type-mcp zod
+npm install @theorvane/type-mcp@0.2.2 zod
 ```
 
 The package name and import are scoped to Theorvane:
