@@ -60,6 +60,24 @@ describe("release intent", () => {
 		).toBe("release_required=false");
 	});
 
+	it("skips release mutation when a manifest change only adds verification scripts", async () => {
+		const repository = await createRepository();
+		const before = git(repository, "rev-parse", "HEAD");
+		await writeFile(
+			join(repository, "package.json"),
+			`${JSON.stringify({
+				version: "0.2.0",
+				scripts: { verify: "node scripts/verify.mjs" },
+			})}\n`,
+		);
+		git(repository, "add", "package.json");
+		git(repository, "commit", "-m", "add verification script");
+
+		expect(
+			releaseIntent(repository, before, git(repository, "rev-parse", "HEAD")),
+		).toBe("release_required=false");
+	});
+
 	it("requires the strict release path when release inputs change or comparison is unavailable", async () => {
 		const repository = await createRepository();
 		const before = git(repository, "rev-parse", "HEAD");
