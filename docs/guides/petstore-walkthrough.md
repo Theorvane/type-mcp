@@ -10,10 +10,16 @@ This walkthrough uses one read-only Petstore catalog tool to show the published 
 - TypeScript with standard decorators; do not enable legacy `experimentalDecorators`
 - An application-owned catalog service if the real tool needs data or an API client
 
+## Workspace checkpoint
+
+For a project-starting route, complete [Petstore project setup](petstore-project-setup.md) and [Petstore TypeMCP foundation](petstore-typemcp-foundation.md) first. This walkthrough is the continuation that selects one runtime boundary after the declaration, explicit resolver, and local stdio path already compile.
+
+## Install
+
 Install the package and Zod:
 
 ```bash
-npm install @theorvane/type-mcp zod
+npm install @theorvane/type-mcp@0.2.2 zod
 ```
 
 Use a Node-aware TypeScript configuration:
@@ -52,7 +58,7 @@ export class PetstoreServer {
 }
 ```
 
-The expected public tool name is `find-product`. Zod validates the input when a compiled MCP or LangChain boundary invokes the tool. The class is still ordinary application code: use an application service or client in its constructor when a real catalog lookup needs one.
+The decorated class must keep a zero-argument constructor under the published `0.2.2` `@McpServer` contract. Configure a real catalog service through the explicit resolver before it creates `PetstoreServer`; TypeMCP does not construct or authorize that dependency for you.
 
 ## 2. Inspect, then compile through an explicit resolver
 
@@ -116,7 +122,7 @@ A Fetch host can call `handler(request)`. In a Next.js route, re-export it for `
 Install the optional peer only when you select this path:
 
 ```bash
-npm install @theorvane/type-mcp @langchain/core zod
+npm install @theorvane/type-mcp@0.2.2 @langchain/core zod
 ```
 
 Create `src/langchain-tools.ts`:
@@ -132,9 +138,32 @@ export const tools = await createLangChainTools(PetstoreServer, {
 
 The adapter creates LangChain structured tools from decorated `@McpTool` methods. It does not start an MCP transport, build an agent, choose a model, or create a LangGraph graph. Pass `tools` to your own LangChain or LangGraph composition and retain the policy/state decisions there. See [LangChain and LangGraph integration](langchain-langgraph.md) and the [in-memory ToolNode example](../../examples/langgraph-tools/README.md).
 
+## Run and verify
+
+Choose exactly one continuation and run the matching check from the project root:
+
+```bash
+# stdio: compile first, then start the process; it remains attached to stdin/stdout.
+npm run check
+npm run inspect-server
+npm run stdio
+
+# HTTP: create src/mcp-handler.ts as shown above, then compile the consumer project.
+npm run check
+
+# LangChain: create src/langchain-tools.ts as shown above, then compile the consumer project.
+npm run check
+```
+
+`npm run check` is the consumer-project verification: it typechecks each selected source file against the installed published package. For stdio, a successful process stays open for its MCP client rather than printing a completion line; stop it with `Ctrl+C` after the client has connected. HTTP and LangChain compilation does not deploy a listener or call a model.
+
+## Expected behavior
+
+The declaration produces the public `find-product` tool name. The selected stdio path connects an already compiled server to a local process, the HTTP path returns a Fetch-compatible handler, and the LangChain path returns structured tools. None of these choices creates a host, authorizes a caller, selects a model, or persists application state.
+
 ## Verify the pattern
 
-The repository proves the published HTTP and LangChain boundaries without a live listener, model, credential, or public Petstore request:
+**Repository maintainers only:** the following commands require this repository checkout (they are not commands for a copied consumer workspace). They prove the published HTTP and LangChain boundaries without a live listener, model, credential, or public Petstore request:
 
 ```bash
 npm test -- --run test/standalone-http-example.test.ts
@@ -142,6 +171,16 @@ npm test -- --run test/langgraph-tool-node.test.ts
 ```
 
 These smoke tests exercise the existing catalog example. In your application, add focused tests for the resolver, the tool's domain result, and the authorization policy that TypeMCP deliberately leaves to you.
+
+## Failure guide
+
+- **Decorator or ESM compilation fails:** start with the strict `NodeNext` and `ESNext.Decorators` configuration in [project setup](petstore-project-setup.md); do not enable legacy `experimentalDecorators`.
+- **A dependency or credential is unavailable:** construct and validate it in the application composition root before the resolver creates `PetstoreServer`. TypeMCP does not supply credentials or a retry policy.
+- **A client needs another process:** use the stdio or HTTP host selected by the application. The LangChain path adapts tools only and is not a client/transport.
+
+## Responsibility boundary
+
+TypeMCP can validate the declaration, compile it through the resolver, and connect a compiled server to a selected published boundary. The application owns its catalog client, authorization, policy, process and host lifecycle, persistence, models, LangGraph composition, telemetry, and deployment.
 
 ## Next steps
 

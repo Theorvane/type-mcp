@@ -9,7 +9,7 @@ A TypeMCP class is a declaration plus ordinary application methods. Choose the p
 Install the root package and Zod when the application declares MCP tools, resources, or prompts:
 
 ```bash
-npm install @theorvane/type-mcp zod
+npm install @theorvane/type-mcp@0.2.2 zod
 ```
 
 The root entry point provides decorators, definition inspection, compilation through `createMcpServer()`, an explicit `InstanceResolver`, and `startStdioServer()`. It does not select a web framework, model, authorization scheme, session store, persistence layer, or deployment target.
@@ -97,7 +97,7 @@ The adapter handles MCP HTTP session routing, protocol negotiation, and JSON-RPC
 Install the optional LangChain peer only when importing the tools-only adapter:
 
 ```bash
-npm install @theorvane/type-mcp @langchain/core zod
+npm install @theorvane/type-mcp@0.2.2 @langchain/core zod
 ```
 
 ```ts
@@ -115,9 +115,11 @@ The adapter turns decorated `@McpTool` methods into LangChain structured tools. 
 
 Use the smallest relevant guide after choosing a boundary:
 
-- [Getting started](getting-started.md) explains decorator configuration and definition inspection.
+- [Petstore project setup](petstore-project-setup.md) creates the strict TypeScript workspace and application-owned client seam.
+- [Petstore TypeMCP foundation](petstore-typemcp-foundation.md) verifies declaration inspection, explicit-resolver compilation, and the local stdio boundary.
+- [Petstore walkthrough](petstore-walkthrough.md) selects an optional HTTP or LangChain continuation after the foundation path.
+- [Getting started](getting-started.md) explains decorator configuration and definition inspection outside the Petstore path.
 - [Core concepts](core-concepts.md) explains declarations, validation/compiler behavior, and the explicit resolver seam.
-- [Petstore walkthrough](petstore-walkthrough.md) applies the same server declaration to each published runtime boundary.
 - [HTTP framework integration](http-and-nextjs.md) contains the published Fetch and Next.js route shape.
 - [LangChain and LangGraph integration](langchain-langgraph.md) covers structured tools and consumer-owned graph composition.
 - [Decorator API contract](../api/decorator-api.md) lists the released declarations, resolver contract, and transport APIs.

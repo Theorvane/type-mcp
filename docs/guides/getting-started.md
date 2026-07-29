@@ -7,7 +7,7 @@ This guide creates and inspects an MCP **declaration** using the published `@the
 Install the package and import Zod directly in the application that owns its schemas:
 
 ```bash
-npm install @theorvane/type-mcp zod
+npm install @theorvane/type-mcp@0.2.2 zod
 ```
 
 Run on Node.js 20 or later. Use standard TypeScript decorators with Node-aware ESM settings. A minimal `tsconfig.json` is:
