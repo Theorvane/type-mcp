@@ -118,6 +118,10 @@ Use the smallest relevant guide after choosing a boundary:
 - [Petstore project setup](petstore-project-setup.md) creates the strict TypeScript workspace and application-owned client seam.
 - [Petstore TypeMCP foundation](petstore-typemcp-foundation.md) verifies declaration inspection, explicit-resolver compilation, and the local stdio boundary.
 - [Petstore walkthrough](petstore-walkthrough.md) selects an optional HTTP or LangChain continuation after the foundation path.
+- [Getting started](getting-started.md) explains decorator configuration and definition inspection outside the Petstore path.
+- [Core concepts](core-concepts.md) explains declarations, validation/compiler behavior, and the explicit resolver seam.
+- [HTTP framework integration](http-and-nextjs.md) contains the published Fetch and Next.js route shape.
+- [LangChain and LangGraph integration](langchain-langgraph.md) covers structured tools and consumer-owned graph composition.
 - [Decorator API contract](../api/decorator-api.md) lists the released declarations, resolver contract, and transport APIs.
 
 The selected entry point should be the smallest surface that reaches the intended boundary. Adding an HTTP host to solve a local stdio integration, or adding a graph runtime to convert structured tools, makes deployment and policy decisions less visible without adding a TypeMCP capability.
