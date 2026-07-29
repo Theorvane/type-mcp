@@ -1,6 +1,6 @@
-# Getting started with `@theorvane/type-mcp@0.2.0`
+# Getting started with `@theorvane/type-mcp@0.2.2`
 
-This guide creates and inspects an MCP **declaration** using the published `@theorvane/type-mcp@0.2.0` package. It also validates and compiles decorated definitions through `createMcpServer()`; the [HTTP guide](http-and-nextjs.md) and [LangChain guide](langchain-langgraph.md) cover their focused adapter boundaries.
+This guide creates and inspects an MCP **declaration** using the published `@theorvane/type-mcp@0.2.2` package. It also validates and compiles decorated definitions through `createMcpServer()`; the [HTTP guide](http-and-nextjs.md) and [LangChain guide](langchain-langgraph.md) cover their focused adapter boundaries.
 
 ## Install the package and configure TypeScript
 
@@ -71,7 +71,7 @@ export class NotesServer {
 }
 ```
 
-The public component name defaults to the method name when `name` is omitted. TypeMCP records these options as metadata and `0.2.0` validates the decorated definition before compilation; use application tests for domain-specific naming conventions.
+The public component name defaults to the method name when `name` is omitted. TypeMCP records these options as metadata and `0.2.2` validates the decorated definition before compilation; use application tests for domain-specific naming conventions.
 
 ## Inspect metadata at an application boundary
 
@@ -100,6 +100,6 @@ The function returns `undefined` for a class without `@McpServer`. For a decorat
 
 ## Continue through the runtime boundary
 
-The published `@theorvane/type-mcp@0.2.0` package contains `createMcpServer()`, `startStdioServer()`, `@theorvane/type-mcp/http`, and `@theorvane/type-mcp/langchain`. TypeMCP validates and compiles decorated definitions through an explicit `InstanceResolver`; it does not choose a web host, authorization model, session store, LangGraph topology, model, or persistence policy for the application.
+The published `@theorvane/type-mcp@0.2.2` package contains `createMcpServer()`, `startStdioServer()`, `@theorvane/type-mcp/http`, and `@theorvane/type-mcp/langchain`. TypeMCP validates and compiles decorated definitions through an explicit `InstanceResolver`; it does not choose a web host, authorization model, session store, LangGraph topology, model, or persistence policy for the application.
 
 The declaration created above remains useful for application-owned inspection. Consult the [configuration guide](configuration.md), [HTTP guide](http-and-nextjs.md), [LangChain guide](langchain-langgraph.md), and [agent guide](agent-integration.md) before automating a change.

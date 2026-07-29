@@ -43,6 +43,7 @@ const currentFacingDocuments = [
 	"../docs/guides/configuration.md",
 	"../docs/guides/getting-started.md",
 	"../docs/guides/http-and-nextjs.md",
+	"../docs/guides/runtime-selection.md",
 	"../docs/guides/langchain-langgraph.md",
 	"../docs/README.md",
 	"../examples/standalone-http/README.md",
@@ -75,7 +76,7 @@ describe("LangChain current-facing documentation contract", () => {
 			.flat()
 			.join("\n");
 
-		expect(combined).toContain("@theorvane/type-mcp@0.2.0");
+		expect(combined).toContain("@theorvane/type-mcp@0.2.2");
 		expect(combined).toContain(
 			"strict declarations, validation, MCP SDK compilation, stdio, or Streamable HTTP",
 		);
