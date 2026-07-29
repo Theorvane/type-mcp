@@ -116,6 +116,8 @@ The adapter turns decorated `@McpTool` methods into LangChain structured tools. 
 Use the smallest relevant guide after choosing a boundary:
 
 - [Getting started](getting-started.md) explains decorator configuration and definition inspection.
+- [Core concepts](core-concepts.md) explains declarations, validation/compiler behavior, and the explicit resolver seam.
+- [Petstore walkthrough](petstore-walkthrough.md) applies the same server declaration to each published runtime boundary.
 - [HTTP framework integration](http-and-nextjs.md) contains the published Fetch and Next.js route shape.
 - [LangChain and LangGraph integration](langchain-langgraph.md) covers structured tools and consumer-owned graph composition.
 - [Decorator API contract](../api/decorator-api.md) lists the released declarations, resolver contract, and transport APIs.

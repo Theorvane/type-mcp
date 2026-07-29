@@ -1,39 +1,60 @@
-# type-mcp documentation
+# TypeMCP documentation
 
-This directory is the canonical project documentation set. For an installed package, read the release note in the README and then use the guides first; product and architecture documents distinguish published runtime behavior from repository decisions and future product work.
+TypeMCP is a decorator-first TypeScript package for describing an MCP server and compiling that description at an explicit application boundary. The published package is [`@theorvane/type-mcp@0.2.2`](https://www.npmjs.com/package/@theorvane/type-mcp).
 
-1. [Getting started](guides/getting-started.md) — install, declare, inspect, and compile with `@theorvane/type-mcp@0.2.2`.
-2. [Choose a runtime boundary](guides/runtime-selection.md) — select the released root, stdio, HTTP, or tools-only LangChain surface.
-3. [Configuration and compatibility](guides/configuration.md) — Node, ESM/CommonJS, TypeScript decorators, and version boundaries.
-4. [Agent integration guide](guides/agent-integration.md) — evidence-first coding-agent workflow and runtime limits.
-5. [Decorator API contract](api/decorator-api.md) — published decorator declarations, runtime compilation, and transport contract.
-6. [Product vision](product/vision.md) — problem, users, and success criteria.
-7. [MVP scope](product/mvp-scope.md) — published MVP boundary, deferred extensions, and exclusions.
-8. [Architecture overview](architecture/overview.md) — components and runtime flow.
-9. [npm release readiness](guides/npm-release.md) — package ownership and pre-publish safeguards.
-10. [Single-package migration plan](planning/2026-07-21-single-package-migration.md) — active packaging plan.
-11. [HTTP framework integration](guides/http-and-nextjs.md) — repository-source Fetch/Next.js route integration boundary.
-12. [Standalone HTTP example](../examples/standalone-http/README.md) — executable repository example and smoke test.
-13. [LangChain and LangGraph integration](guides/langchain-langgraph.md) — tools-only adapter and consumer-owned ToolNode composition.
-14. [LangGraph ToolNode example](../examples/langgraph-tools/README.md) — executable in-memory repository example.
-15. [Open-source launch checklist](guides/open-source-launch.md) — community health, security, and public-repository safeguards.
-16. [Historical MVP implementation plan](planning/2026-07-21-mvp-implementation-plan.md) — superseded two-workspace task history.
+> **Published boundary:** TypeMCP provides declaration metadata, definition validation, MCP SDK compilation, an explicit resolver seam, a stdio helper, a Fetch Streamable HTTP adapter, and a tools-only LangChain adapter. Applications retain ownership of **hosting, authorization, persistence, models, LangGraph composition, and deployment**.
 
-## Sections
+## Start with a goal
 
-| Directory | Canonical content |
-| --- | --- |
-| `product/` | Product intent, users, success metrics, and scope |
-| `architecture/` | Package boundaries, runtime design, architecture decision records |
-| `api/` | Public API contracts and A/E/X behavior tables |
-| `guides/` | Integration walkthroughs once implementation exists |
-| `planning/` | Approved, executable development plans |
-| `superpowers/specs/` | Design history and approved design source |
+| Goal | Read this | Published surface |
+| --- | --- | --- |
+| **Inspect a declaration** before exposing it | [Core concepts](guides/core-concepts.md) | Root decorators and `getMcpServerDefinition()` |
+| **Run over stdio** for an MCP-capable local client | [Choose a runtime boundary](guides/runtime-selection.md#connect-stdio-when-the-process-is-the-boundary) | `startStdioServer()` |
+| **Serve Streamable HTTP** from a Fetch or Next.js route | [HTTP framework integration](guides/http-and-nextjs.md) | `@theorvane/type-mcp/http` |
+| **Reuse tools with LangChain** or an application-owned LangGraph graph | [LangChain and LangGraph](guides/langchain-langgraph.md) | `@theorvane/type-mcp/langchain` |
+| Follow one small end-to-end example | [Petstore walkthrough](guides/petstore-walkthrough.md) | Root compiler plus a selected boundary |
+| Inspect exact decorators and resolver contracts | [Decorator API contract](api/decorator-api.md) | Semver-governed package API |
+
+## Core library concepts
+
+1. **Declarations** — `@McpServer`, `@McpTool`, `@McpResource`, and `@McpPrompt` describe an MCP surface next to application methods.
+2. **Definitions** — `getMcpServerDefinition()` reads a frozen declaration snapshot for application inspection.
+3. **Compilation** — `createMcpServer()` validates the definition, resolves one application instance, and compiles the supported surface into the official MCP SDK server.
+4. **Runtime boundary** — select stdio, Fetch Streamable HTTP, or tools-only LangChain reuse only when the application needs that boundary.
+
+Read [core concepts](guides/core-concepts.md) before selecting a transport, then use the [Petstore walkthrough](guides/petstore-walkthrough.md) to see the same declaration progress through a real choice.
+
+## Reference and integration guides
+
+### Start
+
+- [Getting started](guides/getting-started.md) — install, configure standard decorators, declare, and inspect a server.
+- [Core concepts](guides/core-concepts.md) — definitions, validation/compiler, resolver, and responsibility boundaries.
+- [Petstore walkthrough](guides/petstore-walkthrough.md) — a compact catalog server from declaration to selected integration.
+
+### Integrations
+
+- [Choose a runtime boundary](guides/runtime-selection.md) — root, stdio, HTTP, or tools-only LangChain selection.
+- [HTTP framework integration](guides/http-and-nextjs.md) — Fetch and Next.js route shape.
+- [LangChain and LangGraph integration](guides/langchain-langgraph.md) — structured tools and consumer-owned graph composition.
+- [Configuration and compatibility](guides/configuration.md) — Node, ESM/CommonJS, and TypeScript configuration.
+- [Agent integration guide](guides/agent-integration.md) — evidence-first workflow for coding agents.
+
+### API and architecture
+
+- [Decorator API contract](api/decorator-api.md) — public declarations, compiler, resolver, and transport contracts.
+- [Architecture overview](architecture/overview.md) — published component flow.
+- [MVP scope](product/mvp-scope.md) — published, deferred, and excluded capabilities.
+
+### Executable repository examples
+
+- [Standalone HTTP example](../examples/standalone-http/README.md) — compile, initialize, list, and call a `find-product` tool in memory through Fetch-compatible Streamable HTTP.
+- [LangGraph ToolNode example](../examples/langgraph-tools/README.md) — convert a decorated tool to a LangChain tool and pass it to an application-owned `ToolNode`.
 
 ## Documentation status convention
 
 - **Implemented**: present in merged code and verified by tests.
 - **Planned**: approved interface or behavior not yet merged.
-- **Deferred**: explicitly out of the current MVP.
+- **Deferred**: explicitly outside the current published scope.
 
-Every document must use these labels accurately; planned behavior must never be described as currently usable.
+Planning, release, and product-history documents remain available under `docs/planning/`, `docs/product/`, and `docs/architecture/`. They are not installation or API references; check the published boundary above before treating any claim as installed behavior.
