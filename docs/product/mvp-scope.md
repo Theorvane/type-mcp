@@ -1,8 +1,8 @@
 # MVP scope
 
-> **Published package:** `@theorvane/type-mcp@0.2.0` includes this MVP's metadata, validation, resolver, compiler, stdio, HTTP, and tools-only LangChain adapter. Start with the [README](../../README.md) and [getting-started guide](../guides/getting-started.md) for exact exports and boundaries.
+> **Published package:** `@theorvane/type-mcp@0.2.2` includes this MVP's metadata, validation, resolver, compiler, stdio, HTTP, and tools-only LangChain adapter. Start with the [README](../../README.md) and [getting-started guide](../guides/getting-started.md) for exact exports and boundaries.
 
-**Status:** Implemented and published in `@theorvane/type-mcp@0.2.0`: decorator metadata storage, definition validation, the instance resolver seam, compiler behavior, the Node stdio helper, the Fetch Streamable HTTP adapter, and the tools-only LangChain adapter.
+**Status:** Implemented and published in `@theorvane/type-mcp@0.2.2`: decorator metadata storage, definition validation, the instance resolver seam, compiler behavior, the Node stdio helper, the Fetch Streamable HTTP adapter, and the tools-only LangChain adapter.
 
 ## Included
 
@@ -33,7 +33,7 @@
 
 ## Constraints
 
-- Public distribution: `@theorvane/type-mcp@0.2.0` on npm; the repository is `Theorvane/type-mcp`.
+- Public distribution: `@theorvane/type-mcp@0.2.2` on npm; the repository is `Theorvane/type-mcp`.
 - Runtime protocol behavior comes from the official MCP SDK.
 - Core and HTTP have no agent-framework runtime or peer dependency; `@theorvane/type-mcp/langchain` has an isolated optional LangChain peer.
 - Public types are strict and runtime input is validated before handler invocation.
