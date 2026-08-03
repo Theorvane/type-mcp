@@ -1,6 +1,6 @@
 # LangChain and LangGraph integration
 
-> **Published boundary:** `@theorvane/type-mcp/langchain` is part of the published `@theorvane/type-mcp@0.2.2` package. It is tools-only; LangGraph remains a consumer-owned composition choice.
+> **Published boundary:** `@theorvane/type-mcp/langchain` is part of the published `@theorvane/type-mcp@0.3.0` package. It is tools-only; LangGraph remains a consumer-owned composition choice.
 
 ## Scope
 
@@ -16,7 +16,7 @@ The core package and `@theorvane/type-mcp/http` remain independent of agent fram
 The adapter has an optional peer dependency on `@langchain/core`. A consumer that imports the adapter must install a compatible peer:
 
 ```bash
-npm install @theorvane/type-mcp@0.2.2 @langchain/core zod
+npm install @theorvane/type-mcp@0.3.0 @langchain/core zod
 ```
 
 LangGraph is a consumer choice, not an adapter dependency. Install it only when using a graph:

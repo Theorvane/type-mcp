@@ -1,6 +1,6 @@
 # Decorator API contract
 
-**Public package:** [`@theorvane/type-mcp@0.2.2`](https://www.npmjs.com/package/@theorvane/type-mcp) provides decorator declarations, definition validation, MCP SDK compilation for tools/static resources/prompts, a Node stdio helper, and a Fetch Streamable HTTP adapter. LangChain interoperability is isolated at `@theorvane/type-mcp/langchain`.
+**Public package:** [`@theorvane/type-mcp@0.3.0`](https://www.npmjs.com/package/@theorvane/type-mcp) provides decorator declarations, definition validation, MCP SDK compilation for tools/static resources/prompts, a Node stdio helper, and a Fetch Streamable HTTP adapter. LangChain interoperability is isolated at `@theorvane/type-mcp/langchain`.
 
 ## Server declaration
 
@@ -116,6 +116,33 @@ export { handler as GET, handler as POST, handler as DELETE };
 ## Metadata immutability
 
 `getMcpServerDefinition()` returns a newly allocated, frozen server definition, component arrays, and component records on every read. Tool `input` schemas retain the caller-supplied Zod object-schema identity: schemas are executable mutable objects and are not cloned or frozen by TypeMCP. Consumers should treat a schema supplied to a decorator as immutable after declaration.
+
+## Legacy CJS decorators
+
+`@theorvane/type-mcp/legacy` is the compatibility entrypoint for TypeScript's
+legacy `experimentalDecorators` emit in CommonJS applications.
+It exposes `McpServer`, `McpTool`, `McpResource`, and `McpPrompt` with the same
+options and definition-reader/compiler contracts as the root Stage 3 API.
+
+```ts
+import { z } from "zod";
+import { McpServer, McpTool } from "@theorvane/type-mcp/legacy";
+
+@McpServer({ name: "catalog", version: "1.0.0" })
+class CatalogServer {
+  @McpTool({ input: z.object({ sku: z.string() }) })
+  findProduct({ sku }: { readonly sku: string }) {
+    return { sku };
+  }
+}
+```
+
+Use `"module": "Node16"`, `"moduleResolution": "Node16"`, and
+`"experimentalDecorators": true` for a CommonJS consumer so TypeScript selects
+the package's CJS declaration condition. The legacy entrypoint supports public
+instance methods with string names only; parameter, accessor, field, private,
+and symbol-named decorators are excluded. Do not mix Stage 3 and legacy
+decorators in one TypeScript compilation unit.
 
 ## Compatibility policy
 
