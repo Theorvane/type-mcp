@@ -60,7 +60,8 @@ for (const { key, symbols } of exportsToVerify) {
 		typeof importExport.types !== "string" ||
 		typeof requireExport !== "object" ||
 		requireExport === null ||
-		typeof requireExport.default !== "string"
+		typeof requireExport.default !== "string" ||
+		typeof requireExport.types !== "string"
 	) {
 		throw new Error(`${manifest.name}: invalid ${key} export map`);
 	}
@@ -68,11 +69,18 @@ for (const { key, symbols } of exportsToVerify) {
 	const esmPath = resolve(root, importExport.default);
 	const cjsPath = resolve(root, requireExport.default);
 	const typesPath = resolve(root, importExport.types);
-	await Promise.all([access(esmPath), access(cjsPath), access(typesPath)]);
+	const cjsTypesPath = resolve(root, requireExport.types);
+	await Promise.all([
+		access(esmPath),
+		access(cjsPath),
+		access(typesPath),
+		access(cjsTypesPath),
+	]);
 
-	const [esm, typeDeclarations] = await Promise.all([
+	const [esm, typeDeclarations, cjsTypeDeclarations] = await Promise.all([
 		import(pathToFileURL(esmPath).href),
 		readFile(typesPath, "utf8"),
+		readFile(cjsTypesPath, "utf8"),
 	]);
 	const require = createRequire(manifestPath);
 	const cjs = require(cjsPath);
@@ -83,7 +91,10 @@ for (const { key, symbols } of exportsToVerify) {
 				`${manifest.name}: missing ${key} ${name} runtime export`,
 			);
 		}
-		if (!typeDeclarations.includes(name)) {
+		if (
+			!typeDeclarations.includes(name) ||
+			!cjsTypeDeclarations.includes(name)
+		) {
 			throw new Error(`${manifest.name}: missing ${key} ${name} type export`);
 		}
 	}

@@ -24,12 +24,15 @@ for (const expected of [
 	"dist/index.js",
 	"dist/index.cjs",
 	"dist/index.d.ts",
+	"dist/index.d.cts",
 	"dist/http.js",
 	"dist/http.cjs",
 	"dist/http.d.ts",
+	"dist/http.d.cts",
 	"dist/langchain.js",
 	"dist/langchain.cjs",
 	"dist/langchain.d.ts",
+	"dist/langchain.d.cts",
 ]) {
 	if (!files.has(expected)) {
 		throw new Error(`${manifest.name}: tarball is missing ${expected}`);
