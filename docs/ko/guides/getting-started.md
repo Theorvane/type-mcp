@@ -1,13 +1,13 @@
-# `@theorvane/type-mcp@0.2.2` 시작하기
+# `@theorvane/type-mcp@0.3.0` 시작하기
 
-이 가이드는 배포된 `@theorvane/type-mcp@0.2.2` 패키지로 MCP **선언(declaration)** 을 만들고 확인합니다. 또한 `createMcpServer()`를 통해 데코레이터로 선언된 정의를 검증하고 컴파일합니다. 각 어댑터 경계는 [HTTP 가이드](../../guides/http-and-nextjs.md)와 [LangChain 가이드](../../guides/langchain-langgraph.md)에서 따로 다룹니다.
+이 가이드는 배포된 `@theorvane/type-mcp@0.3.0` 패키지로 MCP **선언(declaration)** 을 만들고 확인합니다. 또한 `createMcpServer()`를 통해 데코레이터로 선언된 정의를 검증하고 컴파일합니다. 각 어댑터 경계는 [HTTP 가이드](../../guides/http-and-nextjs.md)와 [LangChain 가이드](../../guides/langchain-langgraph.md)에서 따로 다룹니다.
 
 ## 패키지 설치와 TypeScript 설정
 
 패키지를 설치하고, 스키마를 소유하는 애플리케이션에서 Zod를 직접 임포트합니다.
 
 ```bash
-npm install @theorvane/type-mcp@0.2.2 zod
+npm install @theorvane/type-mcp@0.3.0 zod
 ```
 
 Node.js 20 이상에서 실행합니다. 표준 TypeScript 데코레이터와 Node를 인식하는 ESM 설정을 사용하세요. 최소 `tsconfig.json`은 다음과 같습니다.
@@ -71,7 +71,7 @@ export class NotesServer {
 }
 ```
 
-`name`을 생략하면 공개 컴포넌트 이름은 메서드 이름을 기본값으로 씁니다. TypeMCP는 이 옵션들을 메타데이터로 기록하고, `0.2.2`는 컴파일 전에 선언된 정의를 검증합니다. 도메인에 특화된 이름 규칙은 애플리케이션 테스트로 확인하세요.
+`name`을 생략하면 공개 컴포넌트 이름은 메서드 이름을 기본값으로 씁니다. TypeMCP는 이 옵션들을 메타데이터로 기록하고, `0.3.0`는 컴파일 전에 선언된 정의를 검증합니다. 도메인에 특화된 이름 규칙은 애플리케이션 테스트로 확인하세요.
 
 ## 애플리케이션 경계에서 메타데이터 확인하기
 
@@ -100,6 +100,6 @@ console.log({
 
 ## 런타임 경계로 이어가기
 
-배포된 `@theorvane/type-mcp@0.2.2` 패키지에는 `createMcpServer()`, `startStdioServer()`, `@theorvane/type-mcp/http`, `@theorvane/type-mcp/langchain`이 들어 있습니다. TypeMCP는 명시적인 `InstanceResolver`를 통해 선언된 정의를 검증하고 컴파일합니다. 웹 호스트, 인가 모델, 세션 저장소, LangGraph 토폴로지, 모델, 영속화 정책을 애플리케이션 대신 고르지는 않습니다.
+배포된 `@theorvane/type-mcp@0.3.0` 패키지에는 `createMcpServer()`, `startStdioServer()`, `@theorvane/type-mcp/http`, `@theorvane/type-mcp/langchain`이 들어 있습니다. TypeMCP는 명시적인 `InstanceResolver`를 통해 선언된 정의를 검증하고 컴파일합니다. 웹 호스트, 인가 모델, 세션 저장소, LangGraph 토폴로지, 모델, 영속화 정책을 애플리케이션 대신 고르지는 않습니다.
 
 위에서 만든 선언은 애플리케이션이 소유하는 확인 작업에 계속 유용합니다. 정의/컴파일러 모델은 [핵심 개념](core-concepts.md)에서 읽고, 그다음 [Petstore 워크스루](petstore-walkthrough.md)를 따라 stdio·HTTP·LangChain 중 무엇을 재사용할지 고르세요. 변경을 자동화하기 전에 [설정 가이드](../../guides/configuration.md), [HTTP 가이드](../../guides/http-and-nextjs.md), [LangChain 가이드](../../guides/langchain-langgraph.md), [에이전트 가이드](../../guides/agent-integration.md)를 확인하세요.

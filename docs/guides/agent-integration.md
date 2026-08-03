@@ -1,6 +1,6 @@
 # Agent integration guide
 
-This guide gives coding agents a deterministic procedure for adding TypeMCP declarations without inventing application-owned policy. It applies to the published `@theorvane/type-mcp@0.2.2` package.
+This guide gives coding agents a deterministic procedure for adding TypeMCP declarations without inventing application-owned policy. It applies to the published `@theorvane/type-mcp@0.3.0` package.
 
 ## Capability contract agents must honor
 

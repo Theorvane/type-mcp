@@ -1,6 +1,6 @@
 # Choose a TypeMCP runtime boundary
 
-> **Release status:** This guide documents the published `@theorvane/type-mcp@0.2.2` package. Version `0.2.2` is an audit-remediation release; the runtime boundaries below are the released `0.2.x` surface.
+> **Release status:** This guide documents the published `@theorvane/type-mcp@0.3.0` package. Version `0.3.0` adds the explicit `@theorvane/type-mcp/legacy` compatibility entrypoint for TypeScript `experimentalDecorators` and CommonJS consumers; the standard decorator/runtime boundaries below remain the released `0.3.x` surface.
 
 A TypeMCP class is a declaration plus ordinary application methods. Choose the package entry point from the way the application needs to expose that declaration, then keep hosting and policy at the application boundary.
 
@@ -9,7 +9,7 @@ A TypeMCP class is a declaration plus ordinary application methods. Choose the p
 Install the root package and Zod when the application declares MCP tools, resources, or prompts:
 
 ```bash
-npm install @theorvane/type-mcp@0.2.2 zod
+npm install @theorvane/type-mcp@0.3.0 zod
 ```
 
 The root entry point provides decorators, definition inspection, compilation through `createMcpServer()`, an explicit `InstanceResolver`, and `startStdioServer()`. It does not select a web framework, model, authorization scheme, session store, persistence layer, or deployment target.
@@ -97,7 +97,7 @@ The adapter handles MCP HTTP session routing, protocol negotiation, and JSON-RPC
 Install the optional LangChain peer only when importing the tools-only adapter:
 
 ```bash
-npm install @theorvane/type-mcp@0.2.2 @langchain/core zod
+npm install @theorvane/type-mcp@0.3.0 @langchain/core zod
 ```
 
 ```ts

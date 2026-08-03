@@ -11,7 +11,7 @@
   [![License](https://img.shields.io/badge/license-MIT-111827?style=flat-square)](LICENSE)
 </div>
 
-> **Published package — `@theorvane/type-mcp@0.2.2`:** provides standard decorators, definition validation, explicit instance resolution, MCP SDK compilation, stdio, `@theorvane/type-mcp/http` Streamable HTTP, and the tools-only `@theorvane/type-mcp/langchain` adapter.
+> **Published package — `@theorvane/type-mcp@0.3.0`:** provides standard decorators, definition validation, explicit instance resolution, MCP SDK compilation, stdio, `@theorvane/type-mcp/http` Streamable HTTP, and the tools-only `@theorvane/type-mcp/langchain` adapter.
 >
 > **Integration boundary:** LangGraph `ToolNode` composition, graph topology, model choice, authorization, state, persistence, and deployment remain consumer responsibilities.
 
@@ -98,11 +98,11 @@ console.log(definition?.tools[0]?.name); // "findProduct"
 
 `getMcpServerDefinition()` returns `undefined` for a class without `@McpServer`. For a decorated class, it returns a newly allocated frozen metadata container on every call. Zod schemas retain their original identity, so treat a schema passed to a decorator as immutable after declaration.
 
-The methods above are ordinary application methods. In `0.2.2`, use `createMcpServer()` to validate and compile this declaration through an explicit resolver; choose an adapter exported by the installed package only when the application owns its hosting, authorization, and lifecycle policy. Follow the [getting-started guide](docs/guides/getting-started.md) for the complete version boundary.
+The methods above are ordinary application methods. In `0.3.0`, use `createMcpServer()` to validate and compile this declaration through an explicit resolver; choose an adapter exported by the installed package only when the application owns its hosting, authorization, and lifecycle policy. Follow the [getting-started guide](docs/guides/getting-started.md) for the complete version boundary.
 
 ## Capability map
 
-| Surface | `@theorvane/type-mcp@0.2.2` | What it does |
+| Surface | `@theorvane/type-mcp@0.3.0` | What it does |
 | --- | --- | --- |
 | `@McpServer` | Available | Records server name and version metadata. |
 | `@McpTool` | Available | Records a method name, optional public name/description, and Zod object schema. |

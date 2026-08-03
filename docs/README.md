@@ -1,6 +1,6 @@
 # TypeMCP documentation
 
-TypeMCP is a decorator-first TypeScript package for describing an MCP server and compiling that description at an explicit application boundary. The published package is [`@theorvane/type-mcp@0.2.2`](https://www.npmjs.com/package/@theorvane/type-mcp).
+TypeMCP is a decorator-first TypeScript package for describing an MCP server and compiling that description at an explicit application boundary. The published package is [`@theorvane/type-mcp@0.3.0`](https://www.npmjs.com/package/@theorvane/type-mcp).
 
 > **Published boundary:** TypeMCP provides declaration metadata, definition validation, MCP SDK compilation, an explicit resolver seam, a stdio helper, a Fetch Streamable HTTP adapter, and a tools-only LangChain adapter. Applications retain ownership of **hosting, authorization, persistence, models, LangGraph composition, and deployment**.
 

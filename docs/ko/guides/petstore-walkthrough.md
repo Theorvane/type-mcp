@@ -1,6 +1,6 @@
 # Petstore 워크스루: 선언에서 선택된 런타임까지
 
-이 워크스루는 읽기 전용 Petstore 카탈로그 도구 하나로 배포된 [`@theorvane/type-mcp@0.2.2`](https://www.npmjs.com/package/@theorvane/type-mcp)의 흐름을 보여 줍니다. 서버를 선언하고, 확인하거나 컴파일한 뒤, 지원되는 가장 작은 런타임 경계를 고릅니다.
+이 워크스루는 읽기 전용 Petstore 카탈로그 도구 하나로 배포된 [`@theorvane/type-mcp@0.3.0`](https://www.npmjs.com/package/@theorvane/type-mcp)의 흐름을 보여 줍니다. 서버를 선언하고, 확인하거나 컴파일한 뒤, 지원되는 가장 작은 런타임 경계를 고릅니다.
 
 > **이것이 하지 않는 일:** TypeMCP는 호스팅, 인가, 영속화, 모델, LangGraph 구성, 배포를 고르지 않습니다. 그 결정은 애플리케이션에 남습니다.
 
@@ -19,7 +19,7 @@
 패키지와 Zod를 설치합니다.
 
 ```bash
-npm install @theorvane/type-mcp@0.2.2 zod
+npm install @theorvane/type-mcp@0.3.0 zod
 ```
 
 Node를 인식하는 TypeScript 설정을 사용합니다.
@@ -58,7 +58,7 @@ export class PetstoreServer {
 }
 ```
 
-배포된 `0.2.2`의 `@McpServer` 계약에서는 데코레이터가 적용된 클래스가 인자 없는 생성자를 유지해야 합니다. 실제 카탈로그 서비스는 리졸버가 `PetstoreServer`를 생성하기 전에 명시적 리졸버를 통해 구성하세요. TypeMCP는 그 의존성을 대신 생성하거나 인가하지 않습니다.
+배포된 `0.3.0`의 `@McpServer` 계약에서는 데코레이터가 적용된 클래스가 인자 없는 생성자를 유지해야 합니다. 실제 카탈로그 서비스는 리졸버가 `PetstoreServer`를 생성하기 전에 명시적 리졸버를 통해 구성하세요. TypeMCP는 그 의존성을 대신 생성하거나 인가하지 않습니다.
 
 ## 2. 확인한 뒤 명시적 리졸버로 컴파일
 
@@ -122,7 +122,7 @@ Fetch 호스트는 `handler(request)`를 호출할 수 있습니다. Next.js 라
 이 경로를 고를 때에만 선택적 피어 의존성을 설치합니다.
 
 ```bash
-npm install @theorvane/type-mcp@0.2.2 @langchain/core zod
+npm install @theorvane/type-mcp@0.3.0 @langchain/core zod
 ```
 
 `src/langchain-tools.ts`를 만듭니다.

@@ -1,6 +1,6 @@
 {
 	"name": "@theorvane/type-mcp",
-	"version": "0.2.2",
+	"version": "0.3.0",
 	"description": "Decorator-first TypeScript framework for Model Context Protocol servers",
 	"repository": {
 		"type": "git",
