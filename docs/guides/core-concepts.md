@@ -1,6 +1,6 @@
 # Core concepts
 
-This page explains the published [`@theorvane/type-mcp@0.2.2`](https://www.npmjs.com/package/@theorvane/type-mcp) model before you choose a runtime boundary.
+This page explains the published [`@theorvane/type-mcp@0.3.0`](https://www.npmjs.com/package/@theorvane/type-mcp) model before you choose a runtime boundary.
 
 > **Responsibility boundary:** TypeMCP provides declaration metadata, validation, MCP SDK compilation, and selected adapters. Applications retain ownership of **hosting, authorization, persistence, models, LangGraph composition, and deployment**.
 

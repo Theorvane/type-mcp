@@ -2,7 +2,7 @@
 
 TypeMCP Petstore 커리큘럼의 첫 장입니다. 애플리케이션이 런타임 경계를 고르기 전에, 데코레이터가 적용된 서버를 컴파일할 수 있는 작은 로컬 프로젝트를 만듭니다.
 
-> **배포 버전:** 예제는 [`@theorvane/type-mcp@0.2.2`](https://www.npmjs.com/package/@theorvane/type-mcp)를 대상으로 합니다. 레거시 `experimentalDecorators`가 아니라 표준 TypeScript 데코레이터를 사용합니다.
+> **배포 버전:** 예제는 [`@theorvane/type-mcp@0.3.0`](https://www.npmjs.com/package/@theorvane/type-mcp)를 대상으로 합니다. 레거시 `experimentalDecorators`가 아니라 표준 TypeScript 데코레이터를 사용합니다.
 
 ## 시작하기 전에
 
@@ -33,7 +33,7 @@ mkdir petstore-workspace
 cd petstore-workspace
 npm init -y
 npm pkg set type=module
-npm install @theorvane/type-mcp@0.2.2 zod
+npm install @theorvane/type-mcp@0.3.0 zod
 npm install --save-dev typescript tsx @types/node
 npm pkg set scripts.check="tsc --noEmit"
 ```

@@ -5,7 +5,7 @@
 ## 시작하기 전에
 
 - 엄격한 NodeNext TypeScript 설정을 포함해 [Petstore 프로젝트 설정](petstore-project-setup.md)을 마치세요.
-- Node.js 20 이상, 그리고 릴리스된 `@theorvane/type-mcp@0.2.2`와 `zod` 의존성.
+- Node.js 20 이상, 그리고 릴리스된 `@theorvane/type-mcp@0.3.0`와 `zod` 의존성.
 - 프로젝트를 로컬에서 확인한 뒤 stdio 프로세스에 연결할 계획이라면, 그때만 MCP를 지원하는 로컬 클라이언트가 필요합니다.
 
 ## 워크스페이스 체크포인트
@@ -29,7 +29,7 @@ petstore-workspace/
 프로젝트에 릴리스된 패키지와 로컬 명령이 있는지 확인합니다.
 
 ```bash
-npm install @theorvane/type-mcp@0.2.2 zod
+npm install @theorvane/type-mcp@0.3.0 zod
 npm install --save-dev typescript tsx @types/node
 npm pkg set scripts.check="tsc --noEmit"
 npm pkg set scripts.inspect-server="tsx src/inspect-server.ts"
@@ -70,7 +70,7 @@ export class PetstoreServer {
 }
 ```
 
-데코레이터가 적용된 클래스에 생성자 매개변수가 없는 것은 의도된 것입니다. `0.2.2`에 배포된 `@McpServer` 데코레이터 계약이 그렇게 정의되어 있습니다. 명시적 리졸버가 컴파일 전에 애플리케이션이 소유한, 구성이 끝난 인스턴스를 반환합니다. `configure()`는 여러분의 컴포지션 루트 배선으로 바꾸되, 데코레이터가 적용된 생성자는 인자 없는 형태로 유지하세요.
+데코레이터가 적용된 클래스에 생성자 매개변수가 없는 것은 의도된 것입니다. `0.3.0`에 배포된 `@McpServer` 데코레이터 계약이 그렇게 정의되어 있습니다. 명시적 리졸버가 컴파일 전에 애플리케이션이 소유한, 구성이 끝난 인스턴스를 반환합니다. `configure()`는 여러분의 컴포지션 루트 배선으로 바꾸되, 데코레이터가 적용된 생성자는 인자 없는 형태로 유지하세요.
 
 ## 선언 확인
 
@@ -175,7 +175,7 @@ npm run stdio
 
 - **`PetstoreServer is missing @McpServer metadata`:** 클래스에 데코레이터가 적용되어 있는지, 확인 파일에서 `.js` ESM 경로로 임포트했는지 확인하세요.
 - **데코레이터 관련 TypeScript 오류:** [프로젝트 설정](petstore-project-setup.md)의 NodeNext/`ESNext.Decorators` 설정을 사용하고, `experimentalDecorators`는 켜지 마세요.
-- **데코레이터가 적용된 생성자가 호환되지 않는다는 TypeScript 오류:** `@McpServer` 클래스를 인자 없는 형태로 유지하고, 애플리케이션 의존성은 명시적 리졸버에서 구성하세요. 배포된 0.2.2 데코레이터 계약은 생성자 매개변수를 받는 클래스를 허용하지 않습니다.
+- **데코레이터가 적용된 생성자가 호환되지 않는다는 TypeScript 오류:** `@McpServer` 클래스를 인자 없는 형태로 유지하고, 애플리케이션 의존성은 명시적 리졸버에서 구성하세요. 배포된 0.3.0 데코레이터 계약은 생성자 매개변수를 받는 클래스를 허용하지 않습니다.
 - **프로세스가 즉시 종료됨:** 애플리케이션 시작 오류와 실제 클라이언트/의존성 설정을 확인하세요. `startStdioServer()`는 이미 컴파일된 서버를 연결할 뿐, 환경을 검증하거나 클라이언트를 준비해 주지는 않습니다.
 - **로컬 MCP 클라이언트가 도구를 발견하지 못함:** 클라이언트가 프로젝트 디렉터리에서 문서화된 실행 파일을 실행하는지, 그리고 클라이언트 자신의 프로세스/접근 정책이 이를 허용하는지 확인하세요. TypeMCP는 데스크톱 클라이언트 설정을 등록하지 않습니다.
 

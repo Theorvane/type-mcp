@@ -35,4 +35,4 @@ This is a route integration shape, not a full Next.js scaffold. It intentionally
 
 ## Published package boundary
 
-The published `@theorvane/type-mcp@0.2.2` package includes `createMcpServer()` and `@theorvane/type-mcp/http`. This guide demonstrates the package API, while hosting, authentication, persistence, and authorization remain application-owned responsibilities.
+The published `@theorvane/type-mcp@0.3.0` package includes `createMcpServer()` and `@theorvane/type-mcp/http`. This guide demonstrates the package API, while hosting, authentication, persistence, and authorization remain application-owned responsibilities.
