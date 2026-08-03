@@ -117,6 +117,33 @@ export { handler as GET, handler as POST, handler as DELETE };
 
 `getMcpServerDefinition()` returns a newly allocated, frozen server definition, component arrays, and component records on every read. Tool `input` schemas retain the caller-supplied Zod object-schema identity: schemas are executable mutable objects and are not cloned or frozen by TypeMCP. Consumers should treat a schema supplied to a decorator as immutable after declaration.
 
+## Legacy CJS decorators
+
+`@theorvane/type-mcp/legacy` is the compatibility entrypoint for TypeScript's
+legacy `experimentalDecorators` emit in CommonJS applications.
+It exposes `McpServer`, `McpTool`, `McpResource`, and `McpPrompt` with the same
+options and definition-reader/compiler contracts as the root Stage 3 API.
+
+```ts
+import { z } from "zod";
+import { McpServer, McpTool } from "@theorvane/type-mcp/legacy";
+
+@McpServer({ name: "catalog", version: "1.0.0" })
+class CatalogServer {
+  @McpTool({ input: z.object({ sku: z.string() }) })
+  findProduct({ sku }: { readonly sku: string }) {
+    return { sku };
+  }
+}
+```
+
+Use `"module": "Node16"`, `"moduleResolution": "Node16"`, and
+`"experimentalDecorators": true` for a CommonJS consumer so TypeScript selects
+the package's CJS declaration condition. The legacy entrypoint supports public
+instance methods with string names only; parameter, accessor, field, private,
+and symbol-named decorators are excluded. Do not mix Stage 3 and legacy
+decorators in one TypeScript compilation unit.
+
 ## Compatibility policy
 
 Public decorator option names, exported definitions, `InstanceResolver`, compiler and transport entry points, and handler signatures are semver-governed. Any breaking change requires an ADR, migration note, and a major release decision.
