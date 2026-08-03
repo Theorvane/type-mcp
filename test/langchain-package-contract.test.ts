@@ -18,9 +18,14 @@ describe("LangChain adapter package contract", () => {
 		) as PackageManifest;
 
 		expect(manifest.exports?.["./langchain"]).toEqual({
-			types: "./dist/langchain.d.ts",
-			import: "./dist/langchain.js",
-			require: "./dist/langchain.cjs",
+			import: {
+				types: "./dist/langchain.d.ts",
+				default: "./dist/langchain.js",
+			},
+			require: {
+				types: "./dist/langchain.d.cts",
+				default: "./dist/langchain.cjs",
+			},
 		});
 		expect(manifest.peerDependencies?.["@langchain/core"]).toBe("^1.2.3");
 		expect(manifest.peerDependenciesMeta?.["@langchain/core"]?.optional).toBe(

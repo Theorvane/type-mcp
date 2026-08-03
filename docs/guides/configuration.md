@@ -1,6 +1,6 @@
 # Configuration and compatibility
 
-`@theorvane/type-mcp@0.3.0` is the published TypeScript declaration and runtime package. Configuration determines whether TypeScript emits standard decorators and whether the runtime can resolve the package's ESM/CJS exports; applications configure their own hosting and transport lifecycle around installed MCP adapters.
+`@theorvane/type-mcp@0.3.1` is the published TypeScript declaration and runtime package. Configuration determines whether TypeScript emits standard decorators and whether the runtime can resolve the package's ESM/CJS exports; applications configure their own hosting and transport lifecycle around installed MCP adapters.
 
 ## Runtime and package manager
 
@@ -41,14 +41,15 @@ Projects using Babel, SWC, or another TypeScript transpiler must confirm that th
 
 ## ESM and CommonJS
 
-The package exports both ESM and CommonJS entry points:
+The package exports ESM and CommonJS runtime and declaration conditions for the root, HTTP, and LangChain entrypoints. Node-aware TypeScript resolution selects the matching declaration form:
 
 | Consumer | Root loading form |
 | --- | --- |
 | ESM / TypeScript NodeNext | `import { McpServer } from "@theorvane/type-mcp"` |
+| CommonJS / TypeScript Node16 | `import { createMcpHandler } from "@theorvane/type-mcp/http"` |
 | CommonJS runtime | `const { McpServer } = require("@theorvane/type-mcp")` |
 
-Decorator syntax is compiled by TypeScript before Node loads the module, so the CommonJS form does not remove the requirement for a standard decorator-compatible compiler configuration. Type-only imports should use TypeScript's `import type` form for the public definition interfaces:
+For a CommonJS TypeScript project, use both `"module": "Node16"` and `"moduleResolution": "Node16"`; static imports of `@theorvane/type-mcp/http` and `@theorvane/type-mcp/langchain` then select CJS `.d.cts` declarations. `@theorvane/type-mcp/langchain` also requires its optional `@langchain/core` peer at runtime. Decorator syntax is compiled by TypeScript before Node loads the module, so the CommonJS form does not remove the requirement for a standard decorator-compatible compiler configuration. Type-only imports should use TypeScript's `import type` form for the public definition interfaces:
 
 ```ts
 import type { McpServerDefinition, McpToolOptions } from "@theorvane/type-mcp";
