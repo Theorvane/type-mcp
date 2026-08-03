@@ -50,7 +50,7 @@ The package is ESM-first and also exposes a CommonJS root export. TypeScript pro
 }
 ```
 
-Do not enable TypeScript's legacy `experimentalDecorators` mode for these standard decorator examples. See [configuration and compatibility](docs/guides/configuration.md) for ESM, CommonJS, and decorator details.
+Do not enable TypeScript's legacy `experimentalDecorators` mode for these standard decorator examples. For a CommonJS legacy-decorator consumer, use the separate `@theorvane/type-mcp/legacy` entrypoint with Node16 module resolution; its supported surface and constraints are documented in the [Decorator API contract](docs/api/decorator-api.md#legacy-cjs-decorators). See [configuration and compatibility](docs/guides/configuration.md) for ESM, CommonJS, and decorator details.
 
 ## Define and inspect a server declaration
 

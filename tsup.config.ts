@@ -5,6 +5,7 @@ export default defineConfig({
 		index: "src/index.ts",
 		http: "src/http.ts",
 		langchain: "src/langchain.ts",
+		legacy: "src/legacy.ts",
 	},
 	format: ["esm", "cjs"],
 	dts: true,

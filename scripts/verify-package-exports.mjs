@@ -25,6 +25,14 @@ const exportsToVerify = [
 		key: "./langchain",
 		symbols: [{ name: "createLangChainTools", runtimeType: "function" }],
 	},
+	{
+		key: "./legacy",
+		symbols: [
+			{ name: "McpServer", runtimeType: "function" },
+			{ name: "McpTool", runtimeType: "function" },
+			{ name: "getMcpServerDefinition", runtimeType: "function" },
+		],
+	},
 ];
 
 for (const { key, symbols } of exportsToVerify) {
@@ -32,17 +40,34 @@ for (const { key, symbols } of exportsToVerify) {
 	if (
 		exportMap === undefined ||
 		typeof exportMap !== "object" ||
-		exportMap === null ||
-		typeof exportMap.import !== "string" ||
-		typeof exportMap.require !== "string" ||
-		typeof exportMap.types !== "string"
+		exportMap === null
 	) {
 		throw new Error(`${manifest.name}: invalid ${key} export map`);
 	}
 
-	const esmPath = resolve(root, exportMap.import);
-	const cjsPath = resolve(root, exportMap.require);
-	const typesPath = resolve(root, exportMap.types);
+	const importExport =
+		typeof exportMap.import === "string"
+			? { default: exportMap.import, types: exportMap.types }
+			: exportMap.import;
+	const requireExport =
+		typeof exportMap.require === "string"
+			? { default: exportMap.require, types: exportMap.types }
+			: exportMap.require;
+	if (
+		typeof importExport !== "object" ||
+		importExport === null ||
+		typeof importExport.default !== "string" ||
+		typeof importExport.types !== "string" ||
+		typeof requireExport !== "object" ||
+		requireExport === null ||
+		typeof requireExport.default !== "string"
+	) {
+		throw new Error(`${manifest.name}: invalid ${key} export map`);
+	}
+
+	const esmPath = resolve(root, importExport.default);
+	const cjsPath = resolve(root, requireExport.default);
+	const typesPath = resolve(root, importExport.types);
 	await Promise.all([access(esmPath), access(cjsPath), access(typesPath)]);
 
 	const [esm, typeDeclarations] = await Promise.all([
