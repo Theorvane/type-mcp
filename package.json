@@ -1,6 +1,6 @@
 {
 	"name": "@theorvane/type-mcp",
-	"version": "0.3.0",
+	"version": "0.3.1",
 	"description": "Decorator-first TypeScript framework for Model Context Protocol servers",
 	"repository": {
 		"type": "git",
@@ -17,19 +17,34 @@
 	"types": "./dist/index.d.ts",
 	"exports": {
 		".": {
-			"types": "./dist/index.d.ts",
-			"import": "./dist/index.js",
-			"require": "./dist/index.cjs"
+			"import": {
+				"types": "./dist/index.d.ts",
+				"default": "./dist/index.js"
+			},
+			"require": {
+				"types": "./dist/index.d.cts",
+				"default": "./dist/index.cjs"
+			}
 		},
 		"./http": {
-			"types": "./dist/http.d.ts",
-			"import": "./dist/http.js",
-			"require": "./dist/http.cjs"
+			"import": {
+				"types": "./dist/http.d.ts",
+				"default": "./dist/http.js"
+			},
+			"require": {
+				"types": "./dist/http.d.cts",
+				"default": "./dist/http.cjs"
+			}
 		},
 		"./langchain": {
-			"types": "./dist/langchain.d.ts",
-			"import": "./dist/langchain.js",
-			"require": "./dist/langchain.cjs"
+			"import": {
+				"types": "./dist/langchain.d.ts",
+				"default": "./dist/langchain.js"
+			},
+			"require": {
+				"types": "./dist/langchain.d.cts",
+				"default": "./dist/langchain.cjs"
+			}
 		},
 		"./legacy": {
 			"import": {

@@ -139,7 +139,10 @@ class CatalogServer {
 
 Use `"module": "Node16"`, `"moduleResolution": "Node16"`, and
 `"experimentalDecorators": true` for a CommonJS consumer so TypeScript selects
-the package's CJS declaration condition. The legacy entrypoint supports public
+the package's CJS declaration condition. In the same compilation, static imports
+of `@theorvane/type-mcp/http` and `@theorvane/type-mcp/langchain` also select
+their CJS `.d.cts` declarations; install `@langchain/core` when importing the
+LangChain adapter. The legacy entrypoint supports public
 instance methods with string names only; parameter, accessor, field, private,
 and symbol-named decorators are excluded. Do not mix Stage 3 and legacy
 decorators in one TypeScript compilation unit.

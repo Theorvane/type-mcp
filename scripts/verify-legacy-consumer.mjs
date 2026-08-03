@@ -32,6 +32,7 @@ try {
 			"--no-fund",
 			tarballPath,
 			"zod",
+			"@langchain/core@1.2.3",
 			"@types/node",
 		],
 		consumer,
@@ -57,7 +58,7 @@ try {
 	);
 	writeFileSync(
 		join(consumer, "server.ts"),
-		`import { z } from "zod";\nimport { getMcpServerDefinition, McpServer, McpTool } from "@theorvane/type-mcp/legacy";\n\n@McpServer({ name: "legacy-catalog", version: "1.0.0" })\nclass LegacyCatalog {\n  @McpTool({ name: "find_product", description: "Finds a product.", input: z.object({ sku: z.string() }) })\n  findProduct({ sku }: { readonly sku: string }) { return { sku }; }\n}\n\nconst definition = getMcpServerDefinition(LegacyCatalog);\nif (definition?.tools[0]?.name !== "find_product") throw new Error("Legacy MCP definition was not registered.");\n`,
+		`import { z } from "zod";\nimport { createMcpHandler } from "@theorvane/type-mcp/http";\nimport { createLangChainTools } from "@theorvane/type-mcp/langchain";\nimport { getMcpServerDefinition, McpServer, McpTool } from "@theorvane/type-mcp/legacy";\n\n@McpServer({ name: "legacy-catalog", version: "1.0.0" })\nclass LegacyCatalog {\n  @McpTool({ name: "find_product", description: "Finds a product.", input: z.object({ sku: z.string() }) })\n  findProduct({ sku }: { readonly sku: string }) { return { sku }; }\n}\n\nconst definition = getMcpServerDefinition(LegacyCatalog);\nif (definition?.tools[0]?.name !== "find_product") throw new Error("Legacy MCP definition was not registered.");\nif (typeof createMcpHandler !== "function") throw new Error("CJS http export missing.");\nif (typeof createLangChainTools !== "function") throw new Error("CJS langchain export missing.");\n`,
 	);
 	run(
 		resolve(packageRoot, "node_modules/typescript/bin/tsc"),
