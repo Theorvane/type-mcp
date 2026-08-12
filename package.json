@@ -89,6 +89,11 @@
 		"@modelcontextprotocol/sdk": "1.30.0",
 		"zod": "^4.4.3"
 	},
+	"overrides": {
+		"fast-uri": "3.1.5",
+		"hono": "4.12.34",
+		"ip-address": "10.4.0"
+	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.5.4",
 		"@langchain/core": "1.2.3",

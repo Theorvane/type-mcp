@@ -11,10 +11,11 @@ interface Lockfile {
 
 interface PackageManifest {
 	readonly dependencies?: Record<string, string>;
+	readonly overrides?: Record<string, string>;
 }
 
 describe("production dependency security", () => {
-	it("pins an MCP SDK graph outside the audited Hono node server range", async () => {
+	it("pins patched production dependency resolutions", async () => {
 		const manifest = JSON.parse(
 			await readFile(new URL("../package.json", import.meta.url), "utf8"),
 		) as PackageManifest;
@@ -24,11 +25,21 @@ describe("production dependency security", () => {
 
 		expect(manifest.dependencies?.["@modelcontextprotocol/sdk"]).toBe("1.30.0");
 		expect(manifest.dependencies?.["@hono/node-server"]).toBe("2.0.12");
+		expect(manifest.overrides).toMatchObject({
+			"fast-uri": "3.1.5",
+			hono: "4.12.34",
+			"ip-address": "10.4.0",
+		});
 		expect(
 			lockfile.packages["node_modules/@modelcontextprotocol/sdk"]?.version,
 		).toBe("1.30.0");
 		expect(lockfile.packages["node_modules/@hono/node-server"]?.version).toBe(
 			"2.0.12",
+		);
+		expect(lockfile.packages["node_modules/fast-uri"]?.version).toBe("3.1.5");
+		expect(lockfile.packages["node_modules/hono"]?.version).toBe("4.12.34");
+		expect(lockfile.packages["node_modules/ip-address"]?.version).toBe(
+			"10.4.0",
 		);
 	});
 });
