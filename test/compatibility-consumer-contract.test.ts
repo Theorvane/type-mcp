@@ -5,12 +5,21 @@ import { parseNpmPackJson } from "../scripts/npm-pack-json.mjs";
 
 interface PackageManifest {
 	readonly scripts?: Readonly<Record<string, string>>;
+	readonly version?: string;
 }
 
 describe("packed consumer compatibility contract", () => {
+	it("declares the 0.3.2 compatibility release version", async () => {
+		const manifest = JSON.parse(
+			await readFile(new URL("../package.json", import.meta.url), "utf8"),
+		) as PackageManifest;
+
+		expect(manifest.version).toBe("0.3.2");
+	});
+
 	it("accepts npm 11 array and npm 12 package-keyed pack JSON", () => {
 		const tarball = {
-			filename: "theorvane-type-mcp-0.3.1.tgz",
+			filename: "theorvane-type-mcp-0.3.2.tgz",
 			name: "@theorvane/type-mcp",
 		};
 
