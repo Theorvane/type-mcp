@@ -1,6 +1,6 @@
 # Configuration and compatibility
 
-`@theorvane/type-mcp@0.3.1` is the published TypeScript declaration and runtime package. Configuration determines whether TypeScript emits standard decorators and whether the runtime can resolve the package's ESM/CJS exports; applications configure their own hosting and transport lifecycle around installed MCP adapters.
+`@theorvane/type-mcp@0.3.2` is the release candidate TypeScript declaration and runtime package; it must not be described as published until the reviewed `main` promotion and registry verification complete. Configuration determines whether TypeScript emits standard decorators and whether the runtime can resolve the package's ESM/CJS exports; applications configure their own hosting and transport lifecycle around installed MCP adapters.
 
 ## Runtime and package manager
 
@@ -35,21 +35,22 @@ Use TypeScript's standard decorator implementation. The configuration must inclu
 }
 ```
 
-Do not enable the legacy `experimentalDecorators` compiler option for this API. Standard decorators provide the metadata object that TypeMCP uses to associate method declarations with a decorated class. A build that compiles legacy decorators is not a supported configuration for the examples in this repository.
+Do not enable the legacy `experimentalDecorators` compiler option for this root API. Standard decorators provide the metadata object that TypeMCP uses to associate method declarations with a decorated class. Legacy decorator emit is supported only through the separate `@theorvane/type-mcp/legacy` entrypoint described below.
 
 Projects using Babel, SWC, or another TypeScript transpiler must confirm that their configured transform supports standard decorators and emits compatible metadata behavior. Run a focused declaration test after changing a compiler transform rather than relying on syntax acceptance alone.
 
 ## ESM and CommonJS
 
-The package exports ESM and CommonJS runtime and declaration conditions for the root, HTTP, and LangChain entrypoints. Node-aware TypeScript resolution selects the matching declaration form:
+The package exports ESM and CommonJS runtime and declaration conditions for the root, HTTP, LangChain, and legacy entrypoints. Node-aware TypeScript resolution selects the matching declaration form. Packed-consumer verification covers every entrypoint in both module systems; standard decorators are executed in the ESM consumer, while legacy decorators are executed in the CommonJS consumer.
 
 | Consumer | Root loading form |
 | --- | --- |
 | ESM / TypeScript NodeNext | `import { McpServer } from "@theorvane/type-mcp"` |
 | CommonJS / TypeScript Node16 | `import { createMcpHandler } from "@theorvane/type-mcp/http"` |
 | CommonJS runtime | `const { McpServer } = require("@theorvane/type-mcp")` |
+| CommonJS / legacy TypeScript decorators | `import { McpServer } from "@theorvane/type-mcp/legacy"` |
 
-For a CommonJS TypeScript project, use both `"module": "Node16"` and `"moduleResolution": "Node16"`; static imports of `@theorvane/type-mcp/http` and `@theorvane/type-mcp/langchain` then select CJS `.d.cts` declarations. `@theorvane/type-mcp/langchain` also requires its optional `@langchain/core` peer at runtime. Decorator syntax is compiled by TypeScript before Node loads the module, so the CommonJS form does not remove the requirement for a standard decorator-compatible compiler configuration. Type-only imports should use TypeScript's `import type` form for the public definition interfaces:
+For a CommonJS TypeScript project, use both `"module": "Node16"` and `"moduleResolution": "Node16"`; static imports of every public entrypoint then select CJS `.d.cts` declarations. `@theorvane/type-mcp/langchain` also requires its optional `@langchain/core` peer at runtime. Decorator syntax is compiled by TypeScript before Node loads the module. Use the root entrypoint with a standard decorator-compatible compiler, or use `@theorvane/type-mcp/legacy` with `"experimentalDecorators": true`; do not mix the two decorator modes in one compilation unit. Type-only imports should use TypeScript's `import type` form for the public definition interfaces:
 
 ```ts
 import type { McpServerDefinition, McpToolOptions } from "@theorvane/type-mcp";
