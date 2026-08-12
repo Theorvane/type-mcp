@@ -14,9 +14,9 @@ describe("packed consumer compatibility contract", () => {
 			name: "@theorvane/type-mcp",
 		};
 
-		expect(
-			parseNpmPackJson(JSON.stringify([tarball]), tarball.name),
-		).toEqual(tarball);
+		expect(parseNpmPackJson(JSON.stringify([tarball]), tarball.name)).toEqual(
+			tarball,
+		);
 		expect(
 			parseNpmPackJson(
 				JSON.stringify({ [tarball.name]: tarball }),

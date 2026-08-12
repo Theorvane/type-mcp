@@ -4,14 +4,13 @@ function isRecord(value) {
 
 function findTarball(value, packageName) {
 	if (Array.isArray(value)) {
-		return value.find(
-			(entry) => isRecord(entry) && entry.name === packageName,
-		);
+		return value.find((entry) => isRecord(entry) && entry.name === packageName);
 	}
 
 	if (!isRecord(value)) return undefined;
 	const packageEntry = value[packageName];
-	if (Array.isArray(packageEntry)) return findTarball(packageEntry, packageName);
+	if (Array.isArray(packageEntry))
+		return findTarball(packageEntry, packageName);
 	if (isRecord(packageEntry)) return packageEntry;
 
 	return Object.values(value).find(

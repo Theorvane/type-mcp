@@ -20,8 +20,14 @@ function run(command, args, cwd = packageRoot) {
 function createConsumer(name, packageJson, tsconfig, source) {
 	const consumer = mkdtempSync(join(tmpdir(), `type-mcp-${name}-consumer-`));
 	consumers.push(consumer);
-	writeFileSync(join(consumer, "package.json"), JSON.stringify(packageJson, null, 2));
-	writeFileSync(join(consumer, "tsconfig.json"), JSON.stringify(tsconfig, null, 2));
+	writeFileSync(
+		join(consumer, "package.json"),
+		JSON.stringify(packageJson, null, 2),
+	);
+	writeFileSync(
+		join(consumer, "tsconfig.json"),
+		JSON.stringify(tsconfig, null, 2),
+	);
 	writeFileSync(join(consumer, "server.ts"), source);
 	run(
 		"npm",
@@ -37,7 +43,11 @@ function createConsumer(name, packageJson, tsconfig, source) {
 		],
 		consumer,
 	);
-	run(resolve(packageRoot, "node_modules/typescript/bin/tsc"), ["--project", "tsconfig.json"], consumer);
+	run(
+		resolve(packageRoot, "node_modules/typescript/bin/tsc"),
+		["--project", "tsconfig.json"],
+		consumer,
+	);
 	run("node", ["dist/server.js"], consumer);
 }
 
@@ -121,8 +131,11 @@ if (typeof createLangChainTools !== "function") throw new Error("CJS langchain e
 `,
 	);
 
-	console.log("Verified packed ESM standard-decorator and CommonJS legacy-decorator consumers across all public entrypoints.");
+	console.log(
+		"Verified packed ESM standard-decorator and CommonJS legacy-decorator consumers across all public entrypoints.",
+	);
 } finally {
-	for (const consumer of consumers) rmSync(consumer, { force: true, recursive: true });
+	for (const consumer of consumers)
+		rmSync(consumer, { force: true, recursive: true });
 	if (tarballPath !== undefined) rmSync(tarballPath, { force: true });
 }
