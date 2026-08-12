@@ -1,6 +1,7 @@
 import { execFile } from "node:child_process";
 import { readFile } from "node:fs/promises";
 import { promisify } from "node:util";
+import { parseNpmPackJson } from "./npm-pack-json.mjs";
 
 const execFileAsync = promisify(execFile);
 const root = process.cwd();
@@ -9,8 +10,8 @@ const { stdout } = await execFileAsync(
 	["pack", "--json", "--dry-run", "--ignore-scripts"],
 	{ cwd: root },
 );
-const [tarball] = JSON.parse(stdout);
 const manifest = JSON.parse(await readFile("package.json", "utf8"));
+const tarball = parseNpmPackJson(stdout, manifest.name);
 
 if (tarball?.name !== manifest.name || tarball?.version !== manifest.version) {
 	throw new Error(`${manifest.name}: unexpected tarball metadata`);
@@ -33,6 +34,10 @@ for (const expected of [
 	"dist/langchain.cjs",
 	"dist/langchain.d.ts",
 	"dist/langchain.d.cts",
+	"dist/legacy.js",
+	"dist/legacy.cjs",
+	"dist/legacy.d.ts",
+	"dist/legacy.d.cts",
 ]) {
 	if (!files.has(expected)) {
 		throw new Error(`${manifest.name}: tarball is missing ${expected}`);

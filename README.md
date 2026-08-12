@@ -11,7 +11,7 @@
   [![License](https://img.shields.io/badge/license-MIT-111827?style=flat-square)](LICENSE)
 </div>
 
-> **Published package — `@theorvane/type-mcp@0.3.0`:** provides standard decorators, definition validation, explicit instance resolution, MCP SDK compilation, stdio, `@theorvane/type-mcp/http` Streamable HTTP, and the tools-only `@theorvane/type-mcp/langchain` adapter.
+> **Published package — `@theorvane/type-mcp@0.3.0`:** provides standard decorators, a separate `@theorvane/type-mcp/legacy` entrypoint for CommonJS legacy decorators, definition validation, explicit instance resolution, MCP SDK compilation, stdio, `@theorvane/type-mcp/http` Streamable HTTP, and the tools-only `@theorvane/type-mcp/langchain` adapter.
 >
 > **Integration boundary:** LangGraph `ToolNode` composition, graph topology, model choice, authorization, state, persistence, and deployment remain consumer responsibilities.
 
@@ -35,7 +35,7 @@ TypeMCP requires **Node.js 20 or later** and TypeScript with standard (Stage 3) 
 npm install @theorvane/type-mcp zod
 ```
 
-The package is ESM-first and also exposes a CommonJS root export. TypeScript projects should use Node-aware module resolution. This `tsconfig.json` baseline matches the package contract:
+The package has ESM and CommonJS runtime and TypeScript declaration conditions for its root, HTTP, LangChain, and legacy entrypoints. The verified decorator modes are standard decorators in an ESM/NodeNext consumer and legacy `experimentalDecorators` in a CommonJS/Node16 consumer. This standard-decorator `tsconfig.json` baseline matches the package contract:
 
 ```json
 {
@@ -50,7 +50,7 @@ The package is ESM-first and also exposes a CommonJS root export. TypeScript pro
 }
 ```
 
-Do not enable TypeScript's legacy `experimentalDecorators` mode for these standard decorator examples. For a CommonJS legacy-decorator consumer, use the separate `@theorvane/type-mcp/legacy` entrypoint with Node16 module resolution; its supported surface and constraints are documented in the [Decorator API contract](docs/api/decorator-api.md#legacy-cjs-decorators). See [configuration and compatibility](docs/guides/configuration.md) for ESM, CommonJS, and decorator details.
+Do not enable TypeScript's legacy `experimentalDecorators` mode for these standard decorator examples. For a CommonJS legacy-decorator consumer, use the separate `@theorvane/type-mcp/legacy` entrypoint with Node16 module resolution; its supported surface and constraints are documented in the [Decorator API contract](docs/api/decorator-api.md#legacy-typescript-decorators). See [configuration and compatibility](docs/guides/configuration.md) for ESM, CommonJS, and decorator details.
 
 ## Define and inspect a server declaration
 
@@ -114,6 +114,7 @@ The methods above are ordinary application methods. In `0.3.0`, use `createMcpSe
 | Definition validation and `TypeMcpDefinitionError` | Available | Validates declarations and reports safe definition errors. |
 | `InstanceResolver<T>` / `resolveMcpServerInstance()` | Available | Explicit application-owned instance construction contract. |
 | `@theorvane/type-mcp/langchain` / `createLangChainTools()` | Available | Tools-only LangChain structured-tool adapter; LangGraph `ToolNode` composition remains consumer-owned. |
+| `@theorvane/type-mcp/legacy` | Available | Separate legacy `experimentalDecorators` compatibility entrypoint for CommonJS TypeScript consumers. |
 
 ## Documentation map
 

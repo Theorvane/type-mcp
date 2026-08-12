@@ -2,8 +2,10 @@ import { execFileSync } from "node:child_process";
 import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
+import { parseNpmPackJson } from "./npm-pack-json.mjs";
 
 const packageRoot = process.cwd();
+const packageName = "@theorvane/type-mcp";
 let consumer;
 let tarballPath;
 
@@ -17,8 +19,9 @@ function run(command, args, cwd = packageRoot) {
 
 try {
 	run("npm", ["run", "build"]);
-	const [packed] = JSON.parse(
+	const packed = parseNpmPackJson(
 		run("npm", ["pack", "--json", "--ignore-scripts"]),
+		packageName,
 	);
 	tarballPath = resolve(packageRoot, packed.filename);
 	consumer = mkdtempSync(join(tmpdir(), "type-mcp-legacy-consumer-"));

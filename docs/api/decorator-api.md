@@ -117,10 +117,12 @@ export { handler as GET, handler as POST, handler as DELETE };
 
 `getMcpServerDefinition()` returns a newly allocated, frozen server definition, component arrays, and component records on every read. Tool `input` schemas retain the caller-supplied Zod object-schema identity: schemas are executable mutable objects and are not cloned or frozen by TypeMCP. Consumers should treat a schema supplied to a decorator as immutable after declaration.
 
-## Legacy CJS decorators
+## Legacy TypeScript decorators
 
 `@theorvane/type-mcp/legacy` is the compatibility entrypoint for TypeScript's
-legacy `experimentalDecorators` emit in CommonJS applications.
+legacy `experimentalDecorators` emit in CommonJS applications. It is separate
+from the root standard-decorator entrypoint; do not combine their decorator
+semantics in one compilation unit.
 It exposes `McpServer`, `McpTool`, `McpResource`, and `McpPrompt` with the same
 options and definition-reader/compiler contracts as the root Stage 3 API.
 
