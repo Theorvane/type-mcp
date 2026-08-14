@@ -98,7 +98,7 @@
 	"devDependencies": {
 		"@biomejs/biome": "^2.5.4",
 		"@langchain/core": "1.2.3",
-		"@langchain/langgraph": "1.4.8",
+		"@langchain/langgraph": "1.4.9",
 		"@types/node": "^22.15.3",
 		"rimraf": "^6.0.1",
 		"tsup": "^8.5.1",
