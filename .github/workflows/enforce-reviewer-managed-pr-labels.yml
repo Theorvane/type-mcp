@@ -22,13 +22,31 @@ jobs:
             const { action, label, pull_request: pullRequest } = context.payload;
             const issueNumber = pullRequest.number;
 
+            const removeLabel = async (name) => {
+              try {
+                await github.rest.issues.removeLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issueNumber,
+                  name,
+                });
+              } catch (error) {
+                if (
+                  typeof error === 'object' &&
+                  error !== null &&
+                  'status' in error &&
+                  error.status === 404
+                ) {
+                  core.info(`Label ${name} was already absent.`);
+                  return;
+                }
+
+                throw error;
+              }
+            };
+
             if (action === 'labeled') {
-              await github.rest.issues.removeLabel({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: issueNumber,
-                name: label.name,
-              });
+              await removeLabel(label.name);
               core.info(`Removed unauthorized label ${label.name}.`);
               return;
             }
@@ -41,12 +59,7 @@ jobs:
 
             await Promise.all(
               labels.map(({ name }) =>
-                github.rest.issues.removeLabel({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: issueNumber,
-                  name,
-                }),
+                removeLabel(name),
               ),
             );
             core.info(`Removed ${labels.length} unreviewed label(s).`);
