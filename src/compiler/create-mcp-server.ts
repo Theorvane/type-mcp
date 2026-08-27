@@ -1,4 +1,9 @@
-import { McpServer, UriTemplate } from "@modelcontextprotocol/server";
+import {
+	McpServer,
+	type ServerContext,
+	UriTemplate,
+} from "@modelcontextprotocol/server";
+import { createMcpInvocationContext } from "../invocation-context.js";
 import { readMcpServerDefinition } from "../metadata/read-server-definition.js";
 import type { InstanceResolver } from "../resolver/instance-resolver.js";
 import { resolveMcpServerInstance } from "../resolver/resolve-server-instance.js";
@@ -78,9 +83,12 @@ export async function createMcpServer<
 					: { annotations: { ...tool.annotations } }),
 				...(tool._meta === undefined ? {} : { _meta: { ...tool._meta } }),
 			},
-			async (input) => {
+			async (input, context) => {
 				try {
-					const result = await invokeTool(instance, tool.methodName, input);
+					const result = await invokeMethod(instance, tool.methodName, [
+						input,
+						createMcpInvocationContext(context),
+					]);
 					return normalizeToolResult(result);
 				} catch {
 					return {
@@ -127,13 +135,11 @@ export async function createMcpServer<
 				resource.name,
 				resource.uri,
 				config,
-				async (uri) => {
+				async (uri, context) => {
 					try {
-						const result = await invokeMethod(
-							instance,
-							resource.methodName,
-							[],
-						);
+						const result = await invokeMethod(instance, resource.methodName, [
+							createMcpInvocationContext(context),
+						]);
 						return normalizeResourceResult(result, uri, resource.mimeType);
 					} catch {
 						return normalizeResourceResult(
@@ -155,7 +161,7 @@ export async function createMcpServer<
 			resource.name,
 			createResourceTemplate(resource),
 			config,
-			async (uri, variables) => {
+			async (uri, variables, context) => {
 				try {
 					const parsed = await input.safeParseAsync(variables);
 					if (!parsed.success) {
@@ -163,6 +169,7 @@ export async function createMcpServer<
 					}
 					const result = await invokeMethod(instance, resource.methodName, [
 						parsed.data,
+						createMcpInvocationContext(context),
 					]);
 					return normalizeResourceResult(result, uri, resource.mimeType);
 				} catch {
@@ -184,9 +191,14 @@ export async function createMcpServer<
 				: { description: prompt.description }),
 		};
 		if (prompt.args === undefined) {
-			server.registerPrompt(prompt.name, config, async () => {
+			server.registerPrompt(prompt.name, config, async (context: unknown) => {
 				try {
-					const result = await invokeMethod(instance, prompt.methodName, []);
+					if (!isServerContext(context)) {
+						throw new TypeError("MCP prompt context is unavailable");
+					}
+					const result = await invokeMethod(instance, prompt.methodName, [
+						createMcpInvocationContext(context),
+					]);
 					return normalizePromptResult(result);
 				} catch {
 					return normalizePromptResult("Prompt execution failed");
@@ -196,10 +208,11 @@ export async function createMcpServer<
 			server.registerPrompt(
 				prompt.name,
 				{ ...config, argsSchema: prompt.args },
-				async (input) => {
+				async (input, context) => {
 					try {
 						const result = await invokeMethod(instance, prompt.methodName, [
 							input,
+							createMcpInvocationContext(context),
 						]);
 						return normalizePromptResult(result);
 					} catch {
@@ -213,12 +226,18 @@ export async function createMcpServer<
 	return server;
 }
 
-function invokeTool(
-	instance: object,
-	methodName: string,
-	input: unknown,
-): unknown | Promise<unknown> {
-	return invokeMethod(instance, methodName, [input]);
+function isServerContext(value: unknown): value is ServerContext {
+	if (typeof value !== "object" || value === null || !("mcpReq" in value)) {
+		return false;
+	}
+	const mcpReq = Reflect.get(value, "mcpReq");
+	return (
+		typeof mcpReq === "object" &&
+		mcpReq !== null &&
+		"id" in mcpReq &&
+		Reflect.get(mcpReq, "signal") instanceof AbortSignal &&
+		typeof Reflect.get(mcpReq, "notify") === "function"
+	);
 }
 
 function invokeMethod(

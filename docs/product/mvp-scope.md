@@ -1,6 +1,6 @@
 # MVP scope
 
-> **Published package:** `@theorvane/type-mcp@0.3.2` includes the MVP baseline. Current `dev` additionally carries SDK v2 serving, modern server/component metadata, initialization instructions, tool structured output, explicit prompt arguments, resource URI templates, and completion. Start with the [README](../../README.md) and [getting-started guide](../guides/getting-started.md) for exact exports and boundaries.
+> **Published package:** `@theorvane/type-mcp@0.3.2` includes the MVP baseline. Current `dev` additionally carries SDK v2 serving, modern server/component metadata, initialization instructions, tool structured output, explicit prompt arguments, resource URI templates, completion, and invocation context. Start with the [README](../../README.md) and [getting-started guide](../guides/getting-started.md) for exact exports and boundaries.
 
 **Status:** The baseline is published in `@theorvane/type-mcp@0.3.2`; rows explicitly marked current `dev` are implemented but unreleased.
 
@@ -13,6 +13,7 @@
 | Resources | Published baseline: explicit static URIs; current `dev`: validated URI templates and variable completion |
 | Prompts | Published baseline: named zero-argument handlers; current `dev`: explicit validated arguments and completion |
 | Compilation | Decorator metadata compiled to the stable split `@modelcontextprotocol/server` v2 `McpServer` |
+| Invocation context | Current `dev`: request/session identity, SDK cancellation signal, and progress reporting |
 | Instance construction | Direct constructor default plus async-capable `InstanceResolver` interface |
 | Local transport | stdio helper |
 | Web transport | Fetch-standard Streamable HTTP handler |
