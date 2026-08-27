@@ -34,7 +34,7 @@ describe("production dependency security", () => {
 		expect(
 			manifest.dependencies?.["@modelcontextprotocol/sdk"],
 		).toBeUndefined();
-		expect(manifest.dependencies?.["@hono/node-server"]).toBe("2.0.12");
+		expect(manifest.dependencies?.["@hono/node-server"]).toBe("2.1.1");
 		expect(manifest.overrides).toMatchObject({
 			esbuild: "0.28.2",
 			"fast-uri": "3.1.5",
@@ -51,7 +51,7 @@ describe("production dependency security", () => {
 			lockfile.packages["node_modules/@modelcontextprotocol/sdk"],
 		).toBeUndefined();
 		expect(lockfile.packages["node_modules/@hono/node-server"]?.version).toBe(
-			"2.0.12",
+			"2.1.1",
 		);
 		expect(lockfile.packages["node_modules/fast-uri"]).toBeUndefined();
 		expect(lockfile.packages["node_modules/hono"]?.version).toBe("4.12.34");
