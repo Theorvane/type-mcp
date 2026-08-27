@@ -85,10 +85,15 @@ function createDecoratedServerClass() {
 		HttpTestServer.prototype.echo,
 		methodContext("echo", metadata),
 	);
-	McpServer({ name: "http-test", version: "1.0.0" })(
-		HttpTestServer,
-		classContext(metadata),
-	);
+	McpServer({
+		name: "http-test",
+		version: "1.0.0",
+		title: "HTTP test server",
+		description: "Exercises Streamable HTTP initialization.",
+		websiteUrl: "https://example.test/http",
+		icons: [{ src: "https://example.test/http.svg", sizes: ["any"] }],
+		instructions: "Call echo with a message.",
+	})(HttpTestServer, classContext(metadata));
 	return HttpTestServer;
 }
 
@@ -114,7 +119,15 @@ describe("Fetch Streamable HTTP handler", () => {
 		expect(initialize.status).toBe(200);
 		const initialized = await json(initialize);
 		expect(initialized.result).toMatchObject({
-			serverInfo: { name: "http-test" },
+			serverInfo: {
+				name: "http-test",
+				version: "1.0.0",
+				title: "HTTP test server",
+				description: "Exercises Streamable HTTP initialization.",
+				websiteUrl: "https://example.test/http",
+				icons: [{ src: "https://example.test/http.svg", sizes: ["any"] }],
+			},
+			instructions: "Call echo with a message.",
 		});
 		expect(hasProtocolVersion(initialized.result)).toBe(true);
 		if (!hasProtocolVersion(initialized.result)) {

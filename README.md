@@ -37,7 +37,7 @@ TypeMCP requires **Node.js 20 or later** and TypeScript with standard (Stage 3) 
 npm install @theorvane/type-mcp zod
 ```
 
-The install command currently resolves to published `0.3.2`. Modern component metadata and `outputSchema` shown below are implemented on `dev` but are not part of that published version yet.
+The install command currently resolves to published `0.3.2`. Modern server/component metadata, initialization instructions, and tool `outputSchema` shown below are implemented on `dev` but are not part of that published version yet.
 
 The package has ESM and CommonJS runtime and TypeScript declaration conditions for its root, HTTP, LangChain, and legacy entrypoints. The verified decorator modes are standard decorators in an ESM/NodeNext consumer and legacy `experimentalDecorators` in a CommonJS/Node16 consumer. This standard-decorator `tsconfig.json` baseline matches the package contract:
 
@@ -70,7 +70,15 @@ import {
   McpTool,
 } from "@theorvane/type-mcp";
 
-@McpServer({ name: "catalog", version: "0.2.0" })
+@McpServer({
+  name: "catalog",
+  version: "0.2.0",
+  title: "Catalog server",
+  description: "Catalog lookup and configuration.",
+  websiteUrl: "https://example.com/catalog",
+  icons: [{ src: "https://example.com/catalog.svg", sizes: ["any"] }],
+  instructions: "Use findProduct with a catalog SKU.",
+})
 export class CatalogServer {
   @McpTool({
     title: "Find a product",
@@ -118,7 +126,7 @@ The methods above are ordinary application methods. In current source, use `crea
 
 | Surface | Current source | What it does |
 | --- | --- | --- |
-| `@McpServer` | Available | Records server name and version metadata. |
+| `@McpServer` | Available | Records standard implementation identity and optional client initialization instructions. |
 | `@McpTool` | Available | Records input/output Zod schemas and metadata; object returns emit text plus structured content. |
 | `@McpResource` | Available | Records a static resource URI plus standard title, icons, annotations, and custom metadata. |
 | `@McpPrompt` | Available | Records a named prompt declaration with an optional title and description. |

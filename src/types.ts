@@ -16,6 +16,11 @@ export type ZeroArgumentMcpServerConstructor<T extends object = object> =
 export interface McpServerOptions {
 	readonly name: string;
 	readonly version: string;
+	readonly title?: string | undefined;
+	readonly description?: string | undefined;
+	readonly websiteUrl?: string | undefined;
+	readonly icons?: readonly Readonly<Icon>[] | undefined;
+	readonly instructions?: string | undefined;
 }
 
 export interface McpToolOptions {

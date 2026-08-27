@@ -35,10 +35,30 @@ export async function createMcpServer<
 		: await resolveMcpServerInstance(
 				serverClass as ZeroArgumentMcpServerConstructor<T>,
 			);
-	const server = new McpServer({
-		name: definition.name,
-		version: definition.version,
-	});
+	const server = new McpServer(
+		{
+			name: definition.name,
+			version: definition.version,
+			...(definition.title === undefined ? {} : { title: definition.title }),
+			...(definition.description === undefined
+				? {}
+				: { description: definition.description }),
+			...(definition.websiteUrl === undefined
+				? {}
+				: { websiteUrl: definition.websiteUrl }),
+			...(definition.icons === undefined
+				? {}
+				: {
+						icons: definition.icons.map((icon) => ({
+							...icon,
+							sizes: icon.sizes === undefined ? undefined : [...icon.sizes],
+						})),
+					}),
+		},
+		definition.instructions === undefined
+			? undefined
+			: { instructions: definition.instructions },
+	);
 
 	for (const tool of definition.tools) {
 		server.registerTool(

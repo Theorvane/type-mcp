@@ -72,11 +72,40 @@ describe("MCP decorators", () => {
 			title: "Greeting",
 			description: "Creates a greeting.",
 		})(() => "not executed", methodContext("greeting", metadata));
-		decorateServer(CalculatorServer, metadata);
-
-		expect(getMcpServerDefinition(CalculatorServer)).toEqual({
+		const serverIcons = [
+			{
+				src: "https://example.test/server.svg",
+				mimeType: "image/svg+xml",
+				sizes: ["any"],
+				theme: "light" as const,
+			},
+		];
+		McpServer({
 			name: "calculator",
 			version: "1.0.0",
+			title: "Calculator server",
+			description: "Calculates and exposes configuration.",
+			websiteUrl: "https://example.test/calculator",
+			icons: serverIcons,
+			instructions: "Use add for arithmetic.",
+		})(CalculatorServer, classContext(metadata));
+
+		const definition = getMcpServerDefinition(CalculatorServer);
+		expect(definition).toEqual({
+			name: "calculator",
+			version: "1.0.0",
+			title: "Calculator server",
+			description: "Calculates and exposes configuration.",
+			websiteUrl: "https://example.test/calculator",
+			icons: [
+				{
+					src: "https://example.test/server.svg",
+					mimeType: "image/svg+xml",
+					sizes: ["any"],
+					theme: "light",
+				},
+			],
+			instructions: "Use add for arithmetic.",
 			tools: [
 				{
 					name: "add",
@@ -110,6 +139,13 @@ describe("MCP decorators", () => {
 				},
 			],
 		});
+		expect(Object.isFrozen(definition?.icons)).toBe(true);
+		expect(Object.isFrozen(definition?.icons?.[0])).toBe(true);
+		expect(Object.isFrozen(definition?.icons?.[0]?.sizes)).toBe(true);
+		serverIcons[0]?.sizes.push("128x128");
+		expect(getMcpServerDefinition(CalculatorServer)?.icons?.[0]?.sizes).toEqual(
+			["any"],
+		);
 	});
 
 	it("preserves explicit component names", () => {
