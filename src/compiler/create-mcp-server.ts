@@ -11,6 +11,7 @@ import type {
 	McpServerConstructor,
 	ZeroArgumentMcpServerConstructor,
 } from "../types.js";
+import { initializeMcpVisibility, trackMcpComponent } from "../visibility.js";
 import {
 	normalizePromptResult,
 	normalizeResourceResult,
@@ -65,9 +66,10 @@ export async function createMcpServer<
 			? undefined
 			: { instructions: definition.instructions },
 	);
+	initializeMcpVisibility(server);
 
 	for (const tool of definition.tools) {
-		server.registerTool(
+		const registeredTool = server.registerTool(
 			tool.name,
 			{
 				inputSchema: tool.input,
@@ -97,6 +99,17 @@ export async function createMcpServer<
 					};
 				}
 			},
+		);
+		trackMcpComponent(
+			server,
+			{
+				key: `tool:${tool.name}`,
+				name: tool.name,
+				kind: "tool",
+				tags: tool.tags,
+				initiallyEnabled: tool.enabled,
+			},
+			registeredTool,
 		);
 	}
 
@@ -131,7 +144,7 @@ export async function createMcpServer<
 			...(resource._meta === undefined ? {} : { _meta: { ...resource._meta } }),
 		};
 		if (!UriTemplate.isTemplate(resource.uri)) {
-			server.registerResource(
+			const registeredResource = server.registerResource(
 				resource.name,
 				resource.uri,
 				config,
@@ -150,6 +163,18 @@ export async function createMcpServer<
 					}
 				},
 			);
+			trackMcpComponent(
+				server,
+				{
+					key: `resource:${resource.uri}`,
+					name: resource.name,
+					identifiers: [resource.uri],
+					kind: "resource",
+					tags: resource.tags,
+					initiallyEnabled: resource.enabled,
+				},
+				registeredResource,
+			);
 			continue;
 		}
 
@@ -157,7 +182,7 @@ export async function createMcpServer<
 		if (input === undefined) {
 			throw new TypeError("Validated resource template input is missing");
 		}
-		server.registerResource(
+		const registeredTemplate = server.registerResource(
 			resource.name,
 			createResourceTemplate(resource),
 			config,
@@ -181,6 +206,18 @@ export async function createMcpServer<
 				}
 			},
 		);
+		trackMcpComponent(
+			server,
+			{
+				key: `template:${resource.uri}`,
+				name: resource.name,
+				identifiers: [resource.uri],
+				kind: "template",
+				tags: resource.tags,
+				initiallyEnabled: resource.enabled,
+			},
+			registeredTemplate,
+		);
 	}
 
 	for (const prompt of definition.prompts) {
@@ -191,21 +228,36 @@ export async function createMcpServer<
 				: { description: prompt.description }),
 		};
 		if (prompt.args === undefined) {
-			server.registerPrompt(prompt.name, config, async (context: unknown) => {
-				try {
-					if (!isServerContext(context)) {
-						throw new TypeError("MCP prompt context is unavailable");
+			const registeredPrompt = server.registerPrompt(
+				prompt.name,
+				config,
+				async (context: unknown) => {
+					try {
+						if (!isServerContext(context)) {
+							throw new TypeError("MCP prompt context is unavailable");
+						}
+						const result = await invokeMethod(instance, prompt.methodName, [
+							createMcpInvocationContext(context),
+						]);
+						return normalizePromptResult(result);
+					} catch {
+						return normalizePromptResult("Prompt execution failed");
 					}
-					const result = await invokeMethod(instance, prompt.methodName, [
-						createMcpInvocationContext(context),
-					]);
-					return normalizePromptResult(result);
-				} catch {
-					return normalizePromptResult("Prompt execution failed");
-				}
-			});
+				},
+			);
+			trackMcpComponent(
+				server,
+				{
+					key: `prompt:${prompt.name}`,
+					name: prompt.name,
+					kind: "prompt",
+					tags: prompt.tags,
+					initiallyEnabled: prompt.enabled,
+				},
+				registeredPrompt,
+			);
 		} else {
-			server.registerPrompt(
+			const registeredPrompt = server.registerPrompt(
 				prompt.name,
 				{ ...config, argsSchema: prompt.args },
 				async (input, context) => {
@@ -219,6 +271,17 @@ export async function createMcpServer<
 						return normalizePromptResult("Prompt execution failed");
 					}
 				},
+			);
+			trackMcpComponent(
+				server,
+				{
+					key: `prompt:${prompt.name}`,
+					name: prompt.name,
+					kind: "prompt",
+					tags: prompt.tags,
+					initiallyEnabled: prompt.enabled,
+				},
+				registeredPrompt,
 			);
 		}
 	}

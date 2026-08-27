@@ -28,11 +28,18 @@ export function readMcpServerDefinition<
 	}
 
 	assertUniqueNames("tool", definition.tools, className);
+	for (const tool of definition.tools) {
+		assertVisibilityDeclaration("tool", tool, className);
+	}
 	assertUniqueNames("resource", definition.resources, className);
 	for (const resource of definition.resources) {
 		assertResourceDeclaration(resource, className);
+		assertVisibilityDeclaration("resource", resource, className);
 	}
 	assertUniqueNames("prompt", definition.prompts, className);
+	for (const prompt of definition.prompts) {
+		assertVisibilityDeclaration("prompt", prompt, className);
+	}
 
 	return definition;
 }
@@ -52,6 +59,38 @@ function assertUniqueNames(
 		}
 
 		names.add(definition.name);
+	}
+}
+
+function assertVisibilityDeclaration(
+	componentType: "tool" | "resource" | "prompt",
+	definition: NamedDefinition,
+	className: string,
+): void {
+	if (
+		definition.enabled !== undefined &&
+		typeof definition.enabled !== "boolean"
+	) {
+		throw new TypeMcpDefinitionError(
+			`MCP ${componentType} "${definition.name}" on ${className} has an invalid enabled value`,
+		);
+	}
+	if (definition.tags === undefined) {
+		return;
+	}
+	if (!Array.isArray(definition.tags)) {
+		throw new TypeMcpDefinitionError(
+			`MCP ${componentType} "${definition.name}" on ${className} has invalid tags`,
+		);
+	}
+	const tags = new Set<string>();
+	for (const tag of definition.tags) {
+		if (typeof tag !== "string" || tag.trim().length === 0 || tags.has(tag)) {
+			throw new TypeMcpDefinitionError(
+				`MCP ${componentType} "${definition.name}" on ${className} requires unique non-empty tags`,
+			);
+		}
+		tags.add(tag);
 	}
 }
 

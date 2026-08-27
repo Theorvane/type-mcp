@@ -28,7 +28,12 @@ export interface McpServerOptions {
 	readonly instructions?: string | undefined;
 }
 
-export interface McpToolOptions {
+export interface McpComponentVisibilityOptions {
+	readonly enabled?: boolean | undefined;
+	readonly tags?: readonly string[] | undefined;
+}
+
+export interface McpToolOptions extends McpComponentVisibilityOptions {
 	readonly name?: string | undefined;
 	readonly title?: string | undefined;
 	readonly description?: string | undefined;
@@ -38,7 +43,7 @@ export interface McpToolOptions {
 	readonly _meta?: Readonly<Record<string, unknown>> | undefined;
 }
 
-export interface McpResourceOptions {
+export interface McpResourceOptions extends McpComponentVisibilityOptions {
 	readonly name?: string | undefined;
 	readonly title?: string | undefined;
 	readonly uri: string;
@@ -53,7 +58,7 @@ export interface McpResourceOptions {
 		| undefined;
 }
 
-export interface McpPromptOptions {
+export interface McpPromptOptions extends McpComponentVisibilityOptions {
 	readonly name?: string | undefined;
 	readonly title?: string | undefined;
 	readonly description?: string | undefined;

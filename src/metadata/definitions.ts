@@ -63,6 +63,8 @@ export function freezeServerDefinition(
 						tool._meta === undefined
 							? undefined
 							: Object.freeze({ ...tool._meta }),
+					...(tool.enabled === undefined ? {} : { enabled: tool.enabled }),
+					...(tool.tags === undefined ? {} : { tags: freezeTags(tool.tags) }),
 				}),
 			),
 		),
@@ -95,6 +97,12 @@ export function freezeServerDefinition(
 						resource.complete === undefined
 							? undefined
 							: Object.freeze({ ...resource.complete }),
+					...(resource.enabled === undefined
+						? {}
+						: { enabled: resource.enabled }),
+					...(resource.tags === undefined
+						? {}
+						: { tags: freezeTags(resource.tags) }),
 				}),
 			),
 		),
@@ -106,10 +114,20 @@ export function freezeServerDefinition(
 					title: prompt.title,
 					description: prompt.description,
 					args: prompt.args,
+					...(prompt.enabled === undefined ? {} : { enabled: prompt.enabled }),
+					...(prompt.tags === undefined
+						? {}
+						: { tags: freezeTags(prompt.tags) }),
 				}),
 			),
 		),
 	});
+}
+
+function freezeTags(
+	tags: readonly string[] | undefined,
+): readonly string[] | undefined {
+	return tags === undefined ? undefined : Object.freeze([...tags]);
 }
 
 function freezeIcons(
