@@ -61,6 +61,6 @@ supported by the official TypeScript SDK 1.30.0 high-level server API.
 
 ## Review handoff
 
-- Spec review: pending PR review
-- Quality review: self-review complete; external PR review pending
+- Spec review: approved on commit `d8847e7`; documentation boundary follow-up pending re-review
+- Quality review: approved on commit `d8847e7`; documentation boundary follow-up pending re-review
 - Final checks: lint, typecheck, 72 tests, build, package exports, publish tarball/consumer verification, and `git diff --check` passed

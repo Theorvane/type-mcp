@@ -13,13 +13,15 @@
 
 > **Published package — `@theorvane/type-mcp@0.3.2`:** provides standard decorators, a separate `@theorvane/type-mcp/legacy` entrypoint for CommonJS legacy decorators, definition validation, explicit instance resolution, MCP SDK compilation, stdio, `@theorvane/type-mcp/http` Streamable HTTP, and the tools-only `@theorvane/type-mcp/langchain` adapter.
 >
+> **Current `dev` source:** additionally includes unreleased modern component metadata and tool output-schema options. The examples and capability map below target current source unless they explicitly say “published package.”
+>
 > **Integration boundary:** LangGraph `ToolNode` composition, graph topology, model choice, authorization, state, persistence, and deployment remain consumer responsibilities.
 
 TypeMCP keeps MCP declarations beside TypeScript classes without coupling the core to a web framework. Install it when you need strict declarations, validation, MCP SDK compilation, stdio, or Streamable HTTP while keeping application policy explicit.
 
 ## Fast path for developers and agents
 
-1. Check the published capability table below and choose only the package entry point your application hosts and authorizes.
+1. Check the capability table below and choose only the package entry point your application hosts and authorizes.
 2. Install [`@theorvane/type-mcp`](https://www.npmjs.com/package/@theorvane/type-mcp) with `zod`.
 3. Use standard TypeScript decorators to declare a server surface.
 4. Inspect the declaration through `getMcpServerDefinition()` at an application boundary.
@@ -34,6 +36,8 @@ TypeMCP requires **Node.js 20 or later** and TypeScript with standard (Stage 3) 
 ```bash
 npm install @theorvane/type-mcp zod
 ```
+
+The install command currently resolves to published `0.3.2`. Modern component metadata and `outputSchema` shown below are implemented on `dev` but are not part of that published version yet.
 
 The package has ESM and CommonJS runtime and TypeScript declaration conditions for its root, HTTP, LangChain, and legacy entrypoints. The verified decorator modes are standard decorators in an ESM/NodeNext consumer and legacy `experimentalDecorators` in a CommonJS/Node16 consumer. This standard-decorator `tsconfig.json` baseline matches the package contract:
 
