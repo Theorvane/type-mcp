@@ -1,10 +1,30 @@
+import type { output, ZodObject } from "zod";
 import { appendPromptDefinition } from "../metadata/metadata.js";
 import type { McpPromptOptions } from "../types.js";
 
-export function McpPrompt(options: McpPromptOptions) {
-	return function <This>(
-		_value: (this: This) => unknown,
-		context: ClassMethodDecoratorContext<This, (this: This) => unknown>,
+type PromptDecorator<Arguments extends readonly unknown[]> = <This>(
+	value: (this: This, ...arguments_: Arguments) => unknown,
+	context: ClassMethodDecoratorContext<
+		This,
+		(this: This, ...arguments_: Arguments) => unknown
+	>,
+) => void;
+
+export function McpPrompt<Schema extends ZodObject>(
+	options: McpPromptOptions & { readonly args: Schema },
+): PromptDecorator<readonly [input: output<Schema>]>;
+export function McpPrompt(
+	options: McpPromptOptions & { readonly args?: undefined },
+): PromptDecorator<readonly []>;
+export function McpPrompt(
+	options: McpPromptOptions,
+): PromptDecorator<readonly []> | PromptDecorator<readonly [input: unknown]> {
+	return function <This, Arguments extends readonly unknown[]>(
+		_value: (this: This, ...arguments_: Arguments) => unknown,
+		context: ClassMethodDecoratorContext<
+			This,
+			(this: This, ...arguments_: Arguments) => unknown
+		>,
 	): void {
 		const methodName = getMethodName(context);
 
@@ -13,6 +33,7 @@ export function McpPrompt(options: McpPromptOptions) {
 			methodName,
 			title: options.title,
 			description: options.description,
+			args: options.args,
 		});
 	};
 }

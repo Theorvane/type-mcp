@@ -8,8 +8,10 @@ import {
 	ReadResourceResultSchema,
 } from "@modelcontextprotocol/server";
 import { describe, expect, it } from "vitest";
+import { z } from "zod";
 import {
 	createMcpServer,
+	McpCompletable,
 	McpPrompt,
 	McpResource,
 	McpServer,
@@ -200,6 +202,190 @@ describe("decorated resource and prompt compilation", () => {
 			},
 		]);
 		expect(readCount).toBe(1);
+
+		await Promise.all([client.close(), server.close()]);
+	});
+
+	it("lists, completes, and reads validated resource templates", async () => {
+		const repositories: Readonly<Record<string, readonly string[]>> = {
+			prefect: ["fastmcp", "prefect"],
+			theorvane: ["type-mcp"],
+		};
+		class TemplateResourceServer {
+			public readRepository(input: {
+				readonly owner: string;
+				readonly repo: string;
+			}) {
+				return { owner: input.owner, repo: input.repo };
+			}
+		}
+
+		const metadata: DecoratorMetadata = {};
+		McpResource({
+			name: "repository",
+			uri: "repo://{owner}/{repo}",
+			mimeType: "application/json",
+			input: z.object({
+				owner: z.string(),
+				repo: z.enum(["fastmcp", "prefect", "type-mcp"]),
+			}),
+			complete: {
+				owner: () =>
+					Array.from({ length: 105 }, (_, index) => `owner-${index}`),
+				repo: (value, context) => {
+					if (value === "!") {
+						throw new Error("completion secret must not be exposed");
+					}
+					const owner = context?.arguments?.owner ?? "";
+					return (repositories[owner] ?? []).filter((repo) =>
+						repo.startsWith(value),
+					);
+				},
+			},
+		})(
+			TemplateResourceServer.prototype.readRepository,
+			methodContext("readRepository", metadata),
+		);
+		McpServer({ name: "template-resources", version: "1.0.0" })(
+			TemplateResourceServer,
+			classContext(metadata),
+		);
+
+		const { client, server } = await connect(
+			createMcpServer(TemplateResourceServer),
+		);
+		expect(await client.listResourceTemplates()).toMatchObject({
+			resourceTemplates: [
+				expect.objectContaining({
+					name: "repository",
+					uriTemplate: "repo://{owner}/{repo}",
+					mimeType: "application/json",
+				}),
+			],
+		});
+		expect(
+			await client.complete({
+				ref: { type: "ref/resource", uri: "repo://{owner}/{repo}" },
+				argument: { name: "repo", value: "f" },
+				context: { arguments: { owner: "prefect" } },
+			}),
+		).toEqual({
+			completion: { values: ["fastmcp"], total: 1, hasMore: false },
+		});
+		const bounded = await client.complete({
+			ref: { type: "ref/resource", uri: "repo://{owner}/{repo}" },
+			argument: { name: "owner", value: "" },
+		});
+		expect(bounded.completion.values).toHaveLength(100);
+		expect(bounded.completion).toMatchObject({ total: 105, hasMore: true });
+		const failedCompletion = await client.complete({
+			ref: { type: "ref/resource", uri: "repo://{owner}/{repo}" },
+			argument: { name: "repo", value: "!" },
+		});
+		expect(failedCompletion).toEqual({
+			completion: { values: [], total: 0, hasMore: false },
+		});
+		expect(JSON.stringify(failedCompletion)).not.toContain("secret");
+
+		expect(
+			await client.readResource({ uri: "repo://prefect/fastmcp" }),
+		).toEqual({
+			contents: [
+				{
+					uri: "repo://prefect/fastmcp",
+					mimeType: "application/json",
+					text: '{"owner":"prefect","repo":"fastmcp"}',
+				},
+			],
+		});
+
+		const invalid = await client.readResource({ uri: "repo://prefect/secret" });
+		expect(invalid.contents).toEqual([
+			{
+				uri: "repo://prefect/secret",
+				mimeType: "application/json",
+				text: "Resource execution failed",
+			},
+		]);
+
+		await Promise.all([client.close(), server.close()]);
+	});
+
+	it("validates explicit prompt arguments and completes schema fields", async () => {
+		class ArgumentPromptServer {
+			public draft(input: { readonly topic: string; readonly tone?: string }) {
+				return (
+					"Write about " +
+					input.topic +
+					" in " +
+					(input.tone ?? "neutral") +
+					" tone."
+				);
+			}
+		}
+
+		const metadata: DecoratorMetadata = {};
+		McpPrompt({
+			description: "Drafts an article prompt.",
+			args: z.object({
+				topic: McpCompletable(z.string().describe("Article topic"), (value) =>
+					["typescript", "testing", "tooling"].filter((item) =>
+						item.startsWith(value),
+					),
+				),
+				tone: z.string().optional().describe("Optional writing tone"),
+			}),
+		})(ArgumentPromptServer.prototype.draft, methodContext("draft", metadata));
+		McpServer({ name: "argument-prompts", version: "1.0.0" })(
+			ArgumentPromptServer,
+			classContext(metadata),
+		);
+
+		const { client, server } = await connect(
+			createMcpServer(ArgumentPromptServer),
+		);
+		const prompts = await client.listPrompts();
+		expect(prompts.prompts).toContainEqual(
+			expect.objectContaining({
+				name: "draft",
+				arguments: [
+					{ name: "topic", description: "Article topic", required: true },
+					{
+						name: "tone",
+						description: "Optional writing tone",
+						required: false,
+					},
+				],
+			}),
+		);
+		expect(
+			await client.getPrompt({
+				name: "draft",
+				arguments: { topic: "typescript", tone: "concise" },
+			}),
+		).toMatchObject({
+			messages: [
+				{
+					role: "user",
+					content: {
+						type: "text",
+						text: "Write about typescript in concise tone.",
+					},
+				},
+			],
+		});
+		expect(
+			await client.complete({
+				ref: { type: "ref/prompt", name: "draft" },
+				argument: { name: "topic", value: "t" },
+			}),
+		).toEqual({
+			completion: {
+				values: ["typescript", "testing", "tooling"],
+				total: 3,
+				hasMore: false,
+			},
+		});
 
 		await Promise.all([client.close(), server.close()]);
 	});

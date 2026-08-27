@@ -15,6 +15,8 @@ export function McpResource(options: McpResourceOptions) {
 			icons: options.icons,
 			annotations: options.annotations,
 			_meta: options._meta,
+			input: options.input,
+			complete: options.complete,
 		});
 	};
 }

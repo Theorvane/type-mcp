@@ -1,3 +1,4 @@
+import { UriTemplate } from "@modelcontextprotocol/server";
 import { TypeMcpDefinitionError } from "../errors.js";
 import type {
 	McpPromptDefinition,
@@ -28,6 +29,9 @@ export function readMcpServerDefinition<
 
 	assertUniqueNames("tool", definition.tools, className);
 	assertUniqueNames("resource", definition.resources, className);
+	for (const resource of definition.resources) {
+		assertResourceDeclaration(resource, className);
+	}
 	assertUniqueNames("prompt", definition.prompts, className);
 
 	return definition;
@@ -48,5 +52,57 @@ function assertUniqueNames(
 		}
 
 		names.add(definition.name);
+	}
+}
+
+function assertResourceDeclaration(
+	resource: McpResourceDefinition,
+	className: string,
+): void {
+	if (!UriTemplate.isTemplate(resource.uri)) {
+		if (resource.input !== undefined || resource.complete !== undefined) {
+			throw new TypeMcpDefinitionError(
+				`Static MCP resource "${resource.name}" on ${className} cannot declare template input or completion`,
+			);
+		}
+		return;
+	}
+
+	if (resource.input === undefined) {
+		throw new TypeMcpDefinitionError(
+			`MCP resource template "${resource.name}" on ${className} requires an input schema`,
+		);
+	}
+
+	let template: UriTemplate;
+	try {
+		template = new UriTemplate(resource.uri);
+	} catch {
+		throw new TypeMcpDefinitionError(
+			`MCP resource template "${resource.name}" on ${className} has an invalid URI template`,
+		);
+	}
+	const variables = new Set(template.variableNames);
+	const fields = new Set(Object.keys(resource.input.shape));
+	for (const variable of variables) {
+		if (!fields.has(variable)) {
+			throw new TypeMcpDefinitionError(
+				`MCP resource template "${resource.name}" variable "${variable}" is missing from its input schema`,
+			);
+		}
+	}
+	for (const field of fields) {
+		if (!variables.has(field)) {
+			throw new TypeMcpDefinitionError(
+				`MCP resource template "${resource.name}" input field "${field}" is missing from its URI template`,
+			);
+		}
+	}
+	for (const variable of Object.keys(resource.complete ?? {})) {
+		if (!variables.has(variable)) {
+			throw new TypeMcpDefinitionError(
+				`MCP resource template "${resource.name}" completion variable "${variable}" is missing from its URI template`,
+			);
+		}
 	}
 }

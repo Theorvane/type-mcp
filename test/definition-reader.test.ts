@@ -3,6 +3,7 @@ import { z } from "zod";
 import {
 	McpPrompt,
 	McpResource,
+	type McpResourceOptions,
 	McpServer,
 	McpTool,
 	readMcpServerDefinition,
@@ -113,6 +114,63 @@ describe("readMcpServerDefinition", () => {
 		expect(readDefinition).toThrow("DuplicateServer");
 		expect(readDefinition).toThrow(name);
 	});
+
+	it.each<
+		readonly [label: string, options: McpResourceOptions, expected: string]
+	>([
+		[
+			"template without input",
+			{ uri: "repo://{owner}/{repo}" },
+			"requires an input schema",
+		],
+		[
+			"template variable missing from input",
+			{
+				uri: "repo://{owner}/{repo}",
+				input: z.object({ owner: z.string() }),
+			},
+			'variable "repo" is missing from its input schema',
+		],
+		[
+			"input field missing from template",
+			{
+				uri: "repo://{owner}",
+				input: z.object({ owner: z.string(), repo: z.string() }),
+			},
+			'input field "repo" is missing from its URI template',
+		],
+		[
+			"static resource with template options",
+			{ uri: "repo://static", input: z.object({}) },
+			"cannot declare template input or completion",
+		],
+		[
+			"completion variable missing from template",
+			{
+				uri: "repo://{owner}",
+				input: z.object({ owner: z.string() }),
+				complete: { repo: () => [] },
+			},
+			'completion variable "repo" is missing from its URI template',
+		],
+	])(
+		"rejects invalid dynamic resource declarations: %s",
+		(_label, options, expected) => {
+			class InvalidResourceServer {}
+			const metadata: DecoratorMetadata = {};
+			McpResource(options)(
+				() => undefined,
+				methodContext("resource", metadata),
+			);
+			decorateServer(InvalidResourceServer, metadata);
+
+			const readDefinition = (): void => {
+				readMcpServerDefinition(InvalidResourceServer);
+			};
+			expect(readDefinition).toThrow(TypeMcpDefinitionError);
+			expect(readDefinition).toThrow(expected);
+		},
+	);
 
 	it("allows the same public name in distinct MCP namespaces", () => {
 		class NamespaceServer {}

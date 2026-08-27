@@ -13,7 +13,7 @@
 
 > **Published package — `@theorvane/type-mcp@0.3.2`:** provides standard decorators, a separate `@theorvane/type-mcp/legacy` entrypoint for CommonJS legacy decorators, definition validation, explicit instance resolution, MCP SDK compilation, stdio, `@theorvane/type-mcp/http` Streamable HTTP, and the tools-only `@theorvane/type-mcp/langchain` adapter.
 >
-> **Current `dev` source:** additionally includes unreleased modern component metadata and tool output-schema options. The examples and capability map below target current source unless they explicitly say “published package.”
+> **Current `dev` source:** additionally includes SDK v2 protocol negotiation, modern component metadata, tool output schemas, explicit prompt arguments, resource URI templates, and completion. The examples and capability map below target current source unless they explicitly say “published package.”
 >
 > **Integration boundary:** LangGraph `ToolNode` composition, graph topology, model choice, authorization, state, persistence, and deployment remain consumer responsibilities.
 
@@ -128,8 +128,8 @@ The methods above are ordinary application methods. In current source, use `crea
 | --- | --- | --- |
 | `@McpServer` | Available | Records standard implementation identity and optional client initialization instructions. |
 | `@McpTool` | Available | Records input/output Zod schemas and metadata; object returns emit text plus structured content. |
-| `@McpResource` | Available | Records a static resource URI plus standard title, icons, annotations, and custom metadata. |
-| `@McpPrompt` | Available | Records a named prompt declaration with an optional title and description. |
+| `@McpResource` | Available | Records a static URI or a validated URI template with variable-scoped completion. |
+| `@McpPrompt` | Available | Records a named prompt with optional explicit Zod arguments and completion. |
 | `getMcpServerDefinition()` | Available | Reads a fresh frozen metadata copy; returns `undefined` for undecorated classes. |
 | `createMcpServer()` | Available | Validates declarations and compiles the decorated server surface with an explicit resolver seam. |
 | `serveStdioServer()` / `startStdioServer()` | Available | SDK v2 factory-based 2025/2026 negotiation plus an instance-based 2025 compatibility helper. |
@@ -143,6 +143,7 @@ The methods above are ordinary application methods. In current source, use `crea
 
 - [Getting started](docs/guides/getting-started.md) — install, declare, inspect, and compile a TypeMCP server.
 - [Choose a runtime boundary](docs/guides/runtime-selection.md) — select the released root, stdio, HTTP, or tools-only LangChain surface.
+- [Dynamic prompts and resources](docs/guides/dynamic-declarations.md) — explicit prompt arguments, URI templates, and completion in current source.
 - [Configuration and compatibility](docs/guides/configuration.md) — Node, ESM/CommonJS, TypeScript decorators, schemas, and release boundaries.
 - [Agent integration guide](docs/guides/agent-integration.md) — evidence-first coding-agent workflow and explicit runtime boundaries.
 - [HTTP framework integration](docs/guides/http-and-nextjs.md) — published Streamable HTTP example and Fetch/Next.js route shape.

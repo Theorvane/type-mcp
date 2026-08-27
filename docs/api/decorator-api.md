@@ -1,6 +1,6 @@
 # Decorator API contract
 
-**Published baseline:** [`@theorvane/type-mcp@0.3.2`](https://www.npmjs.com/package/@theorvane/type-mcp) provides decorator declarations, definition validation, MCP SDK compilation for tools/static resources/prompts, a Node stdio helper, and a Fetch Streamable HTTP adapter. The contract below describes current `dev` source, including unreleased server identity/instructions, modern component metadata, and tool `outputSchema` options. LangChain interoperability is isolated at `@theorvane/type-mcp/langchain`.
+**Published baseline:** [`@theorvane/type-mcp@0.3.2`](https://www.npmjs.com/package/@theorvane/type-mcp) provides decorator declarations, definition validation, MCP SDK compilation for tools/static resources/prompts, a Node stdio helper, and a Fetch Streamable HTTP adapter. The contract below describes current `dev` source, including SDK v2 serving, server identity/instructions, modern component metadata, tool `outputSchema`, explicit prompt arguments, resource URI templates, and completion. LangChain interoperability is isolated at `@theorvane/type-mcp/langchain`.
 
 ## Server declaration
 
@@ -53,42 +53,44 @@ findProduct(input: { sku: string }) {
 
 ```ts
 @McpResource({
-  title: "Catalog configuration",
-  uri: "config://catalog",
+  name: "repository",
+  uri: "repo://{owner}/{repo}",
   mimeType: "application/json",
-  icons: [{ src: "https://example.com/catalog.svg" }],
-  annotations: { audience: ["user"], priority: 0.8 },
-  _meta: { owner: "catalog-team" },
+  input: z.object({ owner: z.string(), repo: z.string() }),
+  complete: {
+    repo: (value, context) => lookupRepos(context?.arguments?.owner, value),
+  },
 })
-readConfig() {
-  return { region: "ap-northeast-2" };
+readRepository(input: { readonly owner: string; readonly repo: string }) {
+  return input;
 }
 ```
 
 | Case | Behavior |
 | --- | --- |
-| Accept | A static explicit URI and optional MIME type are recorded as one resource declaration. Optional `title`, `icons`, `annotations`, and custom `_meta` are forwarded as standard MCP resource metadata. `readMcpServerDefinition()` rejects duplicate resource names. |
-| Runtime | The compiler registers static resources with the MCP SDK and invokes the decorated handler when a client reads the resource. |
-| Excluded | URI templates, subscription/push resources, and persistence/caching policies. |
+| Accept | A static URI remains a zero-argument resource. A URI template must declare an explicit Zod `input` whose fields exactly match its variables; `complete` callbacks may target only declared variables. Optional standard metadata is preserved. |
+| Runtime | Static resources use the existing SDK registration. Templates appear in `resources/templates/list`; URI variables are Zod-validated before the parsed object reaches the handler. Completion callbacks are isolated from application errors and SDK v2 bounds responses to 100 values. |
+| Excluded | Implicit parameter inference, resource subscription policy, and persistence/caching policies. |
 
 ## Prompt declaration
 
 ```ts
 @McpPrompt({
   name: "summarize-product",
-  title: "Summarize product",
-  description: "Prepare a product-summary prompt.",
+  args: z.object({
+    sku: McpCompletable(z.string().describe("Product SKU"), completeSku),
+  }),
 })
-summarizeProduct() {
-  return "Summarize the current product catalog.";
+summarizeProduct(input: { readonly sku: string }) {
+  return "Summarize product " + input.sku + ".";
 }
 ```
 
 | Case | Behavior |
 | --- | --- |
-| Accept | A named method is recorded as a prompt declaration with optional `title` and `description`. `readMcpServerDefinition()` rejects duplicate prompt names. Component namespaces are distinct, so a tool, resource, and prompt may share one public name. |
-| Runtime | The compiler registers prompts with the MCP SDK and normalizes supported handler results into MCP prompt messages. |
-| Excluded | Automatic argument inference from TypeScript parameter types and prompt template files. Tool icons and prompt icons/custom metadata remain excluded until the official SDK high-level registration API exposes them. |
+| Accept | A named method is recorded with optional metadata and an explicit Zod `args` object. `McpCompletable(schema, callback)` marks individual fields for completion. Zero-argument prompts remain valid. |
+| Runtime | SDK v2 derives the MCP prompt argument list, validates request strings through the schema, dispatches completion, and passes the parsed object to the handler. Results and handler failures retain TypeMCP normalization and safe errors. |
+| Excluded | Automatic argument inference from TypeScript parameter types and prompt template files. Tool icons and prompt icons/custom metadata remain excluded until the compiler exposes them. |
 
 ## Server construction
 

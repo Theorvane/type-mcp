@@ -90,6 +90,11 @@ export function freezeServerDefinition(
 						resource._meta === undefined
 							? undefined
 							: Object.freeze({ ...resource._meta }),
+					input: resource.input,
+					complete:
+						resource.complete === undefined
+							? undefined
+							: Object.freeze({ ...resource.complete }),
 				}),
 			),
 		),
@@ -100,6 +105,7 @@ export function freezeServerDefinition(
 					methodName: prompt.methodName,
 					title: prompt.title,
 					description: prompt.description,
+					args: prompt.args,
 				}),
 			),
 		),
