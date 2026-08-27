@@ -1,13 +1,21 @@
 import type { output, ZodObject } from "zod";
+import type { McpInvocationContext } from "../invocation-context.js";
 import { appendPromptDefinition } from "../metadata/metadata.js";
 import type { McpPromptOptions } from "../types.js";
 
-type PromptDecorator<Arguments extends readonly unknown[]> = <This>(
-	value: (this: This, ...arguments_: Arguments) => unknown,
-	context: ClassMethodDecoratorContext<
-		This,
-		(this: This, ...arguments_: Arguments) => unknown
-	>,
+type PromptHandler<This, Arguments extends readonly unknown[]> =
+	| ((this: This, ...arguments_: Arguments) => unknown)
+	| ((
+			this: This,
+			...arguments_: readonly [...Arguments, context: McpInvocationContext]
+	  ) => unknown);
+
+type PromptDecorator<Arguments extends readonly unknown[]> = <
+	This,
+	Value extends PromptHandler<This, Arguments>,
+>(
+	value: Value,
+	context: ClassMethodDecoratorContext<This, Value>,
 ) => void;
 
 export function McpPrompt<Schema extends ZodObject>(
@@ -19,12 +27,9 @@ export function McpPrompt(
 export function McpPrompt(
 	options: McpPromptOptions,
 ): PromptDecorator<readonly []> | PromptDecorator<readonly [input: unknown]> {
-	return function <This, Arguments extends readonly unknown[]>(
-		_value: (this: This, ...arguments_: Arguments) => unknown,
-		context: ClassMethodDecoratorContext<
-			This,
-			(this: This, ...arguments_: Arguments) => unknown
-		>,
+	const decorator = function (
+		_value: object,
+		context: ClassMethodDecoratorContext,
 	): void {
 		const methodName = getMethodName(context);
 
@@ -36,6 +41,9 @@ export function McpPrompt(
 			args: options.args,
 		});
 	};
+	return decorator as
+		| PromptDecorator<readonly []>
+		| PromptDecorator<readonly [input: unknown]>;
 }
 
 function getMethodName(context: { readonly name: string | symbol }): string {

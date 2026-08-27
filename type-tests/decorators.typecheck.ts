@@ -1,5 +1,10 @@
 import { z } from "zod";
-import { McpPrompt, McpServer, McpTool } from "../src/index.js";
+import {
+	type McpInvocationContext,
+	McpPrompt,
+	McpServer,
+	McpTool,
+} from "../src/index.js";
 
 @McpServer({ name: "type-test", version: "0.1.0" })
 class ValidDecoratedServer {
@@ -35,6 +40,19 @@ class ValidDecoratedServer {
 	@McpPrompt({ args: z.object({ sku: z.string() }) })
 	productSummary(input: { readonly sku: string }): string {
 		return input.sku;
+	}
+
+	@McpPrompt({})
+	contextualWelcome(context: McpInvocationContext): string {
+		return String(context.requestId);
+	}
+
+	@McpPrompt({ args: z.object({ sku: z.string() }) })
+	contextualProductSummary(
+		input: { readonly sku: string },
+		context: McpInvocationContext,
+	): string {
+		return input.sku + String(context.requestId);
 	}
 }
 

@@ -5,6 +5,7 @@ export { McpResource } from "./decorators/mcp-resource.js";
 export { McpServer } from "./decorators/mcp-server.js";
 export { McpTool } from "./decorators/mcp-tool.js";
 export { TypeMcpDefinitionError } from "./errors.js";
+export type { McpInvocationContext } from "./invocation-context.js";
 export { getMcpServerDefinition } from "./metadata/definitions.js";
 export { readMcpServerDefinition } from "./metadata/read-server-definition.js";
 export { defaultInstanceResolver } from "./resolver/default-instance-resolver.js";

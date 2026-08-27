@@ -1,6 +1,6 @@
 # Decorator API contract
 
-**Published baseline:** [`@theorvane/type-mcp@0.3.2`](https://www.npmjs.com/package/@theorvane/type-mcp) provides decorator declarations, definition validation, MCP SDK compilation for tools/static resources/prompts, a Node stdio helper, and a Fetch Streamable HTTP adapter. The contract below describes current `dev` source, including SDK v2 serving, server identity/instructions, modern component metadata, tool `outputSchema`, explicit prompt arguments, resource URI templates, and completion. LangChain interoperability is isolated at `@theorvane/type-mcp/langchain`.
+**Published baseline:** [`@theorvane/type-mcp@0.3.2`](https://www.npmjs.com/package/@theorvane/type-mcp) provides decorator declarations, definition validation, MCP SDK compilation for tools/static resources/prompts, a Node stdio helper, and a Fetch Streamable HTTP adapter. The contract below describes current `dev` source, including SDK v2 serving, server identity/instructions, modern component metadata, tool `outputSchema`, explicit prompt arguments, resource URI templates, completion, and invocation context. LangChain interoperability is isolated at `@theorvane/type-mcp/langchain`.
 
 ## Server declaration
 
@@ -91,6 +91,18 @@ summarizeProduct(input: { readonly sku: string }) {
 | Accept | A named method is recorded with optional metadata and an explicit Zod `args` object. `McpCompletable(schema, callback)` marks individual fields for completion. Zero-argument prompts remain valid. |
 | Runtime | SDK v2 derives the MCP prompt argument list, validates request strings through the schema, dispatches completion, and passes the parsed object to the handler. Results and handler failures retain TypeMCP normalization and safe errors. |
 | Excluded | Automatic argument inference from TypeScript parameter types and prompt template files. Tool icons and prompt icons/custom metadata remain excluded until the compiler exposes them. |
+
+## Invocation context
+
+Decorated handlers may declare a final `McpInvocationContext` argument. Tools and URI-template resources receive it after parsed input; static resources and zero-argument prompts receive it as their only argument; prompts with explicit arguments receive it after parsed input.
+
+| Case | Behavior |
+| --- | --- |
+| Accept | `requestId`, optional `sessionId`, the SDK's original `AbortSignal`, and `reportProgress(progress, total?, message?)`. The object is frozen. |
+| Runtime | Progress preserves the request's progress token and is a no-op when no token was supplied. Client cancellation aborts the same signal seen by the handler. Existing handlers that omit the final argument remain compatible. |
+| Excluded | Raw protocol send/notify, authentication, logging, sampling, elicitation, roots, application state, and stack traces. |
+
+See the [invocation context guide](../guides/invocation-context.md) for usage and HTTP streaming constraints.
 
 ## Server construction
 

@@ -13,6 +13,7 @@ import type {
 export { completable as McpCompletable } from "@modelcontextprotocol/server";
 export { createMcpServer } from "./compiler/create-mcp-server.js";
 export { TypeMcpDefinitionError } from "./errors.js";
+export type { McpInvocationContext } from "./invocation-context.js";
 export { getMcpServerDefinition } from "./metadata/definitions.js";
 export { readMcpServerDefinition } from "./metadata/read-server-definition.js";
 export { defaultInstanceResolver } from "./resolver/default-instance-resolver.js";
