@@ -26,6 +26,10 @@ const exportsToVerify = [
 		symbols: [{ name: "createLangChainTools", runtimeType: "function" }],
 	},
 	{
+		key: "./testing",
+		symbols: [{ name: "createMcpTestSession", runtimeType: "function" }],
+	},
+	{
 		key: "./legacy",
 		symbols: [
 			{ name: "McpServer", runtimeType: "function" },

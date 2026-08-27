@@ -14,6 +14,8 @@
 | Prompts | Published baseline: named zero-argument handlers; current `dev`: explicit validated arguments and completion |
 | Compilation | Decorator metadata compiled to the stable split `@modelcontextprotocol/server` v2 `McpServer` |
 | Invocation context | Current `dev`: request/session identity, SDK cancellation signal, and progress reporting |
+| Testing | Current `dev`: official SDK v2 in-memory client/server session with explicit cleanup |
+| Media | Current `dev`: byte-only image/audio helpers with explicit MIME validation |
 | Instance construction | Direct constructor default plus async-capable `InstanceResolver` interface |
 | Local transport | stdio helper |
 | Web transport | Fetch-standard Streamable HTTP handler |

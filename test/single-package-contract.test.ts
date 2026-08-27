@@ -9,7 +9,7 @@ interface PackageManifest {
 }
 
 describe("type-mcp single-package contract", () => {
-	it("declares root and HTTP subpath exports from one package", async () => {
+	it("declares root and public subpath exports from one package", async () => {
 		const manifest = JSON.parse(
 			await readFile(new URL("../package.json", import.meta.url), "utf8"),
 		) as PackageManifest;
@@ -17,6 +17,7 @@ describe("type-mcp single-package contract", () => {
 		expect(manifest.name).toBe("@theorvane/type-mcp");
 		expect(manifest.exports).toHaveProperty(".");
 		expect(manifest.exports).toHaveProperty("./http");
+		expect(manifest.exports).toHaveProperty("./testing");
 		expect(createMcpServer).toBeTypeOf("function");
 		expect(createMcpHandler).toBeTypeOf("function");
 	});
