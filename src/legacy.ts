@@ -52,6 +52,11 @@ export function McpServer(options: McpServerOptions): LegacyClassDecorator {
 		storeMcpServerDefinition(target, {
 			name: options.name,
 			version: options.version,
+			title: options.title,
+			description: options.description,
+			websiteUrl: options.websiteUrl,
+			icons: options.icons,
+			instructions: options.instructions,
 			tools: pending.tools,
 			resources: pending.resources,
 			prompts: pending.prompts,

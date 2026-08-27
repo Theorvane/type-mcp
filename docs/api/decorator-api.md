@@ -1,6 +1,6 @@
 # Decorator API contract
 
-**Published baseline:** [`@theorvane/type-mcp@0.3.2`](https://www.npmjs.com/package/@theorvane/type-mcp) provides decorator declarations, definition validation, MCP SDK compilation for tools/static resources/prompts, a Node stdio helper, and a Fetch Streamable HTTP adapter. The contract below describes current `dev` source, including unreleased modern component metadata and tool `outputSchema` options. LangChain interoperability is isolated at `@theorvane/type-mcp/langchain`.
+**Published baseline:** [`@theorvane/type-mcp@0.3.2`](https://www.npmjs.com/package/@theorvane/type-mcp) provides decorator declarations, definition validation, MCP SDK compilation for tools/static resources/prompts, a Node stdio helper, and a Fetch Streamable HTTP adapter. The contract below describes current `dev` source, including unreleased server identity/instructions, modern component metadata, and tool `outputSchema` options. LangChain interoperability is isolated at `@theorvane/type-mcp/langchain`.
 
 ## Server declaration
 
@@ -8,14 +8,22 @@
 import { McpServer, McpTool, createMcpServer } from "@theorvane/type-mcp";
 import { createMcpHandler } from "@theorvane/type-mcp/http";
 
-@McpServer({ name: "catalog", version: "0.2.0" })
+@McpServer({
+  name: "catalog",
+  version: "0.2.0",
+  title: "Catalog server",
+  description: "Catalog lookup and configuration.",
+  websiteUrl: "https://example.com/catalog",
+  icons: [{ src: "https://example.com/catalog.svg", sizes: ["any"] }],
+  instructions: "Use findProduct with a catalog SKU.",
+})
 class CatalogServer {}
 ```
 
 | Case | Behavior |
 | --- | --- |
-| Accept | `name` and `version` identify one decorated server class. The decorator records an immutable server definition. |
-| Validate and compile | `createMcpServer()` validates the definition, resolves an instance explicitly, and compiles it into an official MCP SDK `McpServer`. |
+| Accept | `name` and `version` identify one decorated server class. Optional `title`, `description`, `websiteUrl`, and `icons` provide standard MCP implementation identity; `instructions` tells connected clients how to use the server. The decorator records an immutable server definition and defensively copies icon metadata. |
+| Validate and compile | `createMcpServer()` validates the definition, resolves an instance explicitly, and compiles it into an official MCP SDK `McpServer`. Identity fields are published as `serverInfo`, and `instructions` is published in the initialization result. |
 | Excluded | Automatic application-container discovery and inferred application metadata. |
 
 ## Tool declaration
@@ -124,7 +132,7 @@ export { handler as GET, handler as POST, handler as DELETE };
 
 ## Metadata immutability
 
-`getMcpServerDefinition()` returns a newly allocated, frozen server definition, component arrays, and component records on every read. Tool `input` and `outputSchema` schemas retain the caller-supplied Zod object-schema identity: schemas are executable mutable objects and are not cloned or frozen by TypeMCP. Standard metadata containers are defensively copied on definition reads. Consumers should treat a schema supplied to a decorator as immutable after declaration.
+`getMcpServerDefinition()` returns a newly allocated, frozen server definition, component arrays, and component records on every read. Tool `input` and `outputSchema` schemas retain the caller-supplied Zod object-schema identity: schemas are executable mutable objects and are not cloned or frozen by TypeMCP. Standard metadata containers, including server and resource icons with nested size arrays, are defensively copied and frozen on definition reads. Consumers should treat a schema supplied to a decorator as immutable after declaration.
 
 ## Legacy TypeScript decorators
 

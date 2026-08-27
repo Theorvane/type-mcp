@@ -1,3 +1,4 @@
+import type { Icon } from "@modelcontextprotocol/sdk/types.js";
 import type {
 	McpPromptDefinition,
 	McpResourceDefinition,
@@ -40,6 +41,11 @@ export function freezeServerDefinition(
 	return Object.freeze({
 		name: definition.name,
 		version: definition.version,
+		title: definition.title,
+		description: definition.description,
+		websiteUrl: definition.websiteUrl,
+		icons: freezeIcons(definition.icons),
+		instructions: definition.instructions,
 		tools: Object.freeze(
 			definition.tools.map((tool) =>
 				Object.freeze({
@@ -69,18 +75,7 @@ export function freezeServerDefinition(
 					uri: resource.uri,
 					mimeType: resource.mimeType,
 					description: resource.description,
-					icons:
-						resource.icons === undefined
-							? undefined
-							: Object.freeze(
-									resource.icons.map((icon) =>
-										Object.freeze({
-											...icon,
-											sizes:
-												icon.sizes === undefined ? undefined : [...icon.sizes],
-										}),
-									),
-								),
+					icons: freezeIcons(resource.icons),
 					annotations:
 						resource.annotations === undefined
 							? undefined
@@ -109,4 +104,20 @@ export function freezeServerDefinition(
 			),
 		),
 	});
+}
+
+function freezeIcons(
+	icons: readonly Readonly<Icon>[] | undefined,
+): readonly Readonly<Icon>[] | undefined {
+	return icons === undefined
+		? undefined
+		: Object.freeze(
+				icons.map((icon) => {
+					const sizes = icon.sizes === undefined ? undefined : [...icon.sizes];
+					if (sizes !== undefined) {
+						Object.freeze(sizes);
+					}
+					return Object.freeze({ ...icon, sizes });
+				}),
+			);
 }

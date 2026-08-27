@@ -1,14 +1,14 @@
 # MVP scope
 
-> **Published package:** `@theorvane/type-mcp@0.3.0` includes this MVP's metadata, validation, resolver, compiler, stdio, HTTP, and tools-only LangChain adapter. Start with the [README](../../README.md) and [getting-started guide](../guides/getting-started.md) for exact exports and boundaries.
+> **Published package:** `@theorvane/type-mcp@0.3.2` includes the MVP baseline. Current `dev` additionally carries unreleased modern server/component metadata, initialization instructions, and tool structured-output support. Start with the [README](../../README.md) and [getting-started guide](../guides/getting-started.md) for exact exports and boundaries.
 
-**Status:** Implemented and published in `@theorvane/type-mcp@0.3.0`: decorator metadata storage, definition validation, the instance resolver seam, compiler behavior, the Node stdio helper, the Fetch Streamable HTTP adapter, and the tools-only LangChain adapter.
+**Status:** The baseline is published in `@theorvane/type-mcp@0.3.2`; rows explicitly marked current `dev` are implemented but unreleased.
 
 ## Included
 
 | Capability | MVP boundary |
 | --- | --- |
-| Server declaration | `@McpServer({ name, version })` on a class |
+| Server declaration | Published baseline: `name` and `version`; current `dev`: optional standard implementation identity and client instructions |
 | Tools | `@McpTool()` with name/description and Zod object input schema |
 | Resources | `@McpResource()` for explicit static URIs |
 | Prompts | `@McpPrompt()` for named prompt handlers |
@@ -33,7 +33,7 @@
 
 ## Constraints
 
-- Public distribution: `@theorvane/type-mcp@0.3.0` on npm; the repository is `Theorvane/type-mcp`.
+- Public distribution: `@theorvane/type-mcp@0.3.2` on npm; the repository is `Theorvane/type-mcp`.
 - Runtime protocol behavior comes from the official MCP SDK.
 - Core and HTTP have no agent-framework runtime or peer dependency; `@theorvane/type-mcp/langchain` has an isolated optional LangChain peer.
 - Public types are strict and runtime input is validated before handler invocation.

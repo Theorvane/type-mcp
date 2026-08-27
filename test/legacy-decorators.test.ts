@@ -60,11 +60,24 @@ describe("legacy MCP decorators", () => {
 			"prompt",
 			Object.getOwnPropertyDescriptor(prototype, "prompt") ?? {},
 		);
-		McpServer({ name: "legacy", version: "1.0.0" })(LegacyServer);
+		McpServer({
+			name: "legacy",
+			version: "1.0.0",
+			title: "Legacy server",
+			description: "Legacy decorator compatibility.",
+			websiteUrl: "https://example.test/legacy",
+			icons: [{ src: "https://example.test/legacy-server.svg" }],
+			instructions: "Use the search tool.",
+		})(LegacyServer);
 
 		expect(getMcpServerDefinition(LegacyServer)).toEqual({
 			name: "legacy",
 			version: "1.0.0",
+			title: "Legacy server",
+			description: "Legacy decorator compatibility.",
+			websiteUrl: "https://example.test/legacy",
+			icons: [{ src: "https://example.test/legacy-server.svg" }],
+			instructions: "Use the search tool.",
 			tools: [
 				{
 					name: "search",
