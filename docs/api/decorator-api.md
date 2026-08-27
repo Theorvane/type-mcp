@@ -104,6 +104,22 @@ Decorated handlers may declare a final `McpInvocationContext` argument. Tools an
 
 See the [invocation context guide](../guides/invocation-context.md) for usage and HTTP streaming constraints.
 
+## Testing subpath
+
+`createMcpTestSession(server, options?)` from `@theorvane/type-mcp/testing` connects an official SDK v2 `Client` and compiled `McpServer` with `InMemoryTransport`.
+
+| Case | Behavior |
+| --- | --- |
+| Accept | A compiled server or promise plus optional client implementation identity. |
+| Runtime | Returns a frozen session containing `client`, `server`, and idempotent `close()`. Setup failure closes both endpoints before rethrowing the original error. |
+| Excluded | Mocks, snapshots, network transport assertions, subprocesses, and application fixtures. |
+
+## Media helpers
+
+`McpImage(bytes, { mimeType, annotations? })` and `McpAudio(bytes, { mimeType, annotations? })` defensively copy bytes and metadata. Direct helpers and helper/string lists normalize to standard MCP content blocks. MIME types must belong to the corresponding `image/*` or `audio/*` family. Filesystem and network loading remain consumer-owned.
+
+See the [testing and media guide](../guides/testing-media.md).
+
 ## Server construction
 
 ```ts

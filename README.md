@@ -13,7 +13,7 @@
 
 > **Published package — `@theorvane/type-mcp@0.3.2`:** provides standard decorators, a separate `@theorvane/type-mcp/legacy` entrypoint for CommonJS legacy decorators, definition validation, explicit instance resolution, MCP SDK compilation, stdio, `@theorvane/type-mcp/http` Streamable HTTP, and the tools-only `@theorvane/type-mcp/langchain` adapter.
 >
-> **Current `dev` source:** additionally includes SDK v2 protocol negotiation, modern component metadata, tool output schemas, explicit prompt arguments, resource URI templates, completion, and a narrow invocation context for cancellation and progress. The examples and capability map below target current source unless they explicitly say “published package.”
+> **Current `dev` source:** additionally includes SDK v2 protocol negotiation, modern component metadata, tool output schemas, explicit prompt arguments, resource URI templates, completion, invocation context, protocol-backed testing, and image/audio helpers. The examples and capability map below target current source unless they explicitly say “published package.”
 >
 > **Integration boundary:** LangGraph `ToolNode` composition, graph topology, model choice, authorization, state, persistence, and deployment remain consumer responsibilities.
 
@@ -133,6 +133,8 @@ The methods above are ordinary application methods. In current source, use `crea
 | `getMcpServerDefinition()` | Available | Reads a fresh frozen metadata copy; returns `undefined` for undecorated classes. |
 | `createMcpServer()` | Available | Validates declarations and compiles the decorated server surface with an explicit resolver seam. |
 | `McpInvocationContext` | Available | Optional final handler argument exposing request/session identity, cancellation, and progress reporting. |
+| `McpImage` / `McpAudio` | Available | Browser-neutral byte helpers normalized to standard MCP media content. |
+| `@theorvane/type-mcp/testing` | Available | Connects the official SDK client and a compiled server through the in-memory protocol transport. |
 | `serveStdioServer()` / `startStdioServer()` | Available | SDK v2 factory-based 2025/2026 negotiation plus an instance-based 2025 compatibility helper. |
 | `@theorvane/type-mcp/http` / `createMcpHandler()` | Available | Fetch/Streamable HTTP adapter with stateful 2025 sessions and the SDK v2 2026 per-request lifecycle; applications own route hosting, durable session policy, and authorization. |
 | Definition validation and `TypeMcpDefinitionError` | Available | Validates declarations and reports safe definition errors. |
@@ -146,6 +148,7 @@ The methods above are ordinary application methods. In current source, use `crea
 - [Choose a runtime boundary](docs/guides/runtime-selection.md) — select the released root, stdio, HTTP, or tools-only LangChain surface.
 - [Dynamic prompts and resources](docs/guides/dynamic-declarations.md) — explicit prompt arguments, URI templates, and completion in current source.
 - [Invocation context](docs/guides/invocation-context.md) — request identity, cancellation, progress, and streaming constraints.
+- [Testing and media helpers](docs/guides/testing-media.md) — in-memory protocol sessions and image/audio byte results.
 - [Configuration and compatibility](docs/guides/configuration.md) — Node, ESM/CommonJS, TypeScript decorators, schemas, and release boundaries.
 - [Agent integration guide](docs/guides/agent-integration.md) — evidence-first coding-agent workflow and explicit runtime boundaries.
 - [HTTP framework integration](docs/guides/http-and-nextjs.md) — published Streamable HTTP example and Fetch/Next.js route shape.

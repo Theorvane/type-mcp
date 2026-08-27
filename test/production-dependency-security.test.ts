@@ -28,9 +28,12 @@ describe("production dependency security", () => {
 		expect(manifest.dependencies?.["@modelcontextprotocol/server"]).toBe(
 			"2.0.0",
 		);
-		expect(manifest.devDependencies?.["@modelcontextprotocol/client"]).toBe(
+		expect(manifest.dependencies?.["@modelcontextprotocol/client"]).toBe(
 			"2.0.0",
 		);
+		expect(
+			manifest.devDependencies?.["@modelcontextprotocol/client"],
+		).toBeUndefined();
 		expect(
 			manifest.dependencies?.["@modelcontextprotocol/sdk"],
 		).toBeUndefined();
