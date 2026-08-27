@@ -97,7 +97,7 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.5.4",
-		"@langchain/core": "1.2.3",
+		"@langchain/core": "1.2.9",
 		"@langchain/langgraph": "1.4.9",
 		"@modelcontextprotocol/client": "2.0.0",
 		"@types/node": "^26.2.0",

@@ -7,7 +7,7 @@
 		"build": "tsc -p tsconfig.json"
 	},
 	"dependencies": {
-		"@langchain/core": "1.2.3",
+		"@langchain/core": "1.2.9",
 		"@langchain/langgraph": "1.4.8",
 		"@theorvane/type-mcp": "file:../..",
 		"zod": "^4.4.3"
