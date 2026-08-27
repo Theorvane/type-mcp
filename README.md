@@ -76,6 +76,7 @@ export class CatalogServer {
     title: "Find a product",
     description: "Look up a catalog item by SKU.",
     input: z.object({ sku: z.string().min(1) }),
+    outputSchema: z.object({ sku: z.string(), available: z.boolean() }),
     annotations: { readOnlyHint: true, openWorldHint: false },
     _meta: { owner: "catalog-team" },
   })
@@ -118,7 +119,7 @@ The methods above are ordinary application methods. In current source, use `crea
 | Surface | Current source | What it does |
 | --- | --- | --- |
 | `@McpServer` | Available | Records server name and version metadata. |
-| `@McpTool` | Available | Records input/output Zod schemas plus standard title, annotations, and custom metadata. |
+| `@McpTool` | Available | Records input/output Zod schemas and metadata; object returns emit text plus structured content. |
 | `@McpResource` | Available | Records a static resource URI plus standard title, icons, annotations, and custom metadata. |
 | `@McpPrompt` | Available | Records a named prompt declaration with an optional title and description. |
 | `getMcpServerDefinition()` | Available | Reads a fresh frozen metadata copy; returns `undefined` for undecorated classes. |

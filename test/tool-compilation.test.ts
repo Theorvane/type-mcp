@@ -38,13 +38,8 @@ function classContext(metadata: DecoratorMetadata): ClassDecoratorContext {
 describe("decorated tool compilation", () => {
 	it("publishes modern tool metadata and validates declared structured output", async () => {
 		class MetadataServer {
-			public calculate(input: { value: number }): unknown {
-				return {
-					structuredContent:
-						input.value < 0
-							? { answer: "invalid" }
-							: { answer: input.value * 2 },
-				};
+			public calculate(input: { value: number }): { readonly answer: unknown } {
+				return { answer: input.value < 0 ? "invalid" : input.value * 2 };
 			}
 		}
 
@@ -114,6 +109,7 @@ describe("decorated tool compilation", () => {
 			}),
 		);
 		expect(valid).toMatchObject({
+			content: [{ type: "text", text: '{"answer":8}' }],
 			structuredContent: { answer: 8 },
 		});
 		expect(invalid.isError).toBe(true);
@@ -297,9 +293,10 @@ describe("decorated tool compilation", () => {
 			CallToolResultSchema,
 		);
 
-		expect(result.content).toEqual([
-			{ type: "text", text: '{"label":"record-7","id":7}' },
-		]);
+		expect(result).toMatchObject({
+			content: [{ type: "text", text: '{"label":"record-7","id":7}' }],
+			structuredContent: { label: "record-7", id: 7 },
+		});
 		expect(structuredResult).toMatchObject({
 			content: [],
 			structuredContent: { answer: 42 },

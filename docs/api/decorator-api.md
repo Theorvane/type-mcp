@@ -31,17 +31,14 @@ class CatalogServer {}
   _meta: { owner: "catalog-team" },
 })
 findProduct(input: { sku: string }) {
-  return {
-    content: [{ type: "text" as const, text: `Found ${input.sku}` }],
-    structuredContent: { sku: input.sku, available: true },
-  };
+  return { sku: input.sku, available: true };
 }
 ```
 
 | Case | Behavior |
 | --- | --- |
 | Accept | A method name is used as the tool name unless an explicit `name` is supplied. `input` and optional `outputSchema` values must be Zod object schemas. Optional `title`, `annotations`, and custom `_meta` are forwarded as standard MCP tool metadata. `readMcpServerDefinition()` rejects duplicate tool names. |
-| Runtime | The compiler registers the validated tool with the MCP SDK. Zod validates tool input before the decorated handler runs. When `outputSchema` is present, the SDK validates returned `structuredContent`; validation and handler failures use safe MCP error results. |
+| Runtime | The compiler registers the validated tool with the MCP SDK. Zod validates tool input before the decorated handler runs. JSON-compatible object returns become both JSON text content and `structuredContent`; strings, primitives, and arrays remain text-only. Explicit SDK-valid tool results are preserved. When `outputSchema` is present, the SDK validates the normalized structured output; validation and handler failures use safe MCP error results. |
 | Excluded | Parameter decorators, automatic schema reflection, authorization, retries, and leaking handler stack traces. |
 
 ## Resource declaration
