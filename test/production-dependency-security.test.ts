@@ -12,6 +12,7 @@ interface Lockfile {
 
 interface PackageManifest {
 	readonly dependencies?: Record<string, string>;
+	readonly devDependencies?: Record<string, string>;
 	readonly overrides?: Record<string, string>;
 }
 
@@ -24,7 +25,15 @@ describe("production dependency security", () => {
 			await readFile(new URL("../package-lock.json", import.meta.url), "utf8"),
 		) as Lockfile;
 
-		expect(manifest.dependencies?.["@modelcontextprotocol/sdk"]).toBe("1.30.0");
+		expect(manifest.dependencies?.["@modelcontextprotocol/server"]).toBe(
+			"2.0.0",
+		);
+		expect(manifest.devDependencies?.["@modelcontextprotocol/client"]).toBe(
+			"2.0.0",
+		);
+		expect(
+			manifest.dependencies?.["@modelcontextprotocol/sdk"],
+		).toBeUndefined();
 		expect(manifest.dependencies?.["@hono/node-server"]).toBe("2.0.12");
 		expect(manifest.overrides).toMatchObject({
 			esbuild: "0.28.2",
@@ -33,16 +42,20 @@ describe("production dependency security", () => {
 			"ip-address": "10.4.0",
 		});
 		expect(
-			lockfile.packages["node_modules/@modelcontextprotocol/sdk"]?.version,
-		).toBe("1.30.0");
+			lockfile.packages["node_modules/@modelcontextprotocol/server"]?.version,
+		).toBe("2.0.0");
+		expect(
+			lockfile.packages["node_modules/@modelcontextprotocol/client"]?.version,
+		).toBe("2.0.0");
+		expect(
+			lockfile.packages["node_modules/@modelcontextprotocol/sdk"],
+		).toBeUndefined();
 		expect(lockfile.packages["node_modules/@hono/node-server"]?.version).toBe(
 			"2.0.12",
 		);
-		expect(lockfile.packages["node_modules/fast-uri"]?.version).toBe("3.1.5");
+		expect(lockfile.packages["node_modules/fast-uri"]).toBeUndefined();
 		expect(lockfile.packages["node_modules/hono"]?.version).toBe("4.12.34");
-		expect(lockfile.packages["node_modules/ip-address"]?.version).toBe(
-			"10.4.0",
-		);
+		expect(lockfile.packages["node_modules/ip-address"]).toBeUndefined();
 		expect(lockfile.packages["node_modules/esbuild"]?.version).toBe("0.28.2");
 		expect(lockfile.packages["node_modules/@esbuild/linux-x64"]?.version).toBe(
 			"0.28.2",

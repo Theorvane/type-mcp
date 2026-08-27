@@ -1,9 +1,9 @@
-import { Client } from "@modelcontextprotocol/sdk/client/index.js";
-import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
+import { Client } from "@modelcontextprotocol/client";
 import {
 	CallToolResultSchema,
+	InMemoryTransport,
 	ListToolsResultSchema,
-} from "@modelcontextprotocol/sdk/types.js";
+} from "@modelcontextprotocol/server";
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
 import { createMcpServer, McpServer, McpTool } from "../src/index.js";

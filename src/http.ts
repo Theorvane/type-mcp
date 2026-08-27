@@ -1,10 +1,19 @@
-import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
-import type { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
+import type {
+	McpRequestContext,
+	McpServer as SdkMcpServer,
+	Server as SdkServer,
+} from "@modelcontextprotocol/server";
+import {
+	createMcpHandler as createSdkMcpHandler,
+	isLegacyRequest,
+	WebStandardStreamableHTTPServerTransport,
+} from "@modelcontextprotocol/server";
 
-export interface McpHttpServerConnection {
-	connect(transport: Transport): Promise<void>;
-	close(): Promise<void>;
-}
+export type McpHttpServerConnection = SdkMcpServer | SdkServer;
+
+export type McpHttpServerFactory = (
+	context: McpRequestContext,
+) => McpHttpServerConnection | Promise<McpHttpServerConnection>;
 
 export type McpHandler = (request: Request) => Promise<Response>;
 
@@ -16,8 +25,8 @@ export interface McpHandlerOptions {
 	readonly enableJsonResponse?: boolean;
 }
 
-interface Session<Server extends McpHttpServerConnection> {
-	readonly server: Server;
+interface Session {
+	readonly server: McpHttpServerConnection;
 	readonly transport: WebStandardStreamableHTTPServerTransport;
 }
 
@@ -57,15 +66,19 @@ async function isInitializeRequest(request: Request): Promise<boolean> {
  * Standard transport. The adapter routes sessions before delegating valid MCP
  * traffic, HTTP methods, JSON-RPC framing, and lifecycle behavior to the SDK.
  */
-export function createMcpHandler<Server extends McpHttpServerConnection>(
-	createServer: () => Server | Promise<Server>,
+export function createMcpHandler(
+	createServer: McpHttpServerFactory,
 	options: McpHandlerOptions = {},
 ): McpHandler {
-	const sessions = new Map<string, Session<Server>>();
+	const sessions = new Map<string, Session>();
+	const modern = createSdkMcpHandler(createServer, {
+		legacy: "reject",
+		responseMode: (options.enableJsonResponse ?? true) ? "json" : "sse",
+	});
 
-	async function createSession(): Promise<Session<Server>> {
-		const server = await createServer();
-		let session: Session<Server>;
+	async function createSession(request: Request): Promise<Session> {
+		const server = await createServer({ era: "legacy", requestInfo: request });
+		let session: Session;
 		const transport = new WebStandardStreamableHTTPServerTransport({
 			sessionIdGenerator: () => crypto.randomUUID(),
 			enableJsonResponse: options.enableJsonResponse ?? true,
@@ -91,7 +104,7 @@ export function createMcpHandler<Server extends McpHttpServerConnection>(
 		return session;
 	}
 
-	return async (request) => {
+	const legacy: McpHandler = async (request) => {
 		const sessionId = request.headers.get("mcp-session-id");
 		if (sessionId !== null) {
 			const session = sessions.get(sessionId);
@@ -107,7 +120,7 @@ export function createMcpHandler<Server extends McpHttpServerConnection>(
 			return mcpError(400, -32000, "Mcp-Session-Id header is required");
 		}
 
-		const session = await createSession();
+		const session = await createSession(request);
 		try {
 			const response = await session.transport.handleRequest(request);
 			if (response.status < 400) {
@@ -128,4 +141,7 @@ export function createMcpHandler<Server extends McpHttpServerConnection>(
 			throw error;
 		}
 	};
+
+	return async (request) =>
+		(await isLegacyRequest(request)) ? legacy(request) : modern.fetch(request);
 }
