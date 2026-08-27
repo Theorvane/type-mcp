@@ -12,7 +12,7 @@
 | Tools | `@McpTool()` with name/description and Zod object input schema |
 | Resources | `@McpResource()` for explicit static URIs |
 | Prompts | `@McpPrompt()` for named prompt handlers |
-| Compilation | Decorator metadata compiled to `@modelcontextprotocol/sdk` `McpServer` |
+| Compilation | Decorator metadata compiled to the stable split `@modelcontextprotocol/server` v2 `McpServer` |
 | Instance construction | Direct constructor default plus async-capable `InstanceResolver` interface |
 | Local transport | stdio helper |
 | Web transport | Fetch-standard Streamable HTTP handler |
