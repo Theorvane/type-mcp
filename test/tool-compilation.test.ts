@@ -36,6 +36,91 @@ function classContext(metadata: DecoratorMetadata): ClassDecoratorContext {
 }
 
 describe("decorated tool compilation", () => {
+	it("publishes modern tool metadata and validates declared structured output", async () => {
+		class MetadataServer {
+			public calculate(input: { value: number }): unknown {
+				return {
+					structuredContent:
+						input.value < 0
+							? { answer: "invalid" }
+							: { answer: input.value * 2 },
+				};
+			}
+		}
+
+		const metadata: DecoratorMetadata = {};
+		McpTool({
+			title: "Double a number",
+			description: "Returns twice the supplied value.",
+			input: z.object({ value: z.number() }),
+			outputSchema: z.object({ answer: z.number() }),
+			annotations: {
+				readOnlyHint: true,
+				idempotentHint: true,
+				openWorldHint: false,
+			},
+			_meta: { owner: "catalog-team" },
+		})(
+			MetadataServer.prototype.calculate,
+			methodContext("calculate", metadata),
+		);
+		McpServer({ name: "metadata", version: "1.0.0" })(
+			MetadataServer,
+			classContext(metadata),
+		);
+
+		const server = await createMcpServer(MetadataServer);
+		const client = new Client({ name: "test-client", version: "1.0.0" });
+		const [clientTransport, serverTransport] =
+			InMemoryTransport.createLinkedPair();
+		await Promise.all([
+			client.connect(clientTransport),
+			server.connect(serverTransport),
+		]);
+
+		const tools = await client.request(
+			{ method: "tools/list" },
+			ListToolsResultSchema,
+		);
+		const valid = await client.request(
+			{
+				method: "tools/call",
+				params: { name: "calculate", arguments: { value: 4 } },
+			},
+			CallToolResultSchema,
+		);
+		const invalid = await client.request(
+			{
+				method: "tools/call",
+				params: { name: "calculate", arguments: { value: -1 } },
+			},
+			CallToolResultSchema,
+		);
+
+		expect(tools.tools).toContainEqual(
+			expect.objectContaining({
+				name: "calculate",
+				title: "Double a number",
+				annotations: {
+					readOnlyHint: true,
+					idempotentHint: true,
+					openWorldHint: false,
+				},
+				_meta: { owner: "catalog-team" },
+				outputSchema: expect.objectContaining({
+					type: "object",
+					required: ["answer"],
+				}),
+			}),
+		);
+		expect(valid).toMatchObject({
+			structuredContent: { answer: 8 },
+		});
+		expect(invalid.isError).toBe(true);
+
+		await Promise.all([client.close(), server.close()]);
+	});
+
 	it("lists a decorated tool and invokes it with validated input", async () => {
 		let addCallCount = 0;
 

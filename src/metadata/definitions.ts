@@ -45,8 +45,18 @@ export function freezeServerDefinition(
 				Object.freeze({
 					name: tool.name,
 					methodName: tool.methodName,
+					title: tool.title,
 					description: tool.description,
 					input: tool.input,
+					outputSchema: tool.outputSchema,
+					annotations:
+						tool.annotations === undefined
+							? undefined
+							: Object.freeze({ ...tool.annotations }),
+					_meta:
+						tool._meta === undefined
+							? undefined
+							: Object.freeze({ ...tool._meta }),
 				}),
 			),
 		),
@@ -55,9 +65,36 @@ export function freezeServerDefinition(
 				Object.freeze({
 					name: resource.name,
 					methodName: resource.methodName,
+					title: resource.title,
 					uri: resource.uri,
 					mimeType: resource.mimeType,
 					description: resource.description,
+					icons:
+						resource.icons === undefined
+							? undefined
+							: Object.freeze(
+									resource.icons.map((icon) =>
+										Object.freeze({
+											...icon,
+											sizes:
+												icon.sizes === undefined ? undefined : [...icon.sizes],
+										}),
+									),
+								),
+					annotations:
+						resource.annotations === undefined
+							? undefined
+							: Object.freeze({
+									...resource.annotations,
+									audience:
+										resource.annotations.audience === undefined
+											? undefined
+											: [...resource.annotations.audience],
+								}),
+					_meta:
+						resource._meta === undefined
+							? undefined
+							: Object.freeze({ ...resource._meta }),
 				}),
 			),
 		),
@@ -66,6 +103,7 @@ export function freezeServerDefinition(
 				Object.freeze({
 					name: prompt.name,
 					methodName: prompt.methodName,
+					title: prompt.title,
 					description: prompt.description,
 				}),
 			),

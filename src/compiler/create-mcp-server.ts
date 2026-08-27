@@ -45,9 +45,17 @@ export async function createMcpServer<
 			tool.name,
 			{
 				inputSchema: tool.input,
+				...(tool.title === undefined ? {} : { title: tool.title }),
 				...(tool.description === undefined
 					? {}
 					: { description: tool.description }),
+				...(tool.outputSchema === undefined
+					? {}
+					: { outputSchema: tool.outputSchema }),
+				...(tool.annotations === undefined
+					? {}
+					: { annotations: { ...tool.annotations } }),
+				...(tool._meta === undefined ? {} : { _meta: { ...tool._meta } }),
 			},
 			async (input) => {
 				try {
@@ -68,12 +76,35 @@ export async function createMcpServer<
 			resource.name,
 			resource.uri,
 			{
+				...(resource.title === undefined ? {} : { title: resource.title }),
 				...(resource.description === undefined
 					? {}
 					: { description: resource.description }),
 				...(resource.mimeType === undefined
 					? {}
 					: { mimeType: resource.mimeType }),
+				...(resource.icons === undefined
+					? {}
+					: {
+							icons: resource.icons.map((icon) => ({
+								...icon,
+								sizes: icon.sizes === undefined ? undefined : [...icon.sizes],
+							})),
+						}),
+				...(resource.annotations === undefined
+					? {}
+					: {
+							annotations: {
+								...resource.annotations,
+								audience:
+									resource.annotations.audience === undefined
+										? undefined
+										: [...resource.annotations.audience],
+							},
+						}),
+				...(resource._meta === undefined
+					? {}
+					: { _meta: { ...resource._meta } }),
 			},
 			async (uri) => {
 				try {
@@ -94,6 +125,7 @@ export async function createMcpServer<
 		server.registerPrompt(
 			prompt.name,
 			{
+				...(prompt.title === undefined ? {} : { title: prompt.title }),
 				...(prompt.description === undefined
 					? {}
 					: { description: prompt.description }),

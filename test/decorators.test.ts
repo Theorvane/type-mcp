@@ -50,19 +50,28 @@ describe("MCP decorators", () => {
 		class CalculatorServer {}
 		const metadata: DecoratorMetadata = {};
 		const input = z.object({ left: z.number(), right: z.number() });
+		const outputSchema = z.object({ total: z.number() });
 
-		McpTool({ description: "Adds two numbers.", input })(
-			() => "not executed",
-			methodContext("add", metadata),
-		);
-		McpResource({ uri: "config://calculator", mimeType: "application/json" })(
-			() => ({}),
-			methodContext("config", metadata),
-		);
-		McpPrompt({ description: "Creates a greeting." })(
-			() => "not executed",
-			methodContext("greeting", metadata),
-		);
+		McpTool({
+			title: "Add numbers",
+			description: "Adds two numbers.",
+			input,
+			outputSchema,
+			annotations: { readOnlyHint: true },
+			_meta: { group: "math" },
+		})(() => "not executed", methodContext("add", metadata));
+		McpResource({
+			title: "Calculator configuration",
+			uri: "config://calculator",
+			mimeType: "application/json",
+			icons: [{ src: "https://example.test/calculator.svg" }],
+			annotations: { priority: 0.5 },
+			_meta: { group: "configuration" },
+		})(() => ({}), methodContext("config", metadata));
+		McpPrompt({
+			title: "Greeting",
+			description: "Creates a greeting.",
+		})(() => "not executed", methodContext("greeting", metadata));
 		decorateServer(CalculatorServer, metadata);
 
 		expect(getMcpServerDefinition(CalculatorServer)).toEqual({
@@ -72,22 +81,31 @@ describe("MCP decorators", () => {
 				{
 					name: "add",
 					methodName: "add",
+					title: "Add numbers",
 					description: "Adds two numbers.",
 					input,
+					outputSchema,
+					annotations: { readOnlyHint: true },
+					_meta: { group: "math" },
 				},
 			],
 			resources: [
 				{
 					name: "config",
 					methodName: "config",
+					title: "Calculator configuration",
 					uri: "config://calculator",
 					mimeType: "application/json",
+					icons: [{ src: "https://example.test/calculator.svg" }],
+					annotations: { priority: 0.5 },
+					_meta: { group: "configuration" },
 				},
 			],
 			prompts: [
 				{
 					name: "greeting",
 					methodName: "greeting",
+					title: "Greeting",
 					description: "Creates a greeting.",
 				},
 			],

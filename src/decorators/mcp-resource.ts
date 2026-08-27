@@ -8,9 +8,13 @@ export function McpResource(options: McpResourceOptions) {
 		appendResourceDefinition(context.metadata, {
 			name: options.name ?? methodName,
 			methodName,
+			title: options.title,
 			uri: options.uri,
 			mimeType: options.mimeType,
 			description: options.description,
+			icons: options.icons,
+			annotations: options.annotations,
+			_meta: options._meta,
 		});
 	};
 }
