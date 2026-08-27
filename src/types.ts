@@ -1,3 +1,8 @@
+import type {
+	Annotations,
+	Icon,
+	ToolAnnotations,
+} from "@modelcontextprotocol/sdk/types.js";
 import type { ZodObject } from "zod";
 
 export type McpServerConstructor<
@@ -15,19 +20,28 @@ export interface McpServerOptions {
 
 export interface McpToolOptions {
 	readonly name?: string | undefined;
+	readonly title?: string | undefined;
 	readonly description?: string | undefined;
 	readonly input: ZodObject;
+	readonly outputSchema?: ZodObject | undefined;
+	readonly annotations?: Readonly<ToolAnnotations> | undefined;
+	readonly _meta?: Readonly<Record<string, unknown>> | undefined;
 }
 
 export interface McpResourceOptions {
 	readonly name?: string | undefined;
+	readonly title?: string | undefined;
 	readonly uri: string;
 	readonly mimeType?: string | undefined;
 	readonly description?: string | undefined;
+	readonly icons?: readonly Readonly<Icon>[] | undefined;
+	readonly annotations?: Readonly<Annotations> | undefined;
+	readonly _meta?: Readonly<Record<string, unknown>> | undefined;
 }
 
 export interface McpPromptOptions {
 	readonly name?: string | undefined;
+	readonly title?: string | undefined;
 	readonly description?: string | undefined;
 }
 

@@ -1,6 +1,6 @@
 # Configuration and compatibility
 
-`@theorvane/type-mcp@0.3.2` is the release candidate TypeScript declaration and runtime package; it must not be described as published until the reviewed `main` promotion and registry verification complete. Configuration determines whether TypeScript emits standard decorators and whether the runtime can resolve the package's ESM/CJS exports; applications configure their own hosting and transport lifecycle around installed MCP adapters.
+`@theorvane/type-mcp@0.3.2` is the published TypeScript declaration and runtime package, verified against the npm registry after its reviewed `main` promotion. Configuration determines whether TypeScript emits standard decorators and whether the runtime can resolve the package's ESM/CJS exports; applications configure their own hosting and transport lifecycle around installed MCP adapters.
 
 ## Runtime and package manager
 

@@ -1,6 +1,6 @@
 # Decorator API contract
 
-**Public package:** [`@theorvane/type-mcp@0.3.0`](https://www.npmjs.com/package/@theorvane/type-mcp) provides decorator declarations, definition validation, MCP SDK compilation for tools/static resources/prompts, a Node stdio helper, and a Fetch Streamable HTTP adapter. LangChain interoperability is isolated at `@theorvane/type-mcp/langchain`.
+**Published baseline:** [`@theorvane/type-mcp@0.3.2`](https://www.npmjs.com/package/@theorvane/type-mcp) provides decorator declarations, definition validation, MCP SDK compilation for tools/static resources/prompts, a Node stdio helper, and a Fetch Streamable HTTP adapter. The contract below describes current `dev` source, including unreleased modern component metadata and tool `outputSchema` options. LangChain interoperability is isolated at `@theorvane/type-mcp/langchain`.
 
 ## Server declaration
 
@@ -23,26 +23,37 @@ class CatalogServer {}
 ```ts
 @McpTool({
   name: "find-product",
+  title: "Find a product",
   description: "Find a product by SKU.",
   input: z.object({ sku: z.string().min(1) }),
+  outputSchema: z.object({ sku: z.string(), available: z.boolean() }),
+  annotations: { readOnlyHint: true, openWorldHint: false },
+  _meta: { owner: "catalog-team" },
 })
 findProduct(input: { sku: string }) {
-  return `Found ${input.sku}`;
+  return {
+    content: [{ type: "text" as const, text: `Found ${input.sku}` }],
+    structuredContent: { sku: input.sku, available: true },
+  };
 }
 ```
 
 | Case | Behavior |
 | --- | --- |
-| Accept | A method name is used as the tool name unless an explicit `name` is supplied. `input` must be a Zod object schema. `readMcpServerDefinition()` rejects duplicate tool names. |
-| Runtime | The compiler registers the validated tool with the MCP SDK. Zod validates tool input before the decorated handler runs, and failures use the package's safe tool-result boundary. |
+| Accept | A method name is used as the tool name unless an explicit `name` is supplied. `input` and optional `outputSchema` values must be Zod object schemas. Optional `title`, `annotations`, and custom `_meta` are forwarded as standard MCP tool metadata. `readMcpServerDefinition()` rejects duplicate tool names. |
+| Runtime | The compiler registers the validated tool with the MCP SDK. Zod validates tool input before the decorated handler runs. When `outputSchema` is present, the SDK validates returned `structuredContent`; validation and handler failures use safe MCP error results. |
 | Excluded | Parameter decorators, automatic schema reflection, authorization, retries, and leaking handler stack traces. |
 
 ## Resource declaration
 
 ```ts
 @McpResource({
+  title: "Catalog configuration",
   uri: "config://catalog",
   mimeType: "application/json",
+  icons: [{ src: "https://example.com/catalog.svg" }],
+  annotations: { audience: ["user"], priority: 0.8 },
+  _meta: { owner: "catalog-team" },
 })
 readConfig() {
   return { region: "ap-northeast-2" };
@@ -51,7 +62,7 @@ readConfig() {
 
 | Case | Behavior |
 | --- | --- |
-| Accept | A static explicit URI and optional MIME type are recorded as one resource declaration. `readMcpServerDefinition()` rejects duplicate resource names. |
+| Accept | A static explicit URI and optional MIME type are recorded as one resource declaration. Optional `title`, `icons`, `annotations`, and custom `_meta` are forwarded as standard MCP resource metadata. `readMcpServerDefinition()` rejects duplicate resource names. |
 | Runtime | The compiler registers static resources with the MCP SDK and invokes the decorated handler when a client reads the resource. |
 | Excluded | URI templates, subscription/push resources, and persistence/caching policies. |
 
@@ -60,6 +71,7 @@ readConfig() {
 ```ts
 @McpPrompt({
   name: "summarize-product",
+  title: "Summarize product",
   description: "Prepare a product-summary prompt.",
 })
 summarizeProduct() {
@@ -69,9 +81,9 @@ summarizeProduct() {
 
 | Case | Behavior |
 | --- | --- |
-| Accept | A named method is recorded as a prompt declaration. `readMcpServerDefinition()` rejects duplicate prompt names. Component namespaces are distinct, so a tool, resource, and prompt may share one public name. |
+| Accept | A named method is recorded as a prompt declaration with optional `title` and `description`. `readMcpServerDefinition()` rejects duplicate prompt names. Component namespaces are distinct, so a tool, resource, and prompt may share one public name. |
 | Runtime | The compiler registers prompts with the MCP SDK and normalizes supported handler results into MCP prompt messages. |
-| Excluded | Automatic argument inference from TypeScript parameter types and prompt template files. |
+| Excluded | Automatic argument inference from TypeScript parameter types and prompt template files. Tool icons and prompt icons/custom metadata remain excluded until the official SDK high-level registration API exposes them. |
 
 ## Server construction
 
@@ -115,7 +127,7 @@ export { handler as GET, handler as POST, handler as DELETE };
 
 ## Metadata immutability
 
-`getMcpServerDefinition()` returns a newly allocated, frozen server definition, component arrays, and component records on every read. Tool `input` schemas retain the caller-supplied Zod object-schema identity: schemas are executable mutable objects and are not cloned or frozen by TypeMCP. Consumers should treat a schema supplied to a decorator as immutable after declaration.
+`getMcpServerDefinition()` returns a newly allocated, frozen server definition, component arrays, and component records on every read. Tool `input` and `outputSchema` schemas retain the caller-supplied Zod object-schema identity: schemas are executable mutable objects and are not cloned or frozen by TypeMCP. Standard metadata containers are defensively copied on definition reads. Consumers should treat a schema supplied to a decorator as immutable after declaration.
 
 ## Legacy TypeScript decorators
 

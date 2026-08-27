@@ -66,8 +66,12 @@ export function McpTool(options: McpToolOptions): LegacyMethodDecorator {
 		pending.tools.push({
 			name: options.name ?? methodName,
 			methodName,
+			title: options.title,
 			description: options.description,
 			input: options.input,
+			outputSchema: options.outputSchema,
+			annotations: options.annotations,
+			_meta: options._meta,
 		});
 	};
 }
@@ -81,9 +85,13 @@ export function McpResource(
 		pending.resources.push({
 			name: options.name ?? methodName,
 			methodName,
+			title: options.title,
 			uri: options.uri,
 			mimeType: options.mimeType,
 			description: options.description,
+			icons: options.icons,
+			annotations: options.annotations,
+			_meta: options._meta,
 		});
 	};
 }
@@ -95,6 +103,7 @@ export function McpPrompt(options: McpPromptOptions): LegacyMethodDecorator {
 		pending.prompts.push({
 			name: options.name ?? methodName,
 			methodName,
+			title: options.title,
 			description: options.description,
 		});
 	};

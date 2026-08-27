@@ -11,6 +11,7 @@ export function McpPrompt(options: McpPromptOptions) {
 		appendPromptDefinition(context.metadata, {
 			name: options.name ?? methodName,
 			methodName,
+			title: options.title,
 			description: options.description,
 		});
 	};

@@ -55,6 +55,100 @@ async function connect(serverPromise: Promise<McpSdkServer>) {
 }
 
 describe("decorated resource and prompt compilation", () => {
+	it("publishes modern static-resource metadata", async () => {
+		class ResourceMetadataServer {
+			public readConfig(): string {
+				return "configuration";
+			}
+		}
+
+		const metadata: DecoratorMetadata = {};
+		McpResource({
+			name: "configuration",
+			title: "Catalog configuration",
+			uri: "config://metadata",
+			icons: [
+				{
+					src: "https://example.test/configuration.svg",
+					mimeType: "image/svg+xml",
+					sizes: ["any"],
+					theme: "light",
+				},
+			],
+			annotations: { audience: ["user"], priority: 0.8 },
+			_meta: { owner: "catalog-team" },
+		})(
+			ResourceMetadataServer.prototype.readConfig,
+			methodContext("readConfig", metadata),
+		);
+		McpServer({ name: "resource-metadata", version: "1.0.0" })(
+			ResourceMetadataServer,
+			classContext(metadata),
+		);
+
+		const { client, server } = await connect(
+			createMcpServer(ResourceMetadataServer),
+		);
+		const resources = await client.request(
+			{ method: "resources/list" },
+			ListResourcesResultSchema,
+		);
+
+		expect(resources.resources).toContainEqual(
+			expect.objectContaining({
+				name: "configuration",
+				title: "Catalog configuration",
+				icons: [
+					{
+						src: "https://example.test/configuration.svg",
+						mimeType: "image/svg+xml",
+						sizes: ["any"],
+						theme: "light",
+					},
+				],
+				annotations: { audience: ["user"], priority: 0.8 },
+				_meta: { owner: "catalog-team" },
+			}),
+		);
+
+		await Promise.all([client.close(), server.close()]);
+	});
+
+	it("publishes a human-readable prompt title", async () => {
+		class PromptMetadataServer {
+			public summarize(): string {
+				return "Summarize the catalog.";
+			}
+		}
+
+		const metadata: DecoratorMetadata = {};
+		McpPrompt({ title: "Summarize catalog" })(
+			PromptMetadataServer.prototype.summarize,
+			methodContext("summarize", metadata),
+		);
+		McpServer({ name: "prompt-metadata", version: "1.0.0" })(
+			PromptMetadataServer,
+			classContext(metadata),
+		);
+
+		const { client, server } = await connect(
+			createMcpServer(PromptMetadataServer),
+		);
+		const prompts = await client.request(
+			{ method: "prompts/list" },
+			ListPromptsResultSchema,
+		);
+
+		expect(prompts.prompts).toContainEqual(
+			expect.objectContaining({
+				name: "summarize",
+				title: "Summarize catalog",
+			}),
+		);
+
+		await Promise.all([client.close(), server.close()]);
+	});
+
 	it("lists and reads a static resource from its decorated instance method", async () => {
 		let readCount = 0;
 

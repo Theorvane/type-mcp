@@ -11,7 +11,9 @@
   [![License](https://img.shields.io/badge/license-MIT-111827?style=flat-square)](LICENSE)
 </div>
 
-> **Published package — `@theorvane/type-mcp@0.3.0`:** provides standard decorators, a separate `@theorvane/type-mcp/legacy` entrypoint for CommonJS legacy decorators, definition validation, explicit instance resolution, MCP SDK compilation, stdio, `@theorvane/type-mcp/http` Streamable HTTP, and the tools-only `@theorvane/type-mcp/langchain` adapter.
+> **Published package — `@theorvane/type-mcp@0.3.2`:** provides standard decorators, a separate `@theorvane/type-mcp/legacy` entrypoint for CommonJS legacy decorators, definition validation, explicit instance resolution, MCP SDK compilation, stdio, `@theorvane/type-mcp/http` Streamable HTTP, and the tools-only `@theorvane/type-mcp/langchain` adapter.
+>
+> **Current `dev` source:** additionally includes unreleased modern component metadata and tool output-schema options. The examples and capability map below target current source unless they explicitly say “published package.”
 >
 > **Integration boundary:** LangGraph `ToolNode` composition, graph topology, model choice, authorization, state, persistence, and deployment remain consumer responsibilities.
 
@@ -19,7 +21,7 @@ TypeMCP keeps MCP declarations beside TypeScript classes without coupling the co
 
 ## Fast path for developers and agents
 
-1. Check the published capability table below and choose only the package entry point your application hosts and authorizes.
+1. Check the capability table below and choose only the package entry point your application hosts and authorizes.
 2. Install [`@theorvane/type-mcp`](https://www.npmjs.com/package/@theorvane/type-mcp) with `zod`.
 3. Use standard TypeScript decorators to declare a server surface.
 4. Inspect the declaration through `getMcpServerDefinition()` at an application boundary.
@@ -34,6 +36,8 @@ TypeMCP requires **Node.js 20 or later** and TypeScript with standard (Stage 3) 
 ```bash
 npm install @theorvane/type-mcp zod
 ```
+
+The install command currently resolves to published `0.3.2`. Modern component metadata and `outputSchema` shown below are implemented on `dev` but are not part of that published version yet.
 
 The package has ESM and CommonJS runtime and TypeScript declaration conditions for its root, HTTP, LangChain, and legacy entrypoints. The verified decorator modes are standard decorators in an ESM/NodeNext consumer and legacy `experimentalDecorators` in a CommonJS/Node16 consumer. This standard-decorator `tsconfig.json` baseline matches the package contract:
 
@@ -69,23 +73,32 @@ import {
 @McpServer({ name: "catalog", version: "0.2.0" })
 export class CatalogServer {
   @McpTool({
+    title: "Find a product",
     description: "Look up a catalog item by SKU.",
     input: z.object({ sku: z.string().min(1) }),
+    annotations: { readOnlyHint: true, openWorldHint: false },
+    _meta: { owner: "catalog-team" },
   })
   findProduct({ sku }: { sku: string }) {
     return { sku, available: true };
   }
 
   @McpResource({
+    title: "Catalog configuration",
     uri: "config://catalog",
     mimeType: "application/json",
     description: "Static catalog configuration.",
+    icons: [{ src: "https://example.com/catalog.svg" }],
+    annotations: { audience: ["user"], priority: 0.8 },
   })
   readConfig() {
     return { region: "ap-northeast-2" };
   }
 
-  @McpPrompt({ description: "Prepare a product summary request." })
+  @McpPrompt({
+    title: "Summarize product",
+    description: "Prepare a product summary request.",
+  })
   summarizeProduct() {
     return "Summarize the selected catalog product.";
   }
@@ -98,16 +111,16 @@ console.log(definition?.tools[0]?.name); // "findProduct"
 
 `getMcpServerDefinition()` returns `undefined` for a class without `@McpServer`. For a decorated class, it returns a newly allocated frozen metadata container on every call. Zod schemas retain their original identity, so treat a schema passed to a decorator as immutable after declaration.
 
-The methods above are ordinary application methods. In `0.3.0`, use `createMcpServer()` to validate and compile this declaration through an explicit resolver; choose an adapter exported by the installed package only when the application owns its hosting, authorization, and lifecycle policy. Follow the [getting-started guide](docs/guides/getting-started.md) for the complete version boundary.
+The methods above are ordinary application methods. In current source, use `createMcpServer()` to validate and compile this declaration through an explicit resolver; choose an adapter exported by the installed package only when the application owns its hosting, authorization, and lifecycle policy. Follow the [getting-started guide](docs/guides/getting-started.md) for the complete version boundary.
 
 ## Capability map
 
-| Surface | `@theorvane/type-mcp@0.3.0` | What it does |
+| Surface | Current source | What it does |
 | --- | --- | --- |
 | `@McpServer` | Available | Records server name and version metadata. |
-| `@McpTool` | Available | Records a method name, optional public name/description, and Zod object schema. |
-| `@McpResource` | Available | Records a static resource URI and optional metadata. |
-| `@McpPrompt` | Available | Records a named prompt declaration. |
+| `@McpTool` | Available | Records input/output Zod schemas plus standard title, annotations, and custom metadata. |
+| `@McpResource` | Available | Records a static resource URI plus standard title, icons, annotations, and custom metadata. |
+| `@McpPrompt` | Available | Records a named prompt declaration with an optional title and description. |
 | `getMcpServerDefinition()` | Available | Reads a fresh frozen metadata copy; returns `undefined` for undecorated classes. |
 | `createMcpServer()` | Available | Validates declarations and compiles the decorated server surface with an explicit resolver seam. |
 | `@theorvane/type-mcp/http` / `createMcpHandler()` | Available | Fetch/Streamable HTTP adapter; TypeMCP owns in-process MCP session routing while applications own route hosting, durable session policy, and authorization. |
