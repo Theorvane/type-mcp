@@ -80,6 +80,8 @@ export function McpTool(options: McpToolOptions): LegacyMethodDecorator {
 			outputSchema: options.outputSchema,
 			annotations: options.annotations,
 			_meta: options._meta,
+			enabled: options.enabled,
+			tags: options.tags,
 		});
 	};
 }
@@ -102,6 +104,8 @@ export function McpResource(
 			_meta: options._meta,
 			input: options.input,
 			complete: options.complete,
+			enabled: options.enabled,
+			tags: options.tags,
 		});
 	};
 }
@@ -116,6 +120,8 @@ export function McpPrompt(options: McpPromptOptions): LegacyMethodDecorator {
 			title: options.title,
 			description: options.description,
 			args: options.args,
+			enabled: options.enabled,
+			tags: options.tags,
 		});
 	};
 }

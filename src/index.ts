@@ -22,6 +22,7 @@ export type {
 } from "./transports/stdio.js";
 export { serveStdioServer, startStdioServer } from "./transports/stdio.js";
 export type {
+	McpComponentVisibilityOptions,
 	McpPromptDefinition,
 	McpPromptOptions,
 	McpResourceCompletion,
@@ -33,3 +34,12 @@ export type {
 	McpToolDefinition,
 	McpToolOptions,
 } from "./types.js";
+export type {
+	McpComponentKind,
+	McpComponentVisibilityFilter,
+	McpEnableComponentsOptions,
+} from "./visibility.js";
+export {
+	disableMcpComponents,
+	enableMcpComponents,
+} from "./visibility.js";

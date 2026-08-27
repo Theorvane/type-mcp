@@ -92,6 +92,20 @@ summarizeProduct(input: { readonly sku: string }) {
 | Runtime | SDK v2 derives the MCP prompt argument list, validates request strings through the schema, dispatches completion, and passes the parsed object to the handler. Results and handler failures retain TypeMCP normalization and safe errors. |
 | Excluded | Automatic argument inference from TypeScript parameter types and prompt template files. Tool icons and prompt icons/custom metadata remain excluded until the compiler exposes them. |
 
+## Component visibility
+
+Tool, resource/template, and prompt options accept `enabled?: boolean` and `tags?: readonly string[]`. Components default to enabled. Tags must be unique non-empty strings and are copied/frozen with definition metadata.
+
+`enableMcpComponents(server, filter)` and `disableMcpComponents(server, filter)` use SDK registered handles. Filters match additively by deterministic key, name/URI, tag, or kind; `matchAll` must be explicit for an all-component operation. Enable accepts `only: true` to establish an exact allowlist.
+
+| Case | Behavior |
+| --- | --- |
+| Static disabled | Hidden from SDK lists and rejected at dispatch. |
+| Runtime transition | SDK list/call behavior and `list_changed` notifications are preserved. The function returns the number of matched components. |
+| Excluded | Authentication, authorization, per-session policy, providers, version filtering, and persistence. |
+
+Visibility is surface shaping, not a security boundary. See the [component visibility guide](../guides/component-visibility.md).
+
 ## Invocation context
 
 Decorated handlers may declare a final `McpInvocationContext` argument. Tools and URI-template resources receive it after parsed input; static resources and zero-argument prompts receive it as their only argument; prompts with explicit arguments receive it after parsed input.
