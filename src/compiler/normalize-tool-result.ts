@@ -33,5 +33,13 @@ export function normalizeToolResult(result: unknown): CallToolResult {
 		throw new TypeError("Tool result must be JSON-compatible");
 	}
 
-	return { content: [{ type: "text", text: json }] };
+	const content = [{ type: "text" as const, text: json }];
+	if (isRecord(result) && !Array.isArray(result)) {
+		const serialized: unknown = JSON.parse(json);
+		if (isRecord(serialized) && !Array.isArray(serialized)) {
+			return { content, structuredContent: serialized };
+		}
+	}
+
+	return { content };
 }
