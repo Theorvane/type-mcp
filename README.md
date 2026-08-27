@@ -132,7 +132,8 @@ The methods above are ordinary application methods. In current source, use `crea
 | `@McpPrompt` | Available | Records a named prompt declaration with an optional title and description. |
 | `getMcpServerDefinition()` | Available | Reads a fresh frozen metadata copy; returns `undefined` for undecorated classes. |
 | `createMcpServer()` | Available | Validates declarations and compiles the decorated server surface with an explicit resolver seam. |
-| `@theorvane/type-mcp/http` / `createMcpHandler()` | Available | Fetch/Streamable HTTP adapter; TypeMCP owns in-process MCP session routing while applications own route hosting, durable session policy, and authorization. |
+| `serveStdioServer()` / `startStdioServer()` | Available | SDK v2 factory-based 2025/2026 negotiation plus an instance-based 2025 compatibility helper. |
+| `@theorvane/type-mcp/http` / `createMcpHandler()` | Available | Fetch/Streamable HTTP adapter with stateful 2025 sessions and the SDK v2 2026 per-request lifecycle; applications own route hosting, durable session policy, and authorization. |
 | Definition validation and `TypeMcpDefinitionError` | Available | Validates declarations and reports safe definition errors. |
 | `InstanceResolver<T>` / `resolveMcpServerInstance()` | Available | Explicit application-owned instance construction contract. |
 | `@theorvane/type-mcp/langchain` / `createLangChainTools()` | Available | Tools-only LangChain structured-tool adapter; LangGraph `ToolNode` composition remains consumer-owned. |

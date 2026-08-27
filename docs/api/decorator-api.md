@@ -117,6 +117,18 @@ const instance = await resolveMcpServerInstance(CatalogServer, resolver);
 | Runtime | `createMcpServer()` uses this resolver seam before compiling the decorated definition. |
 | Excluded | Built-in application-container resolution, request-scoped semantics, and global service location. |
 
+## stdio adapters
+
+```ts
+serveStdioServer(() => createMcpServer(CatalogServer));
+```
+
+| Case | Behavior |
+| --- | --- |
+| Negotiated runtime | `serveStdioServer(factory)` delegates connection ownership and 2025/2026 protocol negotiation to the SDK v2 `serveStdio()` entry point. The factory may use its request context to vary construction by protocol era. |
+| Compatibility runtime | `startStdioServer(server)` keeps the instance-based 2025-compatible helper for applications that already own one compiled server and transport. |
+| Application-owned | Process startup, environment validation, executable packaging, authorization, and shutdown policy remain in the application. |
+
 ## HTTP adapter
 
 ```ts
@@ -126,7 +138,7 @@ export { handler as GET, handler as POST, handler as DELETE };
 
 | Case | Behavior |
 | --- | --- |
-| Runtime | `createMcpHandler()` adapts Web Standard `Request`/`Response` values to the SDK's Streamable HTTP transport. It owns MCP protocol framing and transport sessions. |
+| Runtime | `createMcpHandler()` adapts Web Standard `Request`/`Response` values to SDK v2. It preserves stateful 2025 Streamable HTTP sessions and routes 2026-07-28 envelope requests to the SDK's per-request handler. A zero-argument factory remains valid; factories may optionally inspect the SDK request context. |
 | Application-owned | Route registration, authentication, authorization, deployment, observability, and durable session policy remain in the host application. |
 | Excluded | OAuth policy, custom durable sessions, Express middleware, and legacy SSE transport. |
 

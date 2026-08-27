@@ -2,7 +2,7 @@ import type {
 	Annotations,
 	Icon,
 	ToolAnnotations,
-} from "@modelcontextprotocol/sdk/types.js";
+} from "@modelcontextprotocol/server";
 import type { ZodObject } from "zod";
 
 export type McpServerConstructor<

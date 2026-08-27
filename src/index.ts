@@ -12,9 +12,11 @@ export { resolveMcpServerInstance } from "./resolver/resolve-server-instance.js"
 export type {
 	McpServerConnection,
 	StartedStdioServer,
+	StdioProtocolServerHandle,
+	StdioProtocolServerOptions,
 	StdioServerOptions,
 } from "./transports/stdio.js";
-export { startStdioServer } from "./transports/stdio.js";
+export { serveStdioServer, startStdioServer } from "./transports/stdio.js";
 export type {
 	McpPromptDefinition,
 	McpPromptOptions,

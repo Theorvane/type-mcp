@@ -55,7 +55,17 @@ The resolver is intentionally explicit. Replace the constructor call with the ap
 
 ## Connect stdio when the process is the boundary
 
-Use stdio when the TypeMCP process is launched by an MCP-capable client. The helper connects an already compiled server to the official MCP SDK `StdioServerTransport`.
+Use stdio when the TypeMCP process is launched by an MCP-capable client. Prefer the factory entry point when clients may negotiate either the 2025 or 2026 protocol era:
+
+```ts
+// src/stdio.ts
+import { createMcpServer, serveStdioServer } from "@theorvane/type-mcp";
+import { CatalogServer } from "./catalog-server.js";
+
+serveStdioServer(() => createMcpServer(CatalogServer));
+```
+
+The instance-based helper remains available for an application intentionally preserving its existing 2025-compatible transport lifecycle:
 
 ```ts
 // src/stdio.ts
@@ -90,7 +100,7 @@ A Fetch host can then route supported requests to `handler`. For a Next.js route
 export { handler as DELETE, handler as GET, handler as POST } from "../../../src/mcp-handler.js";
 ```
 
-The adapter handles MCP HTTP session routing, protocol negotiation, and JSON-RPC framing inside the process. The host application owns the URL, authentication, origin controls, deployment, telemetry choices, and any durable session policy. Read [HTTP framework integration](http-and-nextjs.md) before adapting the route to a production host.
+The adapter preserves stateful Streamable HTTP sessions for 2025 clients and uses the SDK v2 per-request lifecycle for 2026-07-28 clients. The host application owns the URL, authentication, origin controls, deployment, telemetry choices, and any durable session policy. Read [HTTP framework integration](http-and-nextjs.md) before adapting the route to a production host.
 
 ## Adapt tools to LangChain without handing over the application
 

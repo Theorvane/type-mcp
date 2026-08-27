@@ -1,12 +1,12 @@
-import { Client } from "@modelcontextprotocol/sdk/client/index.js";
-import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
-import type { McpServer as McpSdkServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { Client } from "@modelcontextprotocol/client";
+import type { McpServer as McpSdkServer } from "@modelcontextprotocol/server";
 import {
 	GetPromptResultSchema,
+	InMemoryTransport,
 	ListPromptsResultSchema,
 	ListResourcesResultSchema,
 	ReadResourceResultSchema,
-} from "@modelcontextprotocol/sdk/types.js";
+} from "@modelcontextprotocol/server";
 import { describe, expect, it } from "vitest";
 import {
 	createMcpServer,

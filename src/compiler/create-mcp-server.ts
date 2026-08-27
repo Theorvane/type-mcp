@@ -1,4 +1,4 @@
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { McpServer } from "@modelcontextprotocol/server";
 import { readMcpServerDefinition } from "../metadata/read-server-definition.js";
 import type { InstanceResolver } from "../resolver/instance-resolver.js";
 import { resolveMcpServerInstance } from "../resolver/resolve-server-instance.js";

@@ -2,6 +2,7 @@
 
 - **Status:** Accepted
 - **Date:** 2026-07-21
+- **Updated:** 2026-08-27 for MCP TypeScript SDK v2
 
 ## Context
 
@@ -15,7 +16,7 @@ The `@theorvane/type-mcp/http` subpath will expose a Fetch-style handler:
 type McpHandler = (request: Request) => Promise<Response>;
 ```
 
-It will delegate protocol/session behavior to the official MCP SDK's Web Standard Streamable HTTP transport. The adapter will support the HTTP methods required by that transport and return a valid method error for unsupported methods.
+It will delegate protocol behavior to the official MCP SDK. The adapter routes claim-less 2025 traffic to its existing stateful Web Standard Streamable HTTP transport and 2026-07-28 envelope traffic to the SDK v2 per-request handler. The adapter will support the HTTP methods required by those transports and return a valid method error for unsupported methods.
 
 ## Consequences
 

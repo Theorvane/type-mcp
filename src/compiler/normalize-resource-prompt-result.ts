@@ -1,9 +1,8 @@
 import {
 	type GetPromptResult,
-	GetPromptResultSchema,
 	type ReadResourceResult,
-	ReadResourceResultSchema,
-} from "@modelcontextprotocol/sdk/types.js";
+	specTypeSchemas,
+} from "@modelcontextprotocol/server";
 
 function isRecord(result: unknown): result is Record<string, unknown> {
 	return typeof result === "object" && result !== null;
@@ -28,9 +27,10 @@ export function normalizeResourceResult(
 	mimeType: string | undefined,
 ): ReadResourceResult {
 	if (isRecord(result) && Array.isArray(result.contents)) {
-		const parsed = ReadResourceResultSchema.safeParse(result);
-		if (parsed.success) {
-			return parsed.data;
+		const parsed =
+			specTypeSchemas.ReadResourceResult["~standard"].validate(result);
+		if ("value" in parsed) {
+			return parsed.value;
 		}
 	}
 
@@ -47,9 +47,10 @@ export function normalizeResourceResult(
 
 export function normalizePromptResult(result: unknown): GetPromptResult {
 	if (isRecord(result) && Array.isArray(result.messages)) {
-		const parsed = GetPromptResultSchema.safeParse(result);
-		if (parsed.success) {
-			return parsed.data;
+		const parsed =
+			specTypeSchemas.GetPromptResult["~standard"].validate(result);
+		if ("value" in parsed) {
+			return parsed.value;
 		}
 	}
 
