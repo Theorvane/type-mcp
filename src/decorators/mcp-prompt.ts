@@ -39,6 +39,8 @@ export function McpPrompt(
 			title: options.title,
 			description: options.description,
 			args: options.args,
+			enabled: options.enabled,
+			tags: options.tags,
 		});
 	};
 	return decorator as

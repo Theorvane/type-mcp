@@ -1,6 +1,6 @@
 # MVP scope
 
-> **Published package:** `@theorvane/type-mcp@0.3.2` includes the MVP baseline. Current `dev` additionally carries SDK v2 serving, modern server/component metadata, initialization instructions, tool structured output, explicit prompt arguments, resource URI templates, completion, and invocation context. Start with the [README](../../README.md) and [getting-started guide](../guides/getting-started.md) for exact exports and boundaries.
+> **Published package:** `@theorvane/type-mcp@0.3.2` includes the MVP baseline. Current `dev` additionally carries SDK v2 serving, modern server/component metadata, initialization instructions, tool structured output, dynamic prompts/resources, invocation context, testing/media helpers, and component visibility. Start with the [README](../../README.md) and [getting-started guide](../guides/getting-started.md) for exact exports and boundaries.
 
 **Status:** The baseline is published in `@theorvane/type-mcp@0.3.2`; rows explicitly marked current `dev` are implemented but unreleased.
 
@@ -16,6 +16,7 @@
 | Invocation context | Current `dev`: request/session identity, SDK cancellation signal, and progress reporting |
 | Testing | Current `dev`: official SDK v2 in-memory client/server session with explicit cleanup |
 | Media | Current `dev`: byte-only image/audio helpers with explicit MIME validation |
+| Component visibility | Current `dev`: static enabled state and server-level key/name/tag/kind filtering |
 | Instance construction | Direct constructor default plus async-capable `InstanceResolver` interface |
 | Local transport | stdio helper |
 | Web transport | Fetch-standard Streamable HTTP handler |
