@@ -10,6 +10,7 @@ import type {
 	McpToolOptions,
 } from "./types.js";
 
+export { completable as McpCompletable } from "@modelcontextprotocol/server";
 export { createMcpServer } from "./compiler/create-mcp-server.js";
 export { TypeMcpDefinitionError } from "./errors.js";
 export { getMcpServerDefinition } from "./metadata/definitions.js";
@@ -20,6 +21,7 @@ export { resolveMcpServerInstance } from "./resolver/resolve-server-instance.js"
 export type {
 	McpPromptDefinition,
 	McpPromptOptions,
+	McpResourceCompletion,
 	McpResourceDefinition,
 	McpResourceOptions,
 	McpServerConstructor,
@@ -97,6 +99,8 @@ export function McpResource(
 			icons: options.icons,
 			annotations: options.annotations,
 			_meta: options._meta,
+			input: options.input,
+			complete: options.complete,
 		});
 	};
 }
@@ -110,6 +114,7 @@ export function McpPrompt(options: McpPromptOptions): LegacyMethodDecorator {
 			methodName,
 			title: options.title,
 			description: options.description,
+			args: options.args,
 		});
 	};
 }

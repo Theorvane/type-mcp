@@ -5,6 +5,11 @@ import type {
 } from "@modelcontextprotocol/server";
 import type { ZodObject } from "zod";
 
+export type McpResourceCompletion = (
+	value: string,
+	context?: { readonly arguments?: Readonly<Record<string, string>> },
+) => readonly string[] | Promise<readonly string[]>;
+
 export type McpServerConstructor<
 	T extends object = object,
 	Arguments extends readonly unknown[] = readonly unknown[],
@@ -42,12 +47,17 @@ export interface McpResourceOptions {
 	readonly icons?: readonly Readonly<Icon>[] | undefined;
 	readonly annotations?: Readonly<Annotations> | undefined;
 	readonly _meta?: Readonly<Record<string, unknown>> | undefined;
+	readonly input?: ZodObject | undefined;
+	readonly complete?:
+		| Readonly<Record<string, McpResourceCompletion>>
+		| undefined;
 }
 
 export interface McpPromptOptions {
 	readonly name?: string | undefined;
 	readonly title?: string | undefined;
 	readonly description?: string | undefined;
+	readonly args?: ZodObject | undefined;
 }
 
 export interface McpToolDefinition extends McpToolOptions {

@@ -1,3 +1,4 @@
+export { completable as McpCompletable } from "@modelcontextprotocol/server";
 export { createMcpServer } from "./compiler/create-mcp-server.js";
 export { McpPrompt } from "./decorators/mcp-prompt.js";
 export { McpResource } from "./decorators/mcp-resource.js";
@@ -20,6 +21,7 @@ export { serveStdioServer, startStdioServer } from "./transports/stdio.js";
 export type {
 	McpPromptDefinition,
 	McpPromptOptions,
+	McpResourceCompletion,
 	McpResourceDefinition,
 	McpResourceOptions,
 	McpServerConstructor,

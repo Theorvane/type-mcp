@@ -20,10 +20,21 @@ class ValidDecoratedServer {
 		return "Welcome";
 	}
 
-	// @ts-expect-error McpPrompt does not support required handler parameters.
+	// @ts-expect-error Prompt handlers with required input need an explicit args schema.
 	@McpPrompt({})
-	productSummary(_sku: string): string {
-		return _sku;
+	invalidPrompt(_input: { readonly sku: string }): string {
+		return _input.sku;
+	}
+
+	// @ts-expect-error Prompt handler input must match the explicit args schema.
+	@McpPrompt({ args: z.object({ sku: z.string() }) })
+	invalidPromptInput(_input: { readonly sku: number }): string {
+		return String(_input.sku);
+	}
+
+	@McpPrompt({ args: z.object({ sku: z.string() }) })
+	productSummary(input: { readonly sku: string }): string {
+		return input.sku;
 	}
 }
 

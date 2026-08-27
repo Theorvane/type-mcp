@@ -1,4 +1,4 @@
-import { McpServer } from "@modelcontextprotocol/server";
+import { McpServer, UriTemplate } from "@modelcontextprotocol/server";
 import { readMcpServerDefinition } from "../metadata/read-server-definition.js";
 import type { InstanceResolver } from "../resolver/instance-resolver.js";
 import { resolveMcpServerInstance } from "../resolver/resolve-server-instance.js";
@@ -11,6 +11,7 @@ import {
 	normalizeResourceResult,
 } from "./normalize-resource-prompt-result.js";
 import { normalizeToolResult } from "./normalize-tool-result.js";
+import { createResourceTemplate } from "./resource-template.js";
 
 export async function createMcpServer<T extends object>(
 	serverClass: ZeroArgumentMcpServerConstructor<T>,
@@ -92,43 +93,77 @@ export async function createMcpServer<
 	}
 
 	for (const resource of definition.resources) {
+		const config = {
+			...(resource.title === undefined ? {} : { title: resource.title }),
+			...(resource.description === undefined
+				? {}
+				: { description: resource.description }),
+			...(resource.mimeType === undefined
+				? {}
+				: { mimeType: resource.mimeType }),
+			...(resource.icons === undefined
+				? {}
+				: {
+						icons: resource.icons.map((icon) => ({
+							...icon,
+							sizes: icon.sizes === undefined ? undefined : [...icon.sizes],
+						})),
+					}),
+			...(resource.annotations === undefined
+				? {}
+				: {
+						annotations: {
+							...resource.annotations,
+							audience:
+								resource.annotations.audience === undefined
+									? undefined
+									: [...resource.annotations.audience],
+						},
+					}),
+			...(resource._meta === undefined ? {} : { _meta: { ...resource._meta } }),
+		};
+		if (!UriTemplate.isTemplate(resource.uri)) {
+			server.registerResource(
+				resource.name,
+				resource.uri,
+				config,
+				async (uri) => {
+					try {
+						const result = await invokeMethod(
+							instance,
+							resource.methodName,
+							[],
+						);
+						return normalizeResourceResult(result, uri, resource.mimeType);
+					} catch {
+						return normalizeResourceResult(
+							"Resource execution failed",
+							uri,
+							resource.mimeType,
+						);
+					}
+				},
+			);
+			continue;
+		}
+
+		const input = resource.input;
+		if (input === undefined) {
+			throw new TypeError("Validated resource template input is missing");
+		}
 		server.registerResource(
 			resource.name,
-			resource.uri,
-			{
-				...(resource.title === undefined ? {} : { title: resource.title }),
-				...(resource.description === undefined
-					? {}
-					: { description: resource.description }),
-				...(resource.mimeType === undefined
-					? {}
-					: { mimeType: resource.mimeType }),
-				...(resource.icons === undefined
-					? {}
-					: {
-							icons: resource.icons.map((icon) => ({
-								...icon,
-								sizes: icon.sizes === undefined ? undefined : [...icon.sizes],
-							})),
-						}),
-				...(resource.annotations === undefined
-					? {}
-					: {
-							annotations: {
-								...resource.annotations,
-								audience:
-									resource.annotations.audience === undefined
-										? undefined
-										: [...resource.annotations.audience],
-							},
-						}),
-				...(resource._meta === undefined
-					? {}
-					: { _meta: { ...resource._meta } }),
-			},
-			async (uri) => {
+			createResourceTemplate(resource),
+			config,
+			async (uri, variables) => {
 				try {
-					const result = await invokeMethod(instance, resource.methodName, []);
+					const parsed = await input.safeParseAsync(variables);
+					if (!parsed.success) {
+						throw new TypeError("Resource template input validation failed");
+					}
+					const result = await invokeMethod(instance, resource.methodName, [
+						parsed.data,
+					]);
 					return normalizeResourceResult(result, uri, resource.mimeType);
 				} catch {
 					return normalizeResourceResult(
@@ -142,23 +177,37 @@ export async function createMcpServer<
 	}
 
 	for (const prompt of definition.prompts) {
-		server.registerPrompt(
-			prompt.name,
-			{
-				...(prompt.title === undefined ? {} : { title: prompt.title }),
-				...(prompt.description === undefined
-					? {}
-					: { description: prompt.description }),
-			},
-			async () => {
+		const config = {
+			...(prompt.title === undefined ? {} : { title: prompt.title }),
+			...(prompt.description === undefined
+				? {}
+				: { description: prompt.description }),
+		};
+		if (prompt.args === undefined) {
+			server.registerPrompt(prompt.name, config, async () => {
 				try {
 					const result = await invokeMethod(instance, prompt.methodName, []);
 					return normalizePromptResult(result);
 				} catch {
 					return normalizePromptResult("Prompt execution failed");
 				}
-			},
-		);
+			});
+		} else {
+			server.registerPrompt(
+				prompt.name,
+				{ ...config, argsSchema: prompt.args },
+				async (input) => {
+					try {
+						const result = await invokeMethod(instance, prompt.methodName, [
+							input,
+						]);
+						return normalizePromptResult(result);
+					} catch {
+						return normalizePromptResult("Prompt execution failed");
+					}
+				},
+			);
+		}
 	}
 
 	return server;

@@ -148,6 +148,34 @@ describe("MCP decorators", () => {
 		);
 	});
 
+	it("freezes dynamic declaration containers while preserving executable identity", () => {
+		class DynamicServer {}
+		const metadata: DecoratorMetadata = {};
+		const resourceInput = z.object({ id: z.string() });
+		const promptArgs = z.object({ topic: z.string() });
+		const complete = () => ["one"];
+		McpResource({
+			uri: "item://{id}",
+			input: resourceInput,
+			complete: { id: complete },
+		})(() => undefined, methodContext("item", metadata));
+		McpPrompt({ args: promptArgs })(
+			() => undefined,
+			methodContext("prompt", metadata),
+		);
+		decorateServer(DynamicServer, metadata);
+
+		const first = getMcpServerDefinition(DynamicServer);
+		const second = getMcpServerDefinition(DynamicServer);
+		expect(first?.resources[0]?.input).toBe(resourceInput);
+		expect(first?.resources[0]?.complete?.id).toBe(complete);
+		expect(first?.prompts[0]?.args).toBe(promptArgs);
+		expect(Object.isFrozen(first?.resources[0]?.complete)).toBe(true);
+		expect(first?.resources[0]?.complete).not.toBe(
+			second?.resources[0]?.complete,
+		);
+	});
+
 	it("preserves explicit component names", () => {
 		class NamedServer {}
 		const metadata: DecoratorMetadata = {};
