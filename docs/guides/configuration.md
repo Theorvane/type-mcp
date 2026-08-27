@@ -1,13 +1,13 @@
 # Configuration and compatibility
 
-`@theorvane/type-mcp@0.3.2` is the published TypeScript declaration and runtime package, verified against the npm registry after its reviewed `main` promotion. Configuration determines whether TypeScript emits standard decorators and whether the runtime can resolve the package's ESM/CJS exports; applications configure their own hosting and transport lifecycle around installed MCP adapters.
+`@theorvane/type-mcp@0.4.0` is the published TypeScript declaration and runtime package, verified against the npm registry after its reviewed `main` promotion. Configuration determines whether TypeScript emits standard decorators and whether the runtime can resolve the package's ESM/CJS exports; applications configure their own hosting and transport lifecycle around installed MCP adapters.
 
 ## Runtime and package manager
 
-Use Node.js 20 or later. After `npm view @theorvane/type-mcp@0.3.0 version` succeeds, install TypeMCP and Zod as application dependencies:
+Use Node.js 20 or later. After `npm view @theorvane/type-mcp@0.4.0 version` succeeds, install TypeMCP and Zod as application dependencies:
 
 ```bash
-npm install @theorvane/type-mcp@0.3.0 zod
+npm install @theorvane/type-mcp@0.4.0 zod
 ```
 
 The package name and import are scoped to Theorvane:
@@ -16,7 +16,7 @@ The package name and import are scoped to Theorvane:
 import { McpServer, McpTool } from "@theorvane/type-mcp";
 ```
 
-The public `@theorvane/type-mcp@0.3.0` package exports `@theorvane/type-mcp/http`. Add it where the application owns Fetch route hosting, durable session policy, and authorization; the adapter owns in-process MCP session routing around the SDK transport.
+The public `@theorvane/type-mcp@0.4.0` package exports `@theorvane/type-mcp/http`. Add it where the application owns Fetch route hosting, durable session policy, and authorization; the adapter owns in-process MCP session routing around the SDK transport.
 
 ## TypeScript decorators
 
@@ -69,10 +69,10 @@ find({ id }: z.infer<typeof findInput>) {
 }
 ```
 
-A missing component `name` defaults to the method name. `0.3.0` validates the decorated definition before compilation; application tests should still protect domain naming conventions.
+A missing component `name` defaults to the method name. `0.4.0` validates the decorated definition before compilation; application tests should still protect domain naming conventions.
 
 ## Registry release versus repository development
 
-The published `@theorvane/type-mcp@0.3.0` root exports `McpServer`, `McpTool`, `McpResource`, `McpPrompt`, `getMcpServerDefinition`, `readMcpServerDefinition`, `TypeMcpDefinitionError`, `InstanceResolver`, `resolveMcpServerInstance`, `createMcpServer`, and `startStdioServer`. The `@theorvane/type-mcp/http` and `@theorvane/type-mcp/langchain` subpaths expose their respective adapters.
+The published `@theorvane/type-mcp@0.4.0` root exports `McpServer`, `McpTool`, `McpResource`, `McpPrompt`, `getMcpServerDefinition`, `readMcpServerDefinition`, `TypeMcpDefinitionError`, `InstanceResolver`, `resolveMcpServerInstance`, `createMcpServer`, and `startStdioServer`. The `@theorvane/type-mcp/http` and `@theorvane/type-mcp/langchain` subpaths expose their respective adapters.
 
 Before upgrading, read the release notes and inspect the package's generated type declarations. Treat a feature as available only when a released version documents it and the installed package exports it.

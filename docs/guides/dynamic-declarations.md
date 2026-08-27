@@ -1,6 +1,6 @@
 # Dynamic prompts and resources
 
-Current `dev` source adds explicit prompt arguments and resource URI templates. These APIs are unreleased until the next reviewed package promotion.
+TypeMCP 0.4.0 adds explicit prompt arguments, resource URI templates, and completion.
 
 ## Prompt arguments and completion
 

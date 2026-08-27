@@ -1,22 +1,22 @@
 # MVP scope
 
-> **Published package:** `@theorvane/type-mcp@0.3.2` includes the MVP baseline. Current `dev` additionally carries SDK v2 serving, modern server/component metadata, initialization instructions, tool structured output, dynamic prompts/resources, invocation context, testing/media helpers, and component visibility. Start with the [README](../../README.md) and [getting-started guide](../guides/getting-started.md) for exact exports and boundaries.
+> **Release package:** `@theorvane/type-mcp@0.4.0` includes the MVP baseline plus SDK v2 serving, modern metadata, instructions, structured output, dynamic prompts/resources, invocation context, testing/media helpers, and component visibility.
 
-**Status:** The baseline is published in `@theorvane/type-mcp@0.3.2`; rows explicitly marked current `dev` are implemented but unreleased.
+**Status:** Included capabilities below are part of the `@theorvane/type-mcp@0.4.0` release contract.
 
 ## Included
 
 | Capability | MVP boundary |
 | --- | --- |
-| Server declaration | Published baseline: `name` and `version`; current `dev`: optional standard implementation identity and client instructions |
+| Server declaration | `name`, `version`, optional standard implementation identity, and client instructions |
 | Tools | `@McpTool()` with name/description and Zod object input schema |
-| Resources | Published baseline: explicit static URIs; current `dev`: validated URI templates and variable completion |
-| Prompts | Published baseline: named zero-argument handlers; current `dev`: explicit validated arguments and completion |
+| Resources | explicit static URIs, validated URI templates, and variable completion |
+| Prompts | named zero-argument handlers, explicit validated arguments, and completion |
 | Compilation | Decorator metadata compiled to the stable split `@modelcontextprotocol/server` v2 `McpServer` |
-| Invocation context | Current `dev`: request/session identity, SDK cancellation signal, and progress reporting |
-| Testing | Current `dev`: official SDK v2 in-memory client/server session with explicit cleanup |
-| Media | Current `dev`: byte-only image/audio helpers with explicit MIME validation |
-| Component visibility | Current `dev`: static enabled state and server-level key/name/tag/kind filtering |
+| Invocation context | request/session identity, SDK cancellation signal, and progress reporting |
+| Testing | official SDK v2 in-memory client/server session with explicit cleanup |
+| Media | byte-only image/audio helpers with explicit MIME validation |
+| Component visibility | static enabled state and server-level key/name/tag/kind filtering |
 | Instance construction | Direct constructor default plus async-capable `InstanceResolver` interface |
 | Local transport | stdio helper |
 | Web transport | Fetch-standard Streamable HTTP handler |
@@ -35,7 +35,7 @@
 
 ## Constraints
 
-- Public distribution: `@theorvane/type-mcp@0.3.2` on npm; the repository is `Theorvane/type-mcp`.
+- Public distribution: `@theorvane/type-mcp@0.4.0` on npm; the repository is `Theorvane/type-mcp`.
 - Runtime protocol behavior comes from the official MCP SDK.
 - Core and HTTP have no agent-framework runtime or peer dependency; `@theorvane/type-mcp/langchain` has an isolated optional LangChain peer.
 - Public types are strict and runtime input is validated before handler invocation.

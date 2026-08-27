@@ -2,7 +2,7 @@
 
 This is the first chapter of the TypeMCP Petstore curriculum. It creates a small local project that can compile a decorated server before the application selects a runtime boundary.
 
-> **Published version:** The examples target [`@theorvane/type-mcp@0.3.0`](https://www.npmjs.com/package/@theorvane/type-mcp). They use standard TypeScript decorators, not legacy `experimentalDecorators`.
+> **Published version:** The examples target [`@theorvane/type-mcp@0.4.0`](https://www.npmjs.com/package/@theorvane/type-mcp). They use standard TypeScript decorators, not legacy `experimentalDecorators`.
 
 ## Before you start
 
@@ -33,7 +33,7 @@ mkdir petstore-workspace
 cd petstore-workspace
 npm init -y
 npm pkg set type=module
-npm install @theorvane/type-mcp@0.3.0 zod
+npm install @theorvane/type-mcp@0.4.0 zod
 npm install --save-dev typescript tsx @types/node
 npm pkg set scripts.check="tsc --noEmit"
 ```

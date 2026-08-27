@@ -1,6 +1,6 @@
 # Decorator API contract
 
-**Published baseline:** [`@theorvane/type-mcp@0.3.2`](https://www.npmjs.com/package/@theorvane/type-mcp) provides decorator declarations, definition validation, MCP SDK compilation for tools/static resources/prompts, a Node stdio helper, and a Fetch Streamable HTTP adapter. The contract below describes current `dev` source, including SDK v2 serving, server identity/instructions, modern component metadata, tool `outputSchema`, explicit prompt arguments, resource URI templates, completion, and invocation context. LangChain interoperability is isolated at `@theorvane/type-mcp/langchain`.
+**Release contract:** [`@theorvane/type-mcp@0.4.0`](https://www.npmjs.com/package/@theorvane/type-mcp) provides SDK v2 serving, modern server/component metadata, structured tool output, prompt arguments, resource templates and completion, invocation context, testing/media helpers, component visibility, stdio, Fetch Streamable HTTP, and tools-only LangChain interoperability.
 
 ## Server declaration
 

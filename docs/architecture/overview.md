@@ -1,6 +1,6 @@
 # Architecture overview
 
-> **Public release:** [`@theorvane/type-mcp@0.3.0`](https://www.npmjs.com/package/@theorvane/type-mcp) implements the metadata, validation, resolver, compiler, stdio, HTTP, and LangChain adapter surfaces described here. Applications remain responsible for hosting and lifecycle policy.
+> **Public release:** [`@theorvane/type-mcp@0.4.0`](https://www.npmjs.com/package/@theorvane/type-mcp) implements the metadata, validation, resolver, compiler, stdio, HTTP, and LangChain adapter surfaces described here. Applications remain responsible for hosting and lifecycle policy.
 
 ## Package surface
 

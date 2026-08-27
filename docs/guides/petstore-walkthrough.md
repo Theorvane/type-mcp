@@ -1,6 +1,6 @@
 # Petstore walkthrough: from declaration to a selected runtime
 
-This walkthrough uses one read-only Petstore catalog tool to show the published [`@theorvane/type-mcp@0.3.0`](https://www.npmjs.com/package/@theorvane/type-mcp) flow: declare a server, inspect or compile it, then select the smallest supported runtime boundary.
+This walkthrough uses one read-only Petstore catalog tool to show the published [`@theorvane/type-mcp@0.4.0`](https://www.npmjs.com/package/@theorvane/type-mcp) flow: declare a server, inspect or compile it, then select the smallest supported runtime boundary.
 
 > **What this does not do:** TypeMCP does not choose hosting, authorization, persistence, models, LangGraph composition, or deployment. Those decisions remain in the application.
 
@@ -19,7 +19,7 @@ For a project-starting route, complete [Petstore project setup](petstore-project
 Install the package and Zod:
 
 ```bash
-npm install @theorvane/type-mcp@0.3.0 zod
+npm install @theorvane/type-mcp@0.4.0 zod
 ```
 
 Use a Node-aware TypeScript configuration:
@@ -58,7 +58,7 @@ export class PetstoreServer {
 }
 ```
 
-The decorated class must keep a zero-argument constructor under the published `0.3.0` `@McpServer` contract. Configure a real catalog service through the explicit resolver before it creates `PetstoreServer`; TypeMCP does not construct or authorize that dependency for you.
+The decorated class must keep a zero-argument constructor under the published `0.4.0` `@McpServer` contract. Configure a real catalog service through the explicit resolver before it creates `PetstoreServer`; TypeMCP does not construct or authorize that dependency for you.
 
 ## 2. Inspect, then compile through an explicit resolver
 
@@ -122,7 +122,7 @@ A Fetch host can call `handler(request)`. In a Next.js route, re-export it for `
 Install the optional peer only when you select this path:
 
 ```bash
-npm install @theorvane/type-mcp@0.3.0 @langchain/core zod
+npm install @theorvane/type-mcp@0.4.0 @langchain/core zod
 ```
 
 Create `src/langchain-tools.ts`:
