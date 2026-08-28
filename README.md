@@ -11,9 +11,7 @@
   [![License](https://img.shields.io/badge/license-MIT-111827?style=flat-square)](LICENSE)
 </div>
 
-> **Published package — `@theorvane/type-mcp@0.3.2`:** provides standard decorators, a separate `@theorvane/type-mcp/legacy` entrypoint for CommonJS legacy decorators, definition validation, explicit instance resolution, MCP SDK compilation, stdio, `@theorvane/type-mcp/http` Streamable HTTP, and the tools-only `@theorvane/type-mcp/langchain` adapter.
->
-> **Current `dev` source:** additionally includes SDK v2 protocol negotiation, modern component metadata, tool output schemas, explicit prompt arguments, resource URI templates, completion, invocation context, protocol-backed testing, image/audio helpers, and component visibility. The examples and capability map below target current source unless they explicitly say “published package.”
+> **Release `@theorvane/type-mcp@0.4.0`:** adds MCP SDK v2 protocol serving, modern component metadata and instructions, structured outputs, prompt arguments, resource templates and completion, invocation context, protocol-backed testing, media helpers, and component visibility while retaining the standard, legacy, HTTP, LangChain, and stdio boundaries.
 >
 > **Integration boundary:** LangGraph `ToolNode` composition, graph topology, model choice, authorization, state, persistence, and deployment remain consumer responsibilities.
 
@@ -37,7 +35,7 @@ TypeMCP requires **Node.js 20 or later** and TypeScript with standard (Stage 3) 
 npm install @theorvane/type-mcp zod
 ```
 
-The install command currently resolves to published `0.3.2`. Modern server/component metadata, initialization instructions, and tool `outputSchema` shown below are implemented on `dev` but are not part of that published version yet.
+Version `0.4.0` includes the modern server/component metadata, initialization instructions, tool `outputSchema`, and additional capabilities documented below.
 
 The package has ESM and CommonJS runtime and TypeScript declaration conditions for its root, HTTP, LangChain, and legacy entrypoints. The verified decorator modes are standard decorators in an ESM/NodeNext consumer and legacy `experimentalDecorators` in a CommonJS/Node16 consumer. This standard-decorator `tsconfig.json` baseline matches the package contract:
 
@@ -120,11 +118,11 @@ console.log(definition?.tools[0]?.name); // "findProduct"
 
 `getMcpServerDefinition()` returns `undefined` for a class without `@McpServer`. For a decorated class, it returns a newly allocated frozen metadata container on every call. Zod schemas retain their original identity, so treat a schema passed to a decorator as immutable after declaration.
 
-The methods above are ordinary application methods. In current source, use `createMcpServer()` to validate and compile this declaration through an explicit resolver; choose an adapter exported by the installed package only when the application owns its hosting, authorization, and lifecycle policy. Follow the [getting-started guide](docs/guides/getting-started.md) for the complete version boundary.
+The methods above are ordinary application methods. In `0.4.0`, use `createMcpServer()` to validate and compile this declaration through an explicit resolver; choose an adapter exported by the installed package only when the application owns its hosting, authorization, and lifecycle policy. Follow the [getting-started guide](docs/guides/getting-started.md) for the complete version boundary.
 
 ## Capability map
 
-| Surface | Current source | What it does |
+| Surface | `@theorvane/type-mcp@0.4.0` | What it does |
 | --- | --- | --- |
 | `@McpServer` | Available | Records standard implementation identity and optional client initialization instructions. |
 | `@McpTool` | Available | Records input/output Zod schemas and metadata; object returns emit text plus structured content. |
@@ -147,7 +145,7 @@ The methods above are ordinary application methods. In current source, use `crea
 
 - [Getting started](docs/guides/getting-started.md) — install, declare, inspect, and compile a TypeMCP server.
 - [Choose a runtime boundary](docs/guides/runtime-selection.md) — select the released root, stdio, HTTP, or tools-only LangChain surface.
-- [Dynamic prompts and resources](docs/guides/dynamic-declarations.md) — explicit prompt arguments, URI templates, and completion in current source.
+- [Dynamic prompts and resources](docs/guides/dynamic-declarations.md) — explicit prompt arguments, URI templates, and completion in 0.4.0.
 - [Invocation context](docs/guides/invocation-context.md) — request identity, cancellation, progress, and streaming constraints.
 - [Testing and media helpers](docs/guides/testing-media.md) — in-memory protocol sessions and image/audio byte results.
 - [Component visibility](docs/guides/component-visibility.md) — static state, runtime filters, allowlists, and security boundaries.

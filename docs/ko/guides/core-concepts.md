@@ -1,6 +1,6 @@
 # 핵심 개념
 
-이 문서는 런타임 경계를 고르기 전에 배포된 [`@theorvane/type-mcp@0.3.0`](https://www.npmjs.com/package/@theorvane/type-mcp) 모델을 설명합니다.
+이 문서는 런타임 경계를 고르기 전에 배포된 [`@theorvane/type-mcp@0.4.0`](https://www.npmjs.com/package/@theorvane/type-mcp) 모델을 설명합니다.
 
 > **책임 경계:** TypeMCP는 선언 메타데이터, 검증, MCP SDK 컴파일, 그리고 선별된 어댑터를 제공합니다. **호스팅, 인가, 영속화, 모델, LangGraph 구성, 배포**의 소유권은 애플리케이션에 남습니다.
 

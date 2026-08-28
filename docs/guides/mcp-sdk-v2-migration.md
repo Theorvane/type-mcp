@@ -1,6 +1,6 @@
 # MCP TypeScript SDK v2 migration
 
-The current `dev` source uses the split stable MCP TypeScript SDK v2 packages. Runtime code depends on `@modelcontextprotocol/server@2.0.0`; protocol integration tests use `@modelcontextprotocol/client@2.0.0`. The monolithic `@modelcontextprotocol/sdk` v1 package is no longer installed.
+TypeMCP 0.4.0 uses the split stable MCP TypeScript SDK v2 packages. Runtime code depends on `@modelcontextprotocol/server@2.0.0`; protocol integration tests use `@modelcontextprotocol/client@2.0.0`. The monolithic `@modelcontextprotocol/sdk` v1 package is no longer installed.
 
 ## HTTP applications
 

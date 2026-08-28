@@ -9,17 +9,17 @@ interface PackageManifest {
 }
 
 describe("packed consumer compatibility contract", () => {
-	it("declares the 0.3.2 compatibility release version", async () => {
+	it("declares the 0.4.0 compatibility release version", async () => {
 		const manifest = JSON.parse(
 			await readFile(new URL("../package.json", import.meta.url), "utf8"),
 		) as PackageManifest;
 
-		expect(manifest.version).toBe("0.3.2");
+		expect(manifest.version).toBe("0.4.0");
 	});
 
 	it("accepts npm 11 array and npm 12 package-keyed pack JSON", () => {
 		const tarball = {
-			filename: "theorvane-type-mcp-0.3.2.tgz",
+			filename: "theorvane-type-mcp-0.4.0.tgz",
 			name: "@theorvane/type-mcp",
 		};
 

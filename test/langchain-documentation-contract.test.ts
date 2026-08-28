@@ -76,7 +76,7 @@ describe("LangChain current-facing documentation contract", () => {
 			.flat()
 			.join("\n");
 
-		expect(combined).toContain("@theorvane/type-mcp@0.3.0");
+		expect(combined).toContain("@theorvane/type-mcp@0.4.0");
 		expect(combined).toContain(
 			"strict declarations, validation, MCP SDK compilation, stdio, or Streamable HTTP",
 		);

@@ -1,6 +1,6 @@
 # Testing and media helpers
 
-**Availability:** current `dev` source; not included in published `0.3.2`.
+**Availability:** included in `@theorvane/type-mcp@0.4.0`.
 
 ## In-memory protocol tests
 

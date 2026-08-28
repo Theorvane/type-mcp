@@ -1,6 +1,6 @@
 # Component visibility
 
-**Availability:** current `dev` source; not included in published `0.3.2`.
+**Availability:** included in `@theorvane/type-mcp@0.4.0`.
 
 Tools, resources/templates, and prompts accept `enabled` and `tags`. Components are enabled by default.
 
