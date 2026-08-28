@@ -5,7 +5,7 @@ This chapter continues the [Petstore project setup](petstore-project-setup.md). 
 ## Before you start
 
 - Complete [Petstore project setup](petstore-project-setup.md), including strict NodeNext TypeScript configuration.
-- Node.js 20 or later and the released `@theorvane/type-mcp@0.3.0` and `zod` dependencies.
+- Node.js 20 or later and the released `@theorvane/type-mcp@0.4.0` and `zod` dependencies.
 - An MCP-capable local client only if you plan to connect to the stdio process after verifying the project locally.
 
 ## Workspace checkpoint
@@ -29,7 +29,7 @@ The local script connects a compiled server to stdio. It does not register the p
 Confirm the project contains the released package and local commands:
 
 ```bash
-npm install @theorvane/type-mcp@0.3.0 zod
+npm install @theorvane/type-mcp@0.4.0 zod
 npm install --save-dev typescript tsx @types/node
 npm pkg set scripts.check="tsc --noEmit"
 npm pkg set scripts.inspect-server="tsx src/inspect-server.ts"
@@ -70,7 +70,7 @@ export class PetstoreServer {
 }
 ```
 
-The decorated class deliberately has no constructor parameters because that is the published `@McpServer` decorator contract in `0.3.0`. The explicit resolver returns an application-owned configured instance before compilation; replace `configure()` with your own composition-root wiring while preserving a zero-argument decorated constructor.
+The decorated class deliberately has no constructor parameters because that is the published `@McpServer` decorator contract in `0.4.0`. The explicit resolver returns an application-owned configured instance before compilation; replace `configure()` with your own composition-root wiring while preserving a zero-argument decorated constructor.
 
 ## Inspect the declaration
 
@@ -175,7 +175,7 @@ The last command intentionally remains running while its stdio transport waits f
 
 - **`PetstoreServer is missing @McpServer metadata`:** confirm the class is decorated and imported from the `.js` ESM path in the inspecting file.
 - **A TypeScript error around decorators:** use the NodeNext/`ESNext.Decorators` configuration from [project setup](petstore-project-setup.md); do not enable `experimentalDecorators`.
-- **A TypeScript error says the decorated constructor is incompatible:** keep the `@McpServer` class zero-argument and configure application dependencies in the explicit resolver. The published 0.3.0 decorator contract does not accept a constructor-parameter class.
+- **A TypeScript error says the decorated constructor is incompatible:** keep the `@McpServer` class zero-argument and configure application dependencies in the explicit resolver. The published 0.4.0 decorator contract does not accept a constructor-parameter class.
 - **The process exits immediately:** inspect application startup errors and the real client/dependency configuration. `startStdioServer()` connects an already compiled server; it does not validate your environment or provision a client.
 - **A local MCP client cannot discover the tool:** verify that the client launches the documented executable from the project directory and that its own process/access policy permits it. TypeMCP does not register desktop client configuration.
 

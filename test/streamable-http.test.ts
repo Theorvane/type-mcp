@@ -1,3 +1,7 @@
+import {
+	Client,
+	StreamableHTTPClientTransport,
+} from "@modelcontextprotocol/client";
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
 import { createMcpHandler } from "../src/http.js";
@@ -85,10 +89,15 @@ function createDecoratedServerClass() {
 		HttpTestServer.prototype.echo,
 		methodContext("echo", metadata),
 	);
-	McpServer({ name: "http-test", version: "1.0.0" })(
-		HttpTestServer,
-		classContext(metadata),
-	);
+	McpServer({
+		name: "http-test",
+		version: "1.0.0",
+		title: "HTTP test server",
+		description: "Exercises Streamable HTTP initialization.",
+		websiteUrl: "https://example.test/http",
+		icons: [{ src: "https://example.test/http.svg", sizes: ["any"] }],
+		instructions: "Call echo with a message.",
+	})(HttpTestServer, classContext(metadata));
 	return HttpTestServer;
 }
 
@@ -114,7 +123,15 @@ describe("Fetch Streamable HTTP handler", () => {
 		expect(initialize.status).toBe(200);
 		const initialized = await json(initialize);
 		expect(initialized.result).toMatchObject({
-			serverInfo: { name: "http-test" },
+			serverInfo: {
+				name: "http-test",
+				version: "1.0.0",
+				title: "HTTP test server",
+				description: "Exercises Streamable HTTP initialization.",
+				websiteUrl: "https://example.test/http",
+				icons: [{ src: "https://example.test/http.svg", sizes: ["any"] }],
+			},
+			instructions: "Call echo with a message.",
 		});
 		expect(hasProtocolVersion(initialized.result)).toBe(true);
 		if (!hasProtocolVersion(initialized.result)) {
@@ -182,6 +199,41 @@ describe("Fetch Streamable HTTP handler", () => {
 		);
 		expect(restarted.status).toBe(200);
 		expect(restarted.headers.get("mcp-session-id")).not.toBe(sessionId);
+	});
+
+	it("negotiates the 2026 protocol and calls a decorated tool", async () => {
+		const handler = createMcpHandler(() =>
+			createMcpServer(createDecoratedServerClass()),
+		);
+		const transport = new StreamableHTTPClientTransport(
+			new URL("https://example.test/mcp"),
+			{
+				fetch: async (input, init) => handler(new Request(input, init)),
+			},
+		);
+		const client = new Client(
+			{ name: "modern-test-client", version: "1.0.0" },
+			{ versionNegotiation: { mode: { pin: "2026-07-28" } } },
+		);
+
+		await client.connect(transport);
+		expect(client.getServerVersion()).toMatchObject({
+			name: "http-test",
+			version: "1.0.0",
+		});
+		expect(await client.listTools()).toMatchObject({
+			tools: [expect.objectContaining({ name: "echo" })],
+		});
+		expect(
+			await client.callTool({
+				name: "echo",
+				arguments: { message: "modern hello" },
+			}),
+		).toMatchObject({
+			content: [{ type: "text", text: "modern hello" }],
+		});
+
+		await client.close();
 	});
 
 	it("closes a newly created server when transport connection fails", async () => {

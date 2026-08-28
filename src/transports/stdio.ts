@@ -1,5 +1,12 @@
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import type { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
+import type { McpServerFactory, Transport } from "@modelcontextprotocol/server";
+import type {
+	ServeStdioOptions,
+	StdioServerHandle,
+} from "@modelcontextprotocol/server/stdio";
+import {
+	StdioServerTransport,
+	serveStdio,
+} from "@modelcontextprotocol/server/stdio";
 
 export interface McpServerConnection {
 	connect(transport: Transport): Promise<void>;
@@ -12,6 +19,22 @@ export interface StdioServerOptions {
 export interface StartedStdioServer<Server extends McpServerConnection> {
 	readonly server: Server;
 	readonly transport: Transport;
+}
+
+/** Options for the protocol-negotiating stdio server entry point. */
+export type StdioProtocolServerOptions = ServeStdioOptions;
+
+/** Handle owned by the protocol-negotiating stdio server entry point. */
+export type StdioProtocolServerHandle = StdioServerHandle;
+
+/**
+ * Serves both 2025 and 2026 MCP protocols over stdio from a fresh-server factory.
+ */
+export function serveStdioServer(
+	factory: McpServerFactory,
+	options: StdioProtocolServerOptions = {},
+): StdioProtocolServerHandle {
+	return serveStdio(factory, options);
 }
 
 /**

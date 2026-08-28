@@ -50,48 +50,130 @@ describe("MCP decorators", () => {
 		class CalculatorServer {}
 		const metadata: DecoratorMetadata = {};
 		const input = z.object({ left: z.number(), right: z.number() });
+		const outputSchema = z.object({ total: z.number() });
 
-		McpTool({ description: "Adds two numbers.", input })(
-			() => "not executed",
-			methodContext("add", metadata),
-		);
-		McpResource({ uri: "config://calculator", mimeType: "application/json" })(
-			() => ({}),
-			methodContext("config", metadata),
-		);
-		McpPrompt({ description: "Creates a greeting." })(
-			() => "not executed",
-			methodContext("greeting", metadata),
-		);
-		decorateServer(CalculatorServer, metadata);
-
-		expect(getMcpServerDefinition(CalculatorServer)).toEqual({
+		McpTool({
+			title: "Add numbers",
+			description: "Adds two numbers.",
+			input,
+			outputSchema,
+			annotations: { readOnlyHint: true },
+			_meta: { group: "math" },
+		})(() => "not executed", methodContext("add", metadata));
+		McpResource({
+			title: "Calculator configuration",
+			uri: "config://calculator",
+			mimeType: "application/json",
+			icons: [{ src: "https://example.test/calculator.svg" }],
+			annotations: { priority: 0.5 },
+			_meta: { group: "configuration" },
+		})(() => ({}), methodContext("config", metadata));
+		McpPrompt({
+			title: "Greeting",
+			description: "Creates a greeting.",
+		})(() => "not executed", methodContext("greeting", metadata));
+		const serverIcons = [
+			{
+				src: "https://example.test/server.svg",
+				mimeType: "image/svg+xml",
+				sizes: ["any"],
+				theme: "light" as const,
+			},
+		];
+		McpServer({
 			name: "calculator",
 			version: "1.0.0",
+			title: "Calculator server",
+			description: "Calculates and exposes configuration.",
+			websiteUrl: "https://example.test/calculator",
+			icons: serverIcons,
+			instructions: "Use add for arithmetic.",
+		})(CalculatorServer, classContext(metadata));
+
+		const definition = getMcpServerDefinition(CalculatorServer);
+		expect(definition).toEqual({
+			name: "calculator",
+			version: "1.0.0",
+			title: "Calculator server",
+			description: "Calculates and exposes configuration.",
+			websiteUrl: "https://example.test/calculator",
+			icons: [
+				{
+					src: "https://example.test/server.svg",
+					mimeType: "image/svg+xml",
+					sizes: ["any"],
+					theme: "light",
+				},
+			],
+			instructions: "Use add for arithmetic.",
 			tools: [
 				{
 					name: "add",
 					methodName: "add",
+					title: "Add numbers",
 					description: "Adds two numbers.",
 					input,
+					outputSchema,
+					annotations: { readOnlyHint: true },
+					_meta: { group: "math" },
 				},
 			],
 			resources: [
 				{
 					name: "config",
 					methodName: "config",
+					title: "Calculator configuration",
 					uri: "config://calculator",
 					mimeType: "application/json",
+					icons: [{ src: "https://example.test/calculator.svg" }],
+					annotations: { priority: 0.5 },
+					_meta: { group: "configuration" },
 				},
 			],
 			prompts: [
 				{
 					name: "greeting",
 					methodName: "greeting",
+					title: "Greeting",
 					description: "Creates a greeting.",
 				},
 			],
 		});
+		expect(Object.isFrozen(definition?.icons)).toBe(true);
+		expect(Object.isFrozen(definition?.icons?.[0])).toBe(true);
+		expect(Object.isFrozen(definition?.icons?.[0]?.sizes)).toBe(true);
+		serverIcons[0]?.sizes.push("128x128");
+		expect(getMcpServerDefinition(CalculatorServer)?.icons?.[0]?.sizes).toEqual(
+			["any"],
+		);
+	});
+
+	it("freezes dynamic declaration containers while preserving executable identity", () => {
+		class DynamicServer {}
+		const metadata: DecoratorMetadata = {};
+		const resourceInput = z.object({ id: z.string() });
+		const promptArgs = z.object({ topic: z.string() });
+		const complete = () => ["one"];
+		McpResource({
+			uri: "item://{id}",
+			input: resourceInput,
+			complete: { id: complete },
+		})(() => undefined, methodContext("item", metadata));
+		McpPrompt({ args: promptArgs })(
+			() => undefined,
+			methodContext("prompt", metadata),
+		);
+		decorateServer(DynamicServer, metadata);
+
+		const first = getMcpServerDefinition(DynamicServer);
+		const second = getMcpServerDefinition(DynamicServer);
+		expect(first?.resources[0]?.input).toBe(resourceInput);
+		expect(first?.resources[0]?.complete?.id).toBe(complete);
+		expect(first?.prompts[0]?.args).toBe(promptArgs);
+		expect(Object.isFrozen(first?.resources[0]?.complete)).toBe(true);
+		expect(first?.resources[0]?.complete).not.toBe(
+			second?.resources[0]?.complete,
+		);
 	});
 
 	it("preserves explicit component names", () => {

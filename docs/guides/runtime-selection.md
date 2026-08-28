@@ -1,6 +1,6 @@
 # Choose a TypeMCP runtime boundary
 
-> **Release status:** This guide documents the published `@theorvane/type-mcp@0.3.0` package. Version `0.3.0` adds the explicit `@theorvane/type-mcp/legacy` compatibility entrypoint for TypeScript `experimentalDecorators` and CommonJS consumers; the standard decorator/runtime boundaries below remain the released `0.3.x` surface.
+> **Release status:** This guide documents the published `@theorvane/type-mcp@0.4.0` package. The explicit `@theorvane/type-mcp/legacy` compatibility entrypoint supports TypeScript `experimentalDecorators` and CommonJS consumers; the standard decorator/runtime boundaries below remain available in 0.4.0.
 
 A TypeMCP class is a declaration plus ordinary application methods. Choose the package entry point from the way the application needs to expose that declaration, then keep hosting and policy at the application boundary.
 
@@ -9,7 +9,7 @@ A TypeMCP class is a declaration plus ordinary application methods. Choose the p
 Install the root package and Zod when the application declares MCP tools, resources, or prompts:
 
 ```bash
-npm install @theorvane/type-mcp@0.3.0 zod
+npm install @theorvane/type-mcp@0.4.0 zod
 ```
 
 The root entry point provides decorators, definition inspection, compilation through `createMcpServer()`, an explicit `InstanceResolver`, and `startStdioServer()`. It does not select a web framework, model, authorization scheme, session store, persistence layer, or deployment target.
@@ -55,7 +55,17 @@ The resolver is intentionally explicit. Replace the constructor call with the ap
 
 ## Connect stdio when the process is the boundary
 
-Use stdio when the TypeMCP process is launched by an MCP-capable client. The helper connects an already compiled server to the official MCP SDK `StdioServerTransport`.
+Use stdio when the TypeMCP process is launched by an MCP-capable client. Prefer the factory entry point when clients may negotiate either the 2025 or 2026 protocol era:
+
+```ts
+// src/stdio.ts
+import { createMcpServer, serveStdioServer } from "@theorvane/type-mcp";
+import { CatalogServer } from "./catalog-server.js";
+
+serveStdioServer(() => createMcpServer(CatalogServer));
+```
+
+The instance-based helper remains available for an application intentionally preserving its existing 2025-compatible transport lifecycle:
 
 ```ts
 // src/stdio.ts
@@ -90,14 +100,14 @@ A Fetch host can then route supported requests to `handler`. For a Next.js route
 export { handler as DELETE, handler as GET, handler as POST } from "../../../src/mcp-handler.js";
 ```
 
-The adapter handles MCP HTTP session routing, protocol negotiation, and JSON-RPC framing inside the process. The host application owns the URL, authentication, origin controls, deployment, telemetry choices, and any durable session policy. Read [HTTP framework integration](http-and-nextjs.md) before adapting the route to a production host.
+The adapter preserves stateful Streamable HTTP sessions for 2025 clients and uses the SDK v2 per-request lifecycle for 2026-07-28 clients. The host application owns the URL, authentication, origin controls, deployment, telemetry choices, and any durable session policy. Read [HTTP framework integration](http-and-nextjs.md) before adapting the route to a production host.
 
 ## Adapt tools to LangChain without handing over the application
 
 Install the optional LangChain peer only when importing the tools-only adapter:
 
 ```bash
-npm install @theorvane/type-mcp@0.3.0 @langchain/core zod
+npm install @theorvane/type-mcp@0.4.0 @langchain/core zod
 ```
 
 ```ts

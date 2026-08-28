@@ -1,6 +1,6 @@
 # Core concepts
 
-This page explains the published [`@theorvane/type-mcp@0.3.0`](https://www.npmjs.com/package/@theorvane/type-mcp) model before you choose a runtime boundary.
+This page explains the published [`@theorvane/type-mcp@0.4.0`](https://www.npmjs.com/package/@theorvane/type-mcp) model before you choose a runtime boundary.
 
 > **Responsibility boundary:** TypeMCP provides declaration metadata, validation, MCP SDK compilation, and selected adapters. Applications retain ownership of **hosting, authorization, persistence, models, LangGraph composition, and deployment**.
 
@@ -25,7 +25,7 @@ export class PetstoreServer {
 }
 ```
 
-`@McpServer` records server identity. `@McpTool` records a public name, description, and Zod object input schema. Resource and prompt decorators work the same way for their supported static contracts. The decorators do not start a process, open a network listener, select a web framework, read credentials, or authorize a caller.
+`@McpServer` records server identity. `@McpTool` records a public name, description, and Zod object input schema. `@McpPrompt` can declare explicit Zod arguments, and `@McpResource` can declare a validated URI template plus variable completion. The decorators do not start a process, open a network listener, select a web framework, read credentials, or authorize a caller.
 
 ## Read a definition at an application boundary
 
@@ -44,7 +44,7 @@ console.log(definition.tools.map((tool) => tool.name));
 // ["find-product"]
 ```
 
-The returned definition container, component arrays, and component records are frozen snapshots. A tool's Zod schema retains its original identity because executable schemas cannot safely be cloned or frozen. Treat a schema supplied to a decorator as immutable.
+The returned definition container, component arrays, and component records are frozen snapshots. Tool, prompt, and resource-template Zod schemas retain their original identity because executable schemas cannot safely be cloned or frozen. Completion callbacks also retain their function identity. Treat executable values supplied to decorators as immutable.
 
 ## Compile with an explicit instance resolver
 

@@ -10,8 +10,10 @@ import type {
 	McpToolOptions,
 } from "./types.js";
 
+export { completable as McpCompletable } from "@modelcontextprotocol/server";
 export { createMcpServer } from "./compiler/create-mcp-server.js";
 export { TypeMcpDefinitionError } from "./errors.js";
+export type { McpInvocationContext } from "./invocation-context.js";
 export { getMcpServerDefinition } from "./metadata/definitions.js";
 export { readMcpServerDefinition } from "./metadata/read-server-definition.js";
 export { defaultInstanceResolver } from "./resolver/default-instance-resolver.js";
@@ -20,6 +22,7 @@ export { resolveMcpServerInstance } from "./resolver/resolve-server-instance.js"
 export type {
 	McpPromptDefinition,
 	McpPromptOptions,
+	McpResourceCompletion,
 	McpResourceDefinition,
 	McpResourceOptions,
 	McpServerConstructor,
@@ -52,6 +55,11 @@ export function McpServer(options: McpServerOptions): LegacyClassDecorator {
 		storeMcpServerDefinition(target, {
 			name: options.name,
 			version: options.version,
+			title: options.title,
+			description: options.description,
+			websiteUrl: options.websiteUrl,
+			icons: options.icons,
+			instructions: options.instructions,
 			tools: pending.tools,
 			resources: pending.resources,
 			prompts: pending.prompts,
@@ -66,8 +74,14 @@ export function McpTool(options: McpToolOptions): LegacyMethodDecorator {
 		pending.tools.push({
 			name: options.name ?? methodName,
 			methodName,
+			title: options.title,
 			description: options.description,
 			input: options.input,
+			outputSchema: options.outputSchema,
+			annotations: options.annotations,
+			_meta: options._meta,
+			enabled: options.enabled,
+			tags: options.tags,
 		});
 	};
 }
@@ -81,9 +95,17 @@ export function McpResource(
 		pending.resources.push({
 			name: options.name ?? methodName,
 			methodName,
+			title: options.title,
 			uri: options.uri,
 			mimeType: options.mimeType,
 			description: options.description,
+			icons: options.icons,
+			annotations: options.annotations,
+			_meta: options._meta,
+			input: options.input,
+			complete: options.complete,
+			enabled: options.enabled,
+			tags: options.tags,
 		});
 	};
 }
@@ -95,7 +117,11 @@ export function McpPrompt(options: McpPromptOptions): LegacyMethodDecorator {
 		pending.prompts.push({
 			name: options.name ?? methodName,
 			methodName,
+			title: options.title,
 			description: options.description,
+			args: options.args,
+			enabled: options.enabled,
+			tags: options.tags,
 		});
 	};
 }

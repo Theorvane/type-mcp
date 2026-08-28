@@ -77,9 +77,10 @@ try {
 			include: ["server.ts"],
 		},
 		`import { z } from "zod";
-import { createMcpServer, getMcpServerDefinition, McpServer, McpTool } from "@theorvane/type-mcp";
+import { createMcpServer, getMcpServerDefinition, McpImage, McpServer, McpTool } from "@theorvane/type-mcp";
 import { createMcpHandler } from "@theorvane/type-mcp/http";
 import { createLangChainTools } from "@theorvane/type-mcp/langchain";
+import { createMcpTestSession } from "@theorvane/type-mcp/testing";
 import { McpServer as LegacyMcpServer, McpTool as LegacyMcpTool } from "@theorvane/type-mcp/legacy";
 
 @McpServer({ name: "standard-catalog", version: "1.0.0" })
@@ -92,6 +93,8 @@ if (getMcpServerDefinition(StandardCatalog)?.tools[0]?.name !== "find_product") 
 if (typeof createMcpServer !== "function") throw new Error("ESM root export missing.");
 if (typeof createMcpHandler !== "function") throw new Error("ESM http export missing.");
 if (typeof createLangChainTools !== "function") throw new Error("ESM langchain export missing.");
+if (typeof createMcpTestSession !== "function") throw new Error("ESM testing export missing.");
+if (new McpImage(new Uint8Array([1]), { mimeType: "image/png" }).toContent().data !== "AQ==") throw new Error("ESM media export failed.");
 if (typeof LegacyMcpServer !== "function" || typeof LegacyMcpTool !== "function") throw new Error("ESM legacy export missing.");
 `,
 	);
@@ -113,9 +116,10 @@ if (typeof LegacyMcpServer !== "function" || typeof LegacyMcpTool !== "function"
 			include: ["server.ts"],
 		},
 		`import { z } from "zod";
-import { createMcpServer } from "@theorvane/type-mcp";
+import { createMcpServer, McpImage } from "@theorvane/type-mcp";
 import { createMcpHandler } from "@theorvane/type-mcp/http";
 import { createLangChainTools } from "@theorvane/type-mcp/langchain";
+import { createMcpTestSession } from "@theorvane/type-mcp/testing";
 import { getMcpServerDefinition, McpServer, McpTool } from "@theorvane/type-mcp/legacy";
 
 @McpServer({ name: "legacy-catalog", version: "1.0.0" })
@@ -128,6 +132,8 @@ if (getMcpServerDefinition(LegacyCatalog)?.tools[0]?.name !== "find_product") th
 if (typeof createMcpServer !== "function") throw new Error("CJS root export missing.");
 if (typeof createMcpHandler !== "function") throw new Error("CJS http export missing.");
 if (typeof createLangChainTools !== "function") throw new Error("CJS langchain export missing.");
+if (typeof createMcpTestSession !== "function") throw new Error("CJS testing export missing.");
+if (new McpImage(new Uint8Array([1]), { mimeType: "image/png" }).toContent().data !== "AQ==") throw new Error("CJS media export failed.");
 `,
 	);
 

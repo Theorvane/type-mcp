@@ -76,11 +76,12 @@ describe("LangChain current-facing documentation contract", () => {
 			.flat()
 			.join("\n");
 
-		expect(combined).toContain("@theorvane/type-mcp@0.3.0");
+		expect(combined).toContain("@theorvane/type-mcp@0.4.0");
 		expect(combined).toContain(
 			"strict declarations, validation, MCP SDK compilation, stdio, or Streamable HTTP",
 		);
-		expect(combined).toContain("TypeMCP owns in-process MCP session routing");
+		expect(combined).toContain("stateful 2025 sessions");
+		expect(combined).toContain("SDK v2 2026 per-request lifecycle");
 		expect(combined).toContain(
 			"applications own route hosting, durable session policy, and authorization",
 		);

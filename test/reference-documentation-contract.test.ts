@@ -14,7 +14,7 @@ describe("reference-first TypeMCP documentation", () => {
 			await Promise.all(documents.map((path) => readFile(path, "utf8")))
 		).join("\n");
 
-		expect(content).toContain("@theorvane/type-mcp@0.3.0");
+		expect(content).toContain("@theorvane/type-mcp@0.4.0");
 		expect(content).toContain("Inspect a declaration");
 		expect(content).toContain("Run over stdio");
 		expect(content).toContain("Serve Streamable HTTP");
@@ -59,7 +59,7 @@ describe("reference-first TypeMCP documentation", () => {
 			expect(content, path).toMatch(/## Next steps/);
 		}
 
-		expect(allContent).toContain("@theorvane/type-mcp@0.3.0");
+		expect(allContent).toContain("@theorvane/type-mcp@0.4.0");
 		expect(allContent).not.toMatch(/npm install @theorvane\/type-mcp(?:\s|$)/);
 		expect(allContent).toContain("npm run stdio");
 		expect(consumerScript).toContain(

@@ -8,8 +8,14 @@ export function McpTool(options: McpToolOptions) {
 		appendToolDefinition(context.metadata, {
 			name: options.name ?? methodName,
 			methodName,
+			title: options.title,
 			description: options.description,
 			input: options.input,
+			outputSchema: options.outputSchema,
+			annotations: options.annotations,
+			_meta: options._meta,
+			enabled: options.enabled,
+			tags: options.tags,
 		});
 	};
 }

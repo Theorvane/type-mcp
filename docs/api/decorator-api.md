@@ -1,6 +1,6 @@
 # Decorator API contract
 
-**Public package:** [`@theorvane/type-mcp@0.3.0`](https://www.npmjs.com/package/@theorvane/type-mcp) provides decorator declarations, definition validation, MCP SDK compilation for tools/static resources/prompts, a Node stdio helper, and a Fetch Streamable HTTP adapter. LangChain interoperability is isolated at `@theorvane/type-mcp/langchain`.
+**Release contract:** [`@theorvane/type-mcp@0.4.0`](https://www.npmjs.com/package/@theorvane/type-mcp) provides SDK v2 serving, modern server/component metadata, structured tool output, prompt arguments, resource templates and completion, invocation context, testing/media helpers, component visibility, stdio, Fetch Streamable HTTP, and tools-only LangChain interoperability.
 
 ## Server declaration
 
@@ -8,14 +8,22 @@
 import { McpServer, McpTool, createMcpServer } from "@theorvane/type-mcp";
 import { createMcpHandler } from "@theorvane/type-mcp/http";
 
-@McpServer({ name: "catalog", version: "0.2.0" })
+@McpServer({
+  name: "catalog",
+  version: "0.2.0",
+  title: "Catalog server",
+  description: "Catalog lookup and configuration.",
+  websiteUrl: "https://example.com/catalog",
+  icons: [{ src: "https://example.com/catalog.svg", sizes: ["any"] }],
+  instructions: "Use findProduct with a catalog SKU.",
+})
 class CatalogServer {}
 ```
 
 | Case | Behavior |
 | --- | --- |
-| Accept | `name` and `version` identify one decorated server class. The decorator records an immutable server definition. |
-| Validate and compile | `createMcpServer()` validates the definition, resolves an instance explicitly, and compiles it into an official MCP SDK `McpServer`. |
+| Accept | `name` and `version` identify one decorated server class. Optional `title`, `description`, `websiteUrl`, and `icons` provide standard MCP implementation identity; `instructions` tells connected clients how to use the server. The decorator records an immutable server definition and defensively copies icon metadata. |
+| Validate and compile | `createMcpServer()` validates the definition, resolves an instance explicitly, and compiles it into an official MCP SDK `McpServer`. Identity fields are published as `serverInfo`, and `instructions` is published in the initialization result. |
 | Excluded | Automatic application-container discovery and inferred application metadata. |
 
 ## Tool declaration
@@ -23,55 +31,108 @@ class CatalogServer {}
 ```ts
 @McpTool({
   name: "find-product",
+  title: "Find a product",
   description: "Find a product by SKU.",
   input: z.object({ sku: z.string().min(1) }),
+  outputSchema: z.object({ sku: z.string(), available: z.boolean() }),
+  annotations: { readOnlyHint: true, openWorldHint: false },
+  _meta: { owner: "catalog-team" },
 })
 findProduct(input: { sku: string }) {
-  return `Found ${input.sku}`;
+  return { sku: input.sku, available: true };
 }
 ```
 
 | Case | Behavior |
 | --- | --- |
-| Accept | A method name is used as the tool name unless an explicit `name` is supplied. `input` must be a Zod object schema. `readMcpServerDefinition()` rejects duplicate tool names. |
-| Runtime | The compiler registers the validated tool with the MCP SDK. Zod validates tool input before the decorated handler runs, and failures use the package's safe tool-result boundary. |
+| Accept | A method name is used as the tool name unless an explicit `name` is supplied. `input` and optional `outputSchema` values must be Zod object schemas. Optional `title`, `annotations`, and custom `_meta` are forwarded as standard MCP tool metadata. `readMcpServerDefinition()` rejects duplicate tool names. |
+| Runtime | The compiler registers the validated tool with the MCP SDK. Zod validates tool input before the decorated handler runs. JSON-compatible object returns become both JSON text content and `structuredContent`; strings, primitives, and arrays remain text-only. Explicit SDK-valid tool results are preserved. When `outputSchema` is present, the SDK validates the normalized structured output; validation and handler failures use safe MCP error results. |
 | Excluded | Parameter decorators, automatic schema reflection, authorization, retries, and leaking handler stack traces. |
 
 ## Resource declaration
 
 ```ts
 @McpResource({
-  uri: "config://catalog",
+  name: "repository",
+  uri: "repo://{owner}/{repo}",
   mimeType: "application/json",
+  input: z.object({ owner: z.string(), repo: z.string() }),
+  complete: {
+    repo: (value, context) => lookupRepos(context?.arguments?.owner, value),
+  },
 })
-readConfig() {
-  return { region: "ap-northeast-2" };
+readRepository(input: { readonly owner: string; readonly repo: string }) {
+  return input;
 }
 ```
 
 | Case | Behavior |
 | --- | --- |
-| Accept | A static explicit URI and optional MIME type are recorded as one resource declaration. `readMcpServerDefinition()` rejects duplicate resource names. |
-| Runtime | The compiler registers static resources with the MCP SDK and invokes the decorated handler when a client reads the resource. |
-| Excluded | URI templates, subscription/push resources, and persistence/caching policies. |
+| Accept | A static URI remains a zero-argument resource. A URI template must declare an explicit Zod `input` whose fields exactly match its variables; `complete` callbacks may target only declared variables. Optional standard metadata is preserved. |
+| Runtime | Static resources use the existing SDK registration. Templates appear in `resources/templates/list`; URI variables are Zod-validated before the parsed object reaches the handler. Completion callbacks are isolated from application errors and SDK v2 bounds responses to 100 values. |
+| Excluded | Implicit parameter inference, resource subscription policy, and persistence/caching policies. |
 
 ## Prompt declaration
 
 ```ts
 @McpPrompt({
   name: "summarize-product",
-  description: "Prepare a product-summary prompt.",
+  args: z.object({
+    sku: McpCompletable(z.string().describe("Product SKU"), completeSku),
+  }),
 })
-summarizeProduct() {
-  return "Summarize the current product catalog.";
+summarizeProduct(input: { readonly sku: string }) {
+  return "Summarize product " + input.sku + ".";
 }
 ```
 
 | Case | Behavior |
 | --- | --- |
-| Accept | A named method is recorded as a prompt declaration. `readMcpServerDefinition()` rejects duplicate prompt names. Component namespaces are distinct, so a tool, resource, and prompt may share one public name. |
-| Runtime | The compiler registers prompts with the MCP SDK and normalizes supported handler results into MCP prompt messages. |
-| Excluded | Automatic argument inference from TypeScript parameter types and prompt template files. |
+| Accept | A named method is recorded with optional metadata and an explicit Zod `args` object. `McpCompletable(schema, callback)` marks individual fields for completion. Zero-argument prompts remain valid. |
+| Runtime | SDK v2 derives the MCP prompt argument list, validates request strings through the schema, dispatches completion, and passes the parsed object to the handler. Results and handler failures retain TypeMCP normalization and safe errors. |
+| Excluded | Automatic argument inference from TypeScript parameter types and prompt template files. Tool icons and prompt icons/custom metadata remain excluded until the compiler exposes them. |
+
+## Component visibility
+
+Tool, resource/template, and prompt options accept `enabled?: boolean` and `tags?: readonly string[]`. Components default to enabled. Tags must be unique non-empty strings and are copied/frozen with definition metadata.
+
+`enableMcpComponents(server, filter)` and `disableMcpComponents(server, filter)` use SDK registered handles. Filters match additively by deterministic key, name/URI, tag, or kind; `matchAll` must be explicit for an all-component operation. Enable accepts `only: true` to establish an exact allowlist.
+
+| Case | Behavior |
+| --- | --- |
+| Static disabled | Hidden from SDK lists and rejected at dispatch. |
+| Runtime transition | SDK list/call behavior and `list_changed` notifications are preserved. The function returns the number of matched components. |
+| Excluded | Authentication, authorization, per-session policy, providers, version filtering, and persistence. |
+
+Visibility is surface shaping, not a security boundary. See the [component visibility guide](../guides/component-visibility.md).
+
+## Invocation context
+
+Decorated handlers may declare a final `McpInvocationContext` argument. Tools and URI-template resources receive it after parsed input; static resources and zero-argument prompts receive it as their only argument; prompts with explicit arguments receive it after parsed input.
+
+| Case | Behavior |
+| --- | --- |
+| Accept | `requestId`, optional `sessionId`, the SDK's original `AbortSignal`, and `reportProgress(progress, total?, message?)`. The object is frozen. |
+| Runtime | Progress preserves the request's progress token and is a no-op when no token was supplied. Client cancellation aborts the same signal seen by the handler. Existing handlers that omit the final argument remain compatible. |
+| Excluded | Raw protocol send/notify, authentication, logging, sampling, elicitation, roots, application state, and stack traces. |
+
+See the [invocation context guide](../guides/invocation-context.md) for usage and HTTP streaming constraints.
+
+## Testing subpath
+
+`createMcpTestSession(server, options?)` from `@theorvane/type-mcp/testing` connects an official SDK v2 `Client` and compiled `McpServer` with `InMemoryTransport`.
+
+| Case | Behavior |
+| --- | --- |
+| Accept | A compiled server or promise plus optional client implementation identity. |
+| Runtime | Returns a frozen session containing `client`, `server`, and idempotent `close()`. Setup failure closes both endpoints before rethrowing the original error. |
+| Excluded | Mocks, snapshots, network transport assertions, subprocesses, and application fixtures. |
+
+## Media helpers
+
+`McpImage(bytes, { mimeType, annotations? })` and `McpAudio(bytes, { mimeType, annotations? })` defensively copy bytes and metadata. Direct helpers and helper/string lists normalize to standard MCP content blocks. MIME types must belong to the corresponding `image/*` or `audio/*` family. Filesystem and network loading remain consumer-owned.
+
+See the [testing and media guide](../guides/testing-media.md).
 
 ## Server construction
 
@@ -100,6 +161,18 @@ const instance = await resolveMcpServerInstance(CatalogServer, resolver);
 | Runtime | `createMcpServer()` uses this resolver seam before compiling the decorated definition. |
 | Excluded | Built-in application-container resolution, request-scoped semantics, and global service location. |
 
+## stdio adapters
+
+```ts
+serveStdioServer(() => createMcpServer(CatalogServer));
+```
+
+| Case | Behavior |
+| --- | --- |
+| Negotiated runtime | `serveStdioServer(factory)` delegates connection ownership and 2025/2026 protocol negotiation to the SDK v2 `serveStdio()` entry point. The factory may use its request context to vary construction by protocol era. |
+| Compatibility runtime | `startStdioServer(server)` keeps the instance-based 2025-compatible helper for applications that already own one compiled server and transport. |
+| Application-owned | Process startup, environment validation, executable packaging, authorization, and shutdown policy remain in the application. |
+
 ## HTTP adapter
 
 ```ts
@@ -109,13 +182,13 @@ export { handler as GET, handler as POST, handler as DELETE };
 
 | Case | Behavior |
 | --- | --- |
-| Runtime | `createMcpHandler()` adapts Web Standard `Request`/`Response` values to the SDK's Streamable HTTP transport. It owns MCP protocol framing and transport sessions. |
+| Runtime | `createMcpHandler()` adapts Web Standard `Request`/`Response` values to SDK v2. It preserves stateful 2025 Streamable HTTP sessions and routes 2026-07-28 envelope requests to the SDK's per-request handler. A zero-argument factory remains valid; factories may optionally inspect the SDK request context. |
 | Application-owned | Route registration, authentication, authorization, deployment, observability, and durable session policy remain in the host application. |
 | Excluded | OAuth policy, custom durable sessions, Express middleware, and legacy SSE transport. |
 
 ## Metadata immutability
 
-`getMcpServerDefinition()` returns a newly allocated, frozen server definition, component arrays, and component records on every read. Tool `input` schemas retain the caller-supplied Zod object-schema identity: schemas are executable mutable objects and are not cloned or frozen by TypeMCP. Consumers should treat a schema supplied to a decorator as immutable after declaration.
+`getMcpServerDefinition()` returns a newly allocated, frozen server definition, component arrays, and component records on every read. Tool `input` and `outputSchema` schemas retain the caller-supplied Zod object-schema identity: schemas are executable mutable objects and are not cloned or frozen by TypeMCP. Standard metadata containers, including server and resource icons with nested size arrays, are defensively copied and frozen on definition reads. Consumers should treat a schema supplied to a decorator as immutable after declaration.
 
 ## Legacy TypeScript decorators
 

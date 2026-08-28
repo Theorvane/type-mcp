@@ -14,6 +14,11 @@ export function McpServer(options: McpServerOptions) {
 		storeMcpServerDefinition(target, {
 			name: options.name,
 			version: options.version,
+			title: options.title,
+			description: options.description,
+			websiteUrl: options.websiteUrl,
+			icons: options.icons,
+			instructions: options.instructions,
 			tools: readToolDefinitions(context.metadata),
 			resources: readResourceDefinitions(context.metadata),
 			prompts: readPromptDefinitions(context.metadata),
