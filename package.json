@@ -109,7 +109,7 @@
 	"devDependencies": {
 		"@biomejs/biome": "^2.5.4",
 		"@langchain/core": "1.2.9",
-		"@langchain/langgraph": "1.4.9",
+		"@langchain/langgraph": "1.4.13",
 		"@types/node": "^26.2.0",
 		"rimraf": "^6.0.1",
 		"tsup": "^8.5.1",
